@@ -37,20 +37,20 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-	'chambres',
-	'taches',
-	'easyPoS',
-	'collectage',
-	'log',
-	'menus',
-	'restaurant',
-	'telephones',
+    'chambres',
+    'taches',
+    'easyPoS',
+    'collectage',
+    'log',
+    'menus',
+    'restaurant',
+    'telephones',
 )
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-	'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -67,10 +67,9 @@ WSGI_APPLICATION = 'seguinus.wsgi.application'
 
 DATABASES = {
     'default': {
-		'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-		'NAME': os.path.join(BASE_DIR,'db.sqlite3'),                      # Or
-		path to database file if using sqlite3.
-		'USER': '',                      # Not used with sqlite3.
+        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': os.path.join(BASE_DIR,'db.sqlite3'),                      # Or
+        'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',
