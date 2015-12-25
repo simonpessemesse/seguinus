@@ -1,0 +1,37 @@
+<html>
+	<head>
+		<!-- link rel="stylesheet" type="text/css" href="/static/print.css" media="print" /-->
+	</head>
+	<body onLoad="window.print();window.close()">
+		<h1>	Repas du soir du {{nomJour}} {{day}}/{{month}}</h1>
+	<small>
+
+	<h5>Anciens</h5>
+			{% include "chambres/tableauRepas.html" with repas=repas.anciens %}
+		<h5>Nouveaux</h5>
+			{% include "chambres/tableauRepas.html" with repas=repas.nouveaux %}
+			<h5>Booking Potentiels</h5>
+			{% include "chambres/tableauRepas.html" with repas=repas.nouveauxBooking %}
+			<h5>Total</h5>
+			{% for k,v in repas.total.stat.items %}
+					{{ v|length }}
+			x
+					{{ k}},
+				
+					
+					
+			{% endfor %}
+					Total: {{ repas.total.total }}
+	</small>
+	<br />
+	<small>
+	Estimations pour demain:
+	Nouveaux: {{ demain.repas.nouveaux.total }}({{ demain.repas.nouveaux.totalKid }})
+	Anciens: {{ demain.repas.anciens.total }}({{ demain.repas.anciens.totalKid }})
+	Estimations pour apres demain:
+	Nouveaux: {{ apresDemain.repas.nouveaux.total }}({{ apresDemain.repas.nouveaux.totalKid }})
+	Anciens: {{ apresDemain.repas.anciens.total }}({{ apresDemain.repas.anciens.totalKid }})<br />
+	{{ fortune }}
+</small>
+	</body>
+</html>

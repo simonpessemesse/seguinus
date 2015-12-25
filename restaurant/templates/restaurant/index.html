@@ -1,0 +1,41 @@
+
+{% extends "base.html" %}
+{% block content %}
+<h1>Gestion du resto</h1>
+<h2><a href="{{year}}/{{month}}/{{day}}">Aller au jour courant</a></h2>
+<h3><a href="plats">Voir les plats</a></h3>
+
+<table>
+	{% for f in fournisseurs %}
+	<tr>
+		<td>
+			<a href="{{f.id}}">{{ f.nom }}</a> numero {{ f.id }}<small><a href="c/{{ f.id }}">  Imprimer</a></small>
+		</td>
+	</tr>
+	{% endfor %}
+</table>
+<h2>liens pour les imprimer:</h2>
+<ul>
+	<li>
+	<a href="c/12/">imprimer mine</a>
+	</li>
+	<li>
+	<a href="c/356/">imprimer SDV POMONA JOASSAN</a>
+	</li>
+	<li>
+	<a href="c/4/">imprimer metro</a>
+	</li>
+	<li>
+	<a href="c/8/">imprimer miko</a>
+	</li>
+	<li>
+	<a href="c/9/">imprimer france boisson</a>
+	</li>
+	<li>
+	<a href="c/6/">imprimer joassan</a>
+	</li>
+
+
+</ul>
+
+{% endblock %}

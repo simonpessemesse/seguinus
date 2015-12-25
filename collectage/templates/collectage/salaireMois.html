@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% block content %}	
+<table border>
+	<tr>
+		<td>
+			<a href="../../{{ moisP }}">Mois Precedent</a>
+		</td>
+		<td>
+			<a href="../../../rh">Retour RH</a>
+		</td>
+		<td>
+			<a href="../../{{ moisS }}">Mois Suivant</a>
+		</td>
+
+	</tr>
+</table>
+<h1> Salaire pour le comptable de {{ premier|date:"F Y" }}</h1>
+<h2>Pour le nouveau comptable <a href="preremplistout">preRemplisTout</a> et <a href="genereTaches">Genere taches</a></h2>
+<table border>
+	<tr>
+		<th>Nom</th>
+		<th>Taux horaire brut</th>
+		<th>Heures travail mensuelles</th>
+		<th>Heures absence</th>
+		<th>Heures supp a 10% (de 35 a 39)</th>
+		<th>Heures supp a 20% (de 40 a 43)</th>
+		<th>Heures supp a 50% a partir de la 44</th>
+		<th>Nb avantages repas</th>
+		<th>Conges payes</th>
+		<th>Maladie</th>
+		<th>Prime</th>
+		<th>Acompte</th>
+		<th>Saisie Arret</th>
+		<th>Commentaire</th>
+	</tr>
+	{% for c in hab %}
+	<tr>
+		<td>
+			<a href="/collectage/emploiDuTemps/{{jourP}}/{{jourS}}/{{c.id}}">{{ c.individu.nom }} {{ c.individu.prenom }} {{ c.nombreHeuresSemaine }}</a>
+		</td>
+		<td>
+			<a href="/admin/collectage/contrat/{{c.id}}">{{ c.tauxHoraireBrut|floatformat:3 }}	</a>
+		</td>
+		<td>{{ c.resumTotal.colH|floatformat:2 }}</td>
+		<td>{{ c.resumTotal.absencesJoli }} 
+			{% if c.resumTotal.repasAbsents %}
+			 et {{ c.resumTotal.repasAbsents }} Repas non pris
+			{% endif %}
+		</td>
+		<td>{{ c.hSupplementaire10pourcent|floatformat:2 }}</td>
+		<td>{{ c.hSupplementaire20pourcent|floatformat:2 }}</td>
+		<td></td>
+		<td>{{ c.resumTotal.repas }}</td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td></td>
+		<td>{{c.resumTotal.commentaires}}</td>
+	</tr>
+	{% endfor %}
+</table>
+
+<h2>Comme le mois dernier</h2>
+<table>
+{% for c in hab %}
+<tr>	
+	<td>{{ c.individu.nom }} {{ c.individu.prenom }}</td>
+	<tr>
+{% endfor %}
+</table>
+<h2>Nouvelles embauches</h2>
+<table>
+{% for c in nvx %}
+<tr>	
+	<td>{{ c.individu.nom }} {{ c.individu.prenom }}</td>
+	<td><a href="../../../rh/fne/{{c.id}}">Fiche nouvelle embauche</a></td>
+	<td><a href="../../../rh/ct/{{c.id}}">Contrat</a></td>
+	<tr>
+{% endfor %}
+</table>
+<h2>Extras</h2>
+<table >
+{% for c in extras %}
+<tr>	
+	<td>{{ c.individu.nom }} {{ c.individu.prenom }}</td>
+	<td><a href="../../../rh/fne/{{c.id}}">Fiche nouvelle embauche</a></td>
+	<td><a href="../../../rh/ct/{{c.id}}">Contrat</a></td>
+	<td>Du {{ c.dateDebut|date }} au {{ c.dateFin|date }} de {{ c.nombreHeuresSemaine }} heures (/semaine???)</td>
+	<tr>
+{% endfor %}
+</table>
+
+<h2>Fins de contrat</h2>
+<table>
+{% for c in finsContrats %}
+<tr>	
+	<td>{{ c.individu.nom }} {{ c.individu.prenom }}</td>
+	<tr>
+{% endfor %}
+</table>
+
+<h2>Modifs dans le contrat</h2>
+<table>
+{% for c in modifs %}
+<tr>	
+	<td>{{ c.individu.nom }} {{ c.individu.prenom }}</td>
+	<tr>
+{% endfor %}
+</table>
+
+<table border>
+
+	</table>
+{% endblock %}
+

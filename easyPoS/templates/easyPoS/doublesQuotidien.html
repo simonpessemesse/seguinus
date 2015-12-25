@@ -1,0 +1,399 @@
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="/static/doublesFacture.css" media="print" />
+	</head>
+	{% if imprime %}
+	<body onload="window.print();">
+	{% else %}
+	<body>
+	{% endif %}
+		{% if month %}
+		<h1>Doubles de {{date|date:"F Y"}}</h1>
+		<a href="/easyPoS/factures/doubles/{{prev}}">Mois Precedent</a>
+		<a href="/easyPoS/"> Retour Resume</a>
+		<a href="/easyPoS/factures/doubles/{{prochain}}">Mois suivant</a>
+		<A HREF="javascript:window.print()">imprimer</A>
+		{% else %}
+		<h1>Doubles du {{date|date:"l d F Y"}}</h1>
+		<a href="/easyPoS/factures/doubles/{{prev}}">Jour Precedent</a>
+		<a href="/easyPoS/"> Retour Resume</a>
+		<a href="/easyPoS/factures/doubles/{{prochain}}">Jour suivant</a>
+		<A HREF="javascript:window.print()">imprimer</A>
+		{% endif %}
+		<br />
+		<br />
+		<table>
+			<tr>
+				<td valign="top">
+		{% for f in col1 %}
+		<div >
+		<table>
+			{% if f.client %}
+			{% if f.client.nom or f.clientNomFinal %}
+			<tr>
+				<td>
+					Client:
+				</td>
+				<td>
+					{% if f.clientNomFinal %}
+					{{ f.clientNomFinal }}
+					{% else %}
+					{{f.client.nom}}
+					{% endif %}
+				</td>
+			</tr>
+				{% endif %}
+				{% endif %}
+			<tr>
+				<td>
+					{{ f.nomJoli }}
+				</td>
+			</tr>
+			<tr>
+				<td>
+					Date:
+				</td>
+				<td>
+					{% if f.dateVente %}
+					{{ f.dateVente|date:"d/m/Y" }}
+					{% else %}
+					{{ f.modification|date:"d/m/Y" }}
+					{% endif %}
+				</td>
+			</tr>
+		</table>
+				<table >
+			<tr>
+				<th>
+					Libell&eacute; Article
+				</th>
+				<th>
+					Prix
+				</th>
+				<th>
+					Quantit&eacute;
+				</th>
+				<th>
+					Montant
+				</th>
+			</tr>
+			{% for ligne in f.lignefacture_set.all|dictsort:"position" %}
+			<tr>
+				<td>
+					{% if ligne.produit %}
+					{{ ligne.produit.nom }}
+				</td>
+				<td align="right">
+						{% if ligne.prixUnitaireFinal %}
+					{{ ligne.prixUnitaireFinal|floatformat:2 }} &euro;
+					{% else %}
+					{{ ligne.produit.prix|floatformat:2 }} &euro;
+					{% endif %}
+				</td>
+				<td align="right">
+					{{ ligne.quantite }}
+				</td>
+				<td align="right">
+					{{ ligne.montant|floatformat:2 }} &euro;
+					{% else %}
+					{{ ligne.libelle }}
+					{% endif %}
+				</td>
+			</tr>
+			{% endfor %}
+
+		</table>
+
+					<table>
+				<tr>
+					<td>
+						Total TTC: 
+					</td>
+				<td align="right">
+					{{ f.total|floatformat:2 }} &euro;
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Montant TVA: 
+					</td>
+				<td align="right">
+					{{ f.montantTVA|floatformat:2 }} &euro;
+					</td>
+				</tr>
+		{% for paiement in f.paiement_set.all %}
+				<tr>
+					<td>
+						Pay&eacute;: 
+					</td>
+				<td align="right">
+					{% if paiement.arrhe %}
+					Le {{ paiement.date|date:"d/m/Y" }} {{ paiement.moyenPaiement.nom }} d'arrhes de {{ paiement.montant|floatformat:2 }} &euro; 
+					{% else %}
+					Le {{ paiement.date|date:"d/m/Y" }} {{ paiement.moyenPaiement.nom }} de {{ paiement.montant|floatformat:2 }} &euro; 
+					{% endif %}
+					</td>
+				</tr>
+				{% endfor %}
+				{% if f.totalDu != 0 %}
+					<tr>
+					<td>Restant du: {{ f.totalDu|floatformat:2 }} &euro;</td>
+				</tr>
+				{% endif %}
+			</table>
+			<hr />
+			
+		</div>
+		{% endfor %}
+	</td>
+				<td valign="top">
+					{% for f in col2 %}
+					<div>
+		<table>
+			{% if f.client %}
+			{% if f.client.nom or f.clientNomFinal%}
+			<tr>
+				<td>
+					Client:
+				</td>
+				<td>
+			{% if f.clientNomFinal %}
+					{{ f.clientNomFinal }}
+					{% else %}
+					{{f.client.nom}}
+					{% endif %}
+			
+				</td>
+			</tr>
+				{% endif %}
+				{% endif %}
+			<tr>
+				<td>
+					{{ f.nomJoli }}
+				</td>
+			</tr>
+			<tr>
+				<td>
+					Date:
+				</td>
+				<td>
+					{% if f.dateVente %}
+					{{ f.dateVente|date:"d/m/Y" }}
+					{% else %}
+					{{ f.modification|date:"d/m/Y" }}
+					{% endif %}
+				</td>
+			</tr>
+		</table>
+				<table >
+			<tr>
+				<th>
+					Libell&eacute; Article
+				</th>
+				<th>
+					Prix
+				</th>
+				<th>
+					Quantit&eacute;
+				</th>
+				<th>
+					Montant
+				</th>
+			</tr>
+			{% for ligne in f.lignefacture_set.all|dictsort:"position" %}
+			<tr>
+				<td>
+					{% if ligne.produit %}
+					{{ ligne.produit.nom }}
+				</td>
+				<td align="right">
+						{% if ligne.prixUnitaireFinal %}
+					{{ ligne.prixUnitaireFinal|floatformat:2 }} &euro;
+					{% else %}
+					{{ ligne.produit.prix|floatformat:2 }} &euro;
+					{% endif %}
+				</td>
+				<td align="right">
+					{{ ligne.quantite }}
+				</td>
+				<td align="right">
+					{{ ligne.montant|floatformat:2 }} &euro;
+					{% else %}
+					{{ ligne.libelle }}
+					{% endif %}
+				</td>
+			</tr>
+			{% endfor %}
+
+		</table>
+
+					<table>
+				<tr>
+					<td>
+						Total TTC: 
+					</td>
+				<td align="right">
+					{{ f.total|floatformat:2 }} &euro;
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Montant TVA: 
+					</td>
+				<td align="right">
+					{{ f.montantTVA|floatformat:2 }} &euro;
+					</td>
+				</tr>
+		{% for paiement in f.paiement_set.all %}
+				<tr>
+					<td>
+						Pay&eacute;: 
+					</td>
+				<td align="right">
+					{% if paiement.arrhe %}
+					Le {{ paiement.date|date:"d/m/Y" }} {{ paiement.moyenPaiement.nom }} d'arrhes de {{ paiement.montant|floatformat:2 }} &euro; 
+					{% else %}
+					Le {{ paiement.date|date:"d/m/Y" }} {{ paiement.moyenPaiement.nom }} de {{ paiement.montant|floatformat:2 }} &euro; 
+					{% endif %}
+					</td>
+				</tr>
+				{% endfor %}
+				{% if f.totalDu != 0 %}
+					<tr>
+					<td>Restant du: {{ f.totalDu|floatformat:2 }} &euro;</td>
+				</tr>
+				{% endif %}
+			</table>
+			<hr />
+			
+		</div>
+		{% endfor %}
+	</td>
+				<td valign="top">
+		{% for f in col3 %}
+		<div>
+		<table>
+			{% if f.client %}
+			{% if f.client.nom or f.clientNomFinal%}
+			<tr>
+				<td>
+					Client:
+				</td>
+				<td>
+							{% if f.clientNomFinal %}
+					{{ f.clientNomFinal }}
+					{% else %}
+					{{f.client.nom}}
+					{% endif %}
+			
+					</td>
+			</tr>
+				{% endif %}
+				{% endif %}
+			<tr>
+				<td>
+					{{ f.nomJoli }}
+				</td>
+			</tr>
+			<tr>
+				<td>
+					Date:
+				</td>
+				<td>
+					{% if f.dateVente %}
+					{{ f.dateVente|date:"d/m/Y" }}
+					{% else %}
+					{{ f.modification|date:"d/m/Y" }}
+					{% endif %}
+				</td>
+			</tr>
+		</table>
+				<table >
+			<tr>
+				<th>
+					Libell&eacute; Article
+				</th>
+				<th>
+					Prix
+				</th>
+				<th>
+					Quantit&eacute;
+				</th>
+				<th>
+					Montant
+				</th>
+			</tr>
+			{% for ligne in f.lignefacture_set.all|dictsort:"position" %}
+			<tr>
+				<td>
+					{% if ligne.produit %}
+					{{ ligne.produit.nom }}
+				</td>
+				<td align="right">
+						{% if ligne.prixUnitaireFinal %}
+					{{ ligne.prixUnitaireFinal|floatformat:2 }} &euro;
+					{% else %}
+					{{ ligne.produit.prix|floatformat:2 }} &euro;
+					{% endif %}
+				</td>
+				<td align="right">
+					{{ ligne.quantite }}
+				</td>
+				<td align="right">
+					{{ ligne.montant|floatformat:2 }} &euro;
+					{% else %}
+					{{ ligne.libelle }}
+					{% endif %}
+				</td>
+			</tr>
+			{% endfor %}
+
+		</table>
+
+			<table>
+				<tr>
+					<td>
+						Total TTC: 
+					</td>
+				<td align="right">
+					{{ f.total|floatformat:2 }} &euro;
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Montant TVA: 
+					</td>
+				<td align="right">
+					{{ f.montantTVA|floatformat:2 }} &euro;
+					</td>
+				</tr>
+		{% for paiement in f.paiement_set.all %}
+				<tr>
+					<td>
+						Pay&eacute;: 
+					</td>
+				<td align="right">
+					{% if paiement.arrhe %}
+					Le {{ paiement.date|date:"d/m/Y" }} {{ paiement.moyenPaiement.nom }} d'arrhes de {{ paiement.montant|floatformat:2 }} &euro; 
+					{% else %}
+					Le {{ paiement.date|date:"d/m/Y" }} {{ paiement.moyenPaiement.nom }} de {{ paiement.montant|floatformat:2 }} &euro; 
+					{% endif %}
+					</td>
+				</tr>
+				{% endfor %}
+				{% if f.totalDu != 0 %}
+				<tr>
+					<td>Restant du: {{ f.totalDu|floatformat:2 }} &euro;</td>
+				</tr>
+				{% endif %}
+			</table>
+			<hr />
+			
+		</div>
+		{% endfor %}
+	</td>
+</tr>
+</table>
+	</body>
+
+</html>

@@ -1,0 +1,139 @@
+
+{% extends "base.html" %}
+{% block content %}
+<form action="" method="POST">{% csrf_token %}
+{{ form.as_p }}
+<input type="submit" value="Submit" />
+</form>
+{% if result %}
+<h2>
+	{{ result.operateur}} du {{ result.dateDebut }} au {{ result.dateFin }}
+</h2>
+<h3>
+	Recapitulatif 
+</h3>
+<ul>
+{% ifnotequal result.nuitsSingle 0 %}
+	<li>
+	{{result.nuitsSingle}} x 78 euros en Single
+	</li>
+{% endifnotequal %}
+{% ifnotequal result.nuitsDp2p 0 %}
+	<li>
+	{{result.nuitsDp2p}} x 116 en double
+	</li>
+{% endifnotequal %}
+{% ifnotequal result.nuitsDp3p 0 %}
+	<li>
+	{{ result.nuitsDp3p }} x 159 en triple
+	</li>
+{% endifnotequal %}
+{% ifnotequal result.nuitsDp4p 0 %}
+	<li>
+	{{ result.nuitsDp4p }} x 192 en quadruple
+	</li>
+{% endifnotequal %}
+{% ifnotequal result.nuitsDp5p 0 %}
+	<li>
+	{{ result.nuitsDp5p }} x 210 en quintuple
+	</li>
+{% endifnotequal %}
+{% ifnotequal result.nuitsDortoir 0 %}
+	<li>
+	{{ result.nuitsDortoir }} x 38 en dortoir
+	</li>
+{% endifnotequal %}
+</ul>
+<h3>
+	Detail 
+</h3>
+<table border>
+		<tr>
+				<th>
+					Nom
+				</th>
+				<th>
+					Chambres
+				</th>
+				<th>
+					Arrivee
+				</th>
+				<th>
+					Depart
+				</th>
+				<th>
+					nbNuits
+				</th>
+				<th>
+					resa Demandee
+				</th>
+				<th>Prepare</th>
+				<th>nbPersonnes</th>
+				<th>Commentaires</th>
+			</tr>
+			{% for reservation in result.list %}
+			<tr>
+				<td>
+					<a href="/admin/chambres/client/{{reservation.client.id}}">{{ reservation.client.nom|capfirst }}</a>
+					<br />
+					<small><a href="/magie/{{reservation.id}}">Magie</a> </small>
+				</td>
+				<td>
+					{% for ch in reservation.chambresAssignees.all %}
+					{{ ch.nom }}</br>
+					{% endfor %}
+						{% ifnotequal reservation.placesDortoir 0 %}
+					{{ reservation.placesDortoir }} lits dortoir
+					{% endifnotequal %}
+				</td>
+				<td>
+					{{ reservation.dateArrivee|date }}
+				</td>
+				<td>
+					<a href="/chambres/{{reservation.dateDepart.year}}/{{reservation.dateDepart.month}}/{{reservation.dateDepart.day}}#departs">{{ reservation.dateDepart|date }}</a>
+				</td>
+					<td>
+					{{reservation.nbNuits }}
+				</td>
+				<td>
+						{% ifnotequal reservation.chambres 0 %}
+					{{ reservation.chambres }} chambres <br />
+					{% endifnotequal %}
+					{% ifnotequal reservation.chambresSingle 0 %}
+					{{ reservation.chambresSingle }} chambres Single<br />
+					{% endifnotequal %}
+					{% ifnotequal reservation.chambresDoubles 0 %}
+					{{ reservation.chambresDoubles }} chambres Doubles<br />
+					{% endifnotequal %}
+					{% ifnotequal reservation.chambresTriples 0 %}
+					{{ reservation.chambresTriples }} chambres Triples<br />
+					{% endifnotequal %}
+					{% ifnotequal reservation.chambresTwin 0 %}
+					{{ reservation.chambresTwin }} chambres Twin<br />
+					{% endifnotequal %}
+					{% ifnotequal reservation.chambresQuadruples 0 %}
+					{{ reservation.chambresQuadruples }} chambres Quadruples<br />
+					{% endifnotequal %}
+					{% ifnotequal reservation.chambresQuintuples 0 %}
+					{{ reservation.chambresQuintuples }} chambres Quintuples<br />
+					{% endifnotequal %}
+					{% ifnotequal reservation.placesDortoir 0 %}
+					{{ reservation.placesDortoir }} Places Dortoir<br />
+					{% endifnotequal %}
+				</td>
+				{% if reservation.aEtePrepare  %}
+				<td class="rouge">
+				{% else %}
+				<td>
+				{% endif %}
+				<a href="/chambres/{{reservation.dateDepart.year}}/{{reservation.dateDepart.month}}/{{reservation.dateDepart.day}}/prepareFacture/{{reservation.id}}">Prepare</a></td>
+				<td>{{ reservation.nbPersonnes }}</td>
+				<td>{{ reservation.client.divers|linebreaks }}</td>
+			</tr>
+			{% endfor %}
+		</table>
+{% else %}
+Veuillez entrer un nom d'operateur et des dates
+{% endif %}
+
+{% endblock %}

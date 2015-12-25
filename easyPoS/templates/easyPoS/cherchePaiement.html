@@ -1,0 +1,43 @@
+
+{% extends "base.html" %}
+{% block content %}	
+			<h3>
+			Paiements Trouves 
+		</h3>
+		<table border>
+			<tr>
+				<th>
+					Montant
+				</th>
+				<th>Moyen</th>
+				<th>Date</th>
+				<th>
+					Facture
+				</th>
+				<th>
+					Montant
+				</th>
+			{% for p in paiements %}
+			<tr>
+				<td>
+					<a href="/admin/easyPoS/paiement/{{ p.id }}">{{ p.montant|floatformat:2 }} &euro;</a>
+				</td>
+				<td>
+					{{ p.moyenPaiement }}
+				</td>
+				<td>
+					<a href="/easyPoS/factures/{{p.date|date:"Y/m/d"}}">{{ p.date|date }} {{p.date.year}}</a>
+				</td>
+				<td>
+					<a href="/easyPoS/facture/{{p.facture.id}}">{{p.facture.numero}} du {{p.facture.dateVente|date}} {{ p.facture.dateVente.year}}</a>
+				</td>
+				<td>
+					{{ p.facture.cacheTotal|floatformat:2 }} &euro;
+				</td>
+				<td>
+					<a href="/easyPoS/facture/{{p.facture.id}}/show">montre</a>
+			</tr>
+			{% endfor %}
+		</table>
+
+{% endblock %}

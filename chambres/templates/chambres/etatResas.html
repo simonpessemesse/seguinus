@@ -1,0 +1,25 @@
+
+{% extends "base.html" %}
+{% block content %}
+<h3>Reservation non faites par un tour operateur, sans arrhes associees, et non optionnelles</h3>
+
+		<table border width="{{largeur}}">
+			{% for r in resas %}
+			<tr>
+		<td>
+			<a href="conf/{{r.client.id}}">J'ai confiance!</a>
+		</td>
+				{% if r.client.aConfiance %}
+					<td class="vert">
+					{% else %}
+				<td>
+						{% endif %}
+					<a href="/admin/chambres/client/{{r.client.id}}">{{ r.client.nom }} pour {{ r }}</a>
+				</td>
+				<td>
+					 {{ r.visuel|safe }}
+				 </td>
+		</tr>
+			{% endfor %}
+	</table>
+			{% endblock %}

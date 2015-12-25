@@ -1,0 +1,314 @@
+
+
+{% extends "base.html" %}
+{% block head %}
+<script type="text/javascript" src="/site_media/js/MochiKit.js"></script>
+<script type="text/javascript" src="/site_media/js/Base.js"></script>
+<script type="text/javascript" src="/site_media/js/Layout.js"></script>
+<script type="text/javascript" src="/site_media/js/Canvas.js"></script>
+<script type="text/javascript" src="/site_media/js/SweetCanvas.js"></script>
+
+{% endblock %}
+{% block insideBody %}
+{% if imprime %}
+onload="window.print();"
+{% endif %}
+{% endblock %}
+{% block content %}		
+
+{% if imprime %}
+
+		<table border>
+			<tr>
+				<th>
+					Jour
+				</th>
+				<th>
+					Total
+				</th>
+				<th>
+					Nvx
+				</th>
+				<th>
+					Anc
+				</th>
+				<th>
+					Nvx booking
+				</th>
+				<th>
+					Anc booking
+				</th>
+			</tr>
+		{% for d in result %}
+		<tr>
+				<td>
+{{ d.dateDemandee|date  }}
+				
+			</td>
+			<td>
+				{{ d.total }}
+			</td>
+			<td>
+				{{d.repas.nouveaux.total }}
+			</td>
+			<td>
+				{{d.repas.anciens.total }}
+			</td>
+			<td>
+				{{d.repas.nouveauxBooking.total }}
+			</td>
+			<td>
+				{{d.repas.anciensBooking.total }}
+			</td>
+			
+		</tr>
+
+		{% endfor %}
+		</table>
+
+{% else %}
+		<div id="page">
+			<h3>Recapitulatif {{ g.plop }}</h3> 
+		nbNuitees:{{nbNuitees}}          <a href="./print">Imprimer</a>  <a href="./futur">Futur</a><br />
+		nbRepas:{{nbRepas}}
+		<div id="header">
+		<table border>
+			<tr>
+				<th>
+					Jour
+				</th>
+				<th>
+					Total
+				</th>
+				<th>
+					chambres Occupees
+				</th>
+				<th>
+					places dortoir
+				</th>
+				<th>
+					chambres a placer
+				</th>
+				<th>
+					Conflits 
+				</th>
+				<th>
+					Nvx
+				</th>
+				<th>
+					Anc
+				</th>
+				<th>
+					Nvx booking
+				</th>
+				<th>
+					Anc booking
+				</th>
+				<th>
+					coefMenage
+				</th>
+				<th>
+					Nb Pains
+				</th>
+				
+			</tr>
+		{% for d in result %}
+		<tr>
+			{% ifequal d.dateDemandee.weekday 6 %}
+			<td class="vert">
+				{% else %}		
+			{% ifequal d.dateDemandee.weekday 2 %}
+			<td class="jaune">
+				{% else %}		
+				<td>
+					{% endifequal %}
+					{% endifequal %}
+				<a href=/chambres/{{d.dateDemandee.year}}/{{d.dateDemandee.month}}/{{d.dateDemandee.day}}>{{ d.dateDemandee|date  }}</a>
+				
+			</td>
+			{% if d.total > 80 %}
+			<td style="background-color:#B40404">
+				{% else %}
+			{% if d.total > 70  %}
+			<td style="background-color:#DF0101">
+				{% else %}
+			{% if d.total > 60  %}
+			<td style="background-color:#FF0000">
+				{% else %}
+			{% if d.total > 50  %}
+			<td style="background-color:#FE2E2E">
+				{% else %}
+			{% if d.total > 40  %}
+			<td style="background-color:#FA5858">
+				{% else %}
+				<td>
+				{% endif %}
+				{% endif %}
+				{% endif %}
+				{% endif %}
+				{% endif %}
+				{{ d.total }}
+			</td>
+			{% if d.nbAll > 21 %}
+			<td class="jaune">
+				{% else %}
+			<td>				
+					{% endif %}
+				{{ d.nbAll  }}
+			</td>
+			{% if d.nbDortoir > 15 %}
+			<td class="jaune">
+				{% else %}
+			<td>				
+					{% endif %}
+				{{ d.nbDortoir  }}
+			</td>
+			{% ifequal d.todo -1 %}
+			<td class="rouge">				
+				{% else %}		
+			{% ifequal d.todo 0 %}
+			<td class="vert">
+				{% else %}		
+				<td class="jaune">
+					{% endifequal %}
+					{% endifequal %}
+				{{ d.todo  }}
+			</td>
+			{% if d.error %}
+			<td class="rouge">
+				{% for ch in d.error %}
+				{{ ch.nom }}<br />
+				{% endfor %}
+				{% else %}
+				<td>
+				{% endif %}
+
+			</td>
+			<td>
+				{{d.repas.nouveaux.total}}
+			</td>
+			<td>
+				{{d.repas.anciens.total}}
+			</td>
+			<td>
+				{{d.repas.nouveauxBooking.total }}
+			</td>
+			<td>
+				{{d.repas.anciensBooking.total }}
+			</td>
+			<td>
+				{{ d.men }}
+			</td>
+			<td align="right">
+				{{ d.painJour|floatformat:0 }}
+			</td>
+	
+
+			
+		</tr>
+
+		{% endfor %}
+		</table>
+	</div>
+	<br />	
+	<h2>Stats moyennes par jour de la semaine</h2>
+	<table border>
+		<tr>
+			<th>Jour</th>
+			<th>Repas</th>
+			<th>Petit dej</th>
+			<th> Menage</th>
+		</tr>
+	{% for j in joursStat %}
+	<tr>
+		<th>
+			{{j.jour}}
+		</th>
+		<td>
+			{{ j.mRepas }}
+		</td>
+		<td>
+			{{ j.mDej }}
+			</td>
+			<td>
+				{{j.mMen }}
+			</td>
+	</tr>
+	
+	{% endfor %}
+	</table>
+
+	<h2> Chambres Occupees </h2>
+<div class="graph"><canvas id="graph1" width="1000" height="500"></canvas></div>
+
+	<script type="text/javascript">
+		function drawGraph() {
+		  var opts = {
+			  "xOriginIsZero": false,
+			  "yNumberOfTicks": 32,
+			  "yAxis": [0,31],
+			  "xTicks": [ {{xticks|safe}} ],
+			  "yTickPrecision":0
+		   };
+			
+    var layout = new PlotKit.Layout("bar", opts);
+	layout.addDataset("Occupation", [{{graph1|safe}}]);
+    layout.evaluate();
+    var canvas = MochiKit.DOM.getElement("graph1");
+    var plotter = new PlotKit.SweetCanvasRenderer(canvas, layout, {});
+    plotter.render();
+}
+MochiKit.DOM.addLoadEvent(drawGraph);
+	</script>
+
+	<h2> Pensios qui mangent </h2>
+<div class="graph"><canvas id="graph2" width="1000" height="500"></canvas></div>
+
+	<script type="text/javascript">
+		function drawGraph() {
+		  var opts = {
+			  "xOriginIsZero": false,
+			  "yNumberOfTicks": 32,
+			  "yAxis": [0,110],
+			  "xTicks": [ {{xticks|safe}} ],
+			  "yTickPrecision":0
+		   };
+			
+    var layout = new PlotKit.Layout("bar", opts);
+	layout.addDataset("Occupation", [{{graph2|safe}}]);
+    layout.evaluate();
+    var canvas = MochiKit.DOM.getElement("graph2");
+    var plotter = new PlotKit.SweetCanvasRenderer(canvas, layout, {});
+    plotter.render();
+}
+MochiKit.DOM.addLoadEvent(drawGraph);
+	</script>
+	<h2>Chambres les plus utilisees</h2>
+<div class="graph"><canvas id="graph3" width="1800" height="500"></canvas></div>
+
+	<script type="text/javascript">
+		function drawGraph() {
+		  var opts = {
+			  "xOriginIsZero": false,
+			  "yNumberOfTicks": 30,
+			  "yAxis": [{{minCh}},{{lenCh}}],
+			  "xTicks": [ {{chTicks|safe}} ],
+			  "yTickPrecision":0
+		   };
+			
+    var layout = new PlotKit.Layout("bar", opts);
+	layout.addDataset("Occupation", [{{chGraph|safe}}]);
+    layout.evaluate();
+    var canvas = MochiKit.DOM.getElement("graph3");
+    var plotter = new PlotKit.SweetCanvasRenderer(canvas, layout, {});
+    plotter.render();
+}
+MochiKit.DOM.addLoadEvent(drawGraph);
+	</script>
+
+</div>
+	</body>
+</html>
+
+{% endif %}
+{% endblock %}

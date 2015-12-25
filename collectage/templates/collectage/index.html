@@ -1,0 +1,39 @@
+
+{% extends "base.html" %}
+{% block content %}
+<h1>Gestion des heures</h1>
+<h2><a href="/admin/collectage/plage/">Editer les heures</a></h2>
+<h2><a href="{{year}}/{{month}}">Aller au mois courant</a></h2>
+<h1>Calcul pour {{t.nom|capfirst}}</h1>
+<table border>
+	<tr>
+		<th>Jour</th>
+		<th>Heure debut</th>
+		<th>Heure fin</th>
+		<th>Duree</th>
+	</tr>
+	{% for f in t.plages %}
+	<tr>
+		<td>
+			<a href="/admin/collectage/plage/{{f.plage.id}}">{{ f.heureDebut|date:"D d M Y"
+ }}</a>
+		</td>
+		<td>
+			{{ f.heureDebut|time:"H:i" }}
+		</td>
+		<td>
+			{{ f.heureFin|time:"H:i" }}
+		</td>
+		<td>
+			{{ f.duree }}
+		</td>
+	</tr>
+	{% endfor %}
+	<tr>
+		<th colspan=3>Total </th>
+		<td>{{t.heur}}</td>
+
+</table>
+
+
+{% endblock %}

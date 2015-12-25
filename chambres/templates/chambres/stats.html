@@ -1,0 +1,1029 @@
+
+{% extends "base.html" %}
+{% block title %}
+{{ dateDemandee|date }}
+{% endblock %}
+{% block head %}
+{% for r in reservations %}
+	<script type="text/javascript">
+
+			$(function(){
+
+				// Dialog
+		$('#dialog{{r.id}}').dialog({
+					autoOpen: false,
+					width: 700,
+					buttons: {
+						"Ok": function() {
+							$(this).dialog("close");
+						},
+						"Cancel": function() {
+							$(this).dialog("close");
+						}
+					}
+				});
+
+				// Dialog Link
+		$('#dialog_link{{r.id}}').click(function(){
+			$('#dialog{{r.id}}').dialog('open');
+					return false;
+				});
+
+				//hover states on the static widgets
+		$('#dialog_link{{r.id}}, ul#icons li').hover(
+					function() { $(this).addClass('ui-state-hover'); },
+					function() { $(this).removeClass('ui-state-hover'); }
+				);
+
+			});
+		</script>
+		{% endfor %}
+{% endblock %}
+{% block content %}
+
+
+{% load admin_urls %}
+
+		<h3>Recapitulatif du {{ dateDemandee|date }} </h3>
+		<table border>
+			<tr>
+				<td class="jaune">
+					<a href="{% url 'admin:chambres_client_add' %}">Ajouter un client</a></td><td class="jaune">
+					<a href="{% url 'admin:chambres_client_changelist' %}">Editer les clients</a></td><td class="jaune">
+					<a href="{% url 'agendaToday' %}">Agenda</a></td><td class="jaune">
+					<a href="{% url 'agendaTodayPrint' %}">Previsions</a></td><td class="jaune">
+					<a href="{% url 'planningToday' %}">Planning</a></td><td class="jaune">
+					<a href="{% url 'planning' year month day oneDayStat.dans15.year oneDayStat.dans15.month oneDayStat.dans15.day %}">Planning ce jour</a></td><td class="jaune">
+					<a href="{% url 'tourOp' %}">Tour operateurs</a></td><td class="jaune">
+					<a href="{% url 'facturation' %}">FACTURATION</a></td><td class="jaune">
+					<a href="{% url 'resumeQuotidien' dateDemandee.year dateDemandee.month dateDemandee.day %}">Caisse</a></td><td class="jaune">
+					<a href="{% url 'admin:chambres_tache_add' %}">Ajouter Tache</a></td><td class="jaune">
+					<a href="{% url 'restaurant' %}">Resto Du Jour</a></td><td class="jaune">
+					<a href="{% url 'vuePapierCourante' %}">{{aujourdhui.year}}</a></td><td class="jaune">
+					<a href="{% url 'vuePapierProchaine' %}">{{aujourdhui.year|add:1}}</a></td><td class="jaune">
+				<a href="{% url 'rhIndex' %}">rh</a></td><td class="jaune">
+				<a href="{% url 'moisCourant' %}">mail comptable</a></td><td class="jaune">
+				<a href="{% url 'pb' %}">pb</a></td>
+			</tr>
+	</table>
+	<table border>
+		<tr>
+			{% for d in prochainsJours %}
+			{% if d == dateDemandee %}
+			<td class="vert">
+			{% else %}
+			<td>
+			{% endif %}
+				<small>	<a href="/chambres/{{ d.year}}/{{d.month}}/{{d.day}}">{{ d|date }}</a></small>
+			</td>
+			{% endfor %}
+		</tr>
+		<tr>
+			<td>
+				<small>
+		<a href="/chambres/{{prev}}">Jour Precedent</a>
+				</small>
+			</td>
+			<td>
+				<small>
+		<a href="/chambres/{{next}}">Jour suivant</a>
+				</small>
+			</td>
+		</tr>
+	</table>
+
+	<table border><tr><td class="vert">
+				<A HREF="#recapitulatif">Recapitulatif</A></td><td class="vert">
+				<A HREF="#departs">Departs</A></td><td class="vert">
+				<A HREF="#arrivees">Arrivees</A></td><td class="vert">
+				<A HREF="#changements">Changements</A></td><td class="vert">
+				<A HREF="#menages">Menages</A></td><td class="vert">
+				<A HREF="#libres">Libres</A></td><td class="vert">
+				<A HREF="#repas">Repas</A></td></tr>
+	</table>
+		{% if error %}
+		<h1 class="rouge">  Erreurs, chambres donnees plusieurs fois</h1>
+		<h3  class="rouge" >
+					{% for er in error %}
+					{{ er.nom }} <br />
+					{% endfor %}
+				</h3>
+				<br />
+			
+
+		{% endif %}
+		{% if oneDayStat.resasOptionnellesDepassees %}
+		<h1 class="rouge">Resa optionnelle depassée</h1>
+		<table border>
+			{% for c in oneDayStat.resasOptionnellesDepassees %}
+			<tr>
+				<td>
+					<a href="/admin/chambres/client/{{c.id}}">{{ c.nom }}</a>
+				</td>
+				<td>
+					au {{ c.optionJusquau }}
+				</td>
+				<td style="background-color:{{ c.couleur }}">
+					<ul>
+					{% for r in c.reservation_set.all %}
+					<li><a href="/chambres/{{ r.dateArrivee.year }}/{{ r.dateArrivee.month }}/{{ r.dateArrivee.day }}">{{r}}</a></li>
+					{% endfor %}
+				</ul>
+				</td>
+				<td>
+					<small>
+						{{ c.creation }}
+					</small>
+				</td>
+				<td>
+					<small>
+						<a href="{% url 'plusSemaine' year month day c.id %}">+1 semaine</a>
+					</small>
+				</td>
+				<td>
+					<small>
+						<a href="{% url 'confirmeOpt' year month day c.id %}">confirme</a>
+					</small>
+				</td>
+
+			</tr>
+			{% endfor %}
+		</table>
+		{% endif %}
+			{% if taches %}
+			<a href="/taches/{{year}}/{{month}}/{{day}}/0">				<h1 style="background-color:brown">Taches</h1></a>
+			{% if user.username != "auberge" %}
+				<table border>
+					<COL >
+					<COL width="50">
+
+
+					{% for t in taches %}
+					<tr>
+						{% ifequal t.priorite "B" %}
+						<td class="vert" >
+						{% endifequal %}
+						{% ifequal t.priorite "M" %}
+						<td  class="jaune">
+						{% endifequal %}
+						{% ifequal t.priorite "H" %}
+						<td  class="rouge">
+							{% endifequal %}
+							<a href="/admin/chambres/tache/{{ t.id }}">
+						{% if t.multiligne %}
+								{{ t.description|linebreaks }}
+						{% else %}
+								{{ t.description }} 
+						{% endif %}
+						{% if t.rappel %}
+						<small>Rappel: {{t.rappel|time }}</small>
+						{% endif %}
+						{% for pipi in t.entite.all %}
+						<small>,POUR:</small>
+						{{ pipi }}
+						{% endfor %}
+						</a>
+						</td>
+						<td><small><a href="{{day}}/delEx/{{t.id}}/0">c'est fait</a></small>
+						</td>
+							<td><small><a href="/chambres/{{year}}/{{month}}/{{day}}/up/{{t.id}}/0">Up</a></small>
+						</td>
+						<td><small><a href="/chambres/{{year}}/{{month}}/{{day}}/down/{{t.id}}/0">Down</a></small>
+						</td>
+						<td><small><a href="/chambres/{{year}}/{{month}}/{{day}}/report/{{t.id}}/0">Report</a></small>
+						</td>
+					
+					</tr>
+					{% endfor %}
+											
+				</table>
+				<br />
+				{% endif %}
+
+
+		{% endif %}
+		<table border>
+			<tr>
+				<th>
+					ch
+				</th>
+				<th>
+					ch single
+				</th>
+				<th>
+					ch double
+				</th>
+				<th>
+					ch twin
+				</th>
+				<th>
+					ch triple
+				</th>
+				<th>
+					ch quadruple
+				</th>
+				<th>
+					ch quintuple
+				</th>
+				<th>
+					<b>
+						Total de chambres
+					</b>
+				</th>
+				<td>
+					<b>
+						Total de places dortoir
+					</b>
+				</th>
+		</tr>
+		<tr>
+				<td>
+					{{nbCh}}
+				</td>
+				<td>
+					{{nbSingle}}
+				</td>
+				<td>
+					{{nbDouble}}
+				</td>
+				<td>
+					{{nbTwin}}
+				</td>
+				<td>
+					{{nbTriples}}
+				</td>
+				<td>
+					{{nbQuadruples}}
+				</td>
+				<td>
+					{{nbQuintuples}}
+				</td>
+				<td> 
+					<b>
+						{{ nbAll }}
+					</b>
+				</td>
+				<td> 
+					<b>
+						{{ nbDortoir }}
+					</b>
+				</td>
+			</table>
+			<br />
+		<A NAME="recapitulatif"></A>
+		<small>	<a href="#top">haut de page</a> </small>
+		<table border>
+	
+		<tr>
+			{% for d in prochainsJours %}
+			{% if d == dateDemandee %}
+			<td class="vert">
+			{% else %}
+			<td>
+			{% endif %}
+				<small>	<a href="/chambres/{{ d.year}}/{{d.month}}/{{d.day}}#recapitulatif">{{ d|date }}</a></small>
+			</td>
+			{% endfor %}
+		</tr>
+		<tr>
+			<td>
+				<small>
+		<a href="/chambres/{{prev}}#recapitulatif">Jour Precedent</a>
+				</small>
+			</td>
+			<td>
+				<small>
+		<a href="/chambres/{{next}}#recapitulatif">Jour suivant</a>
+				</small>
+			</td>
+		</tr>
+	</table>
+	 
+		{% if reservations %}
+		<table border> 
+			<tr>
+				<th>
+					Nom
+				</th>
+				<th>
+					Chambres
+				</th>
+				<th>
+					Arrivee
+				</th>
+				<th>
+					Depart
+				</th>
+				<th>
+					nbNuits
+				</th>
+				<th>
+					resa Demandee
+				</th>
+				<th>
+					Nombre de chambres a assigner
+				</th>
+				<th>Commentaires</th>
+			</tr>
+			{% for reservation in reservations %}
+			<tr>
+				<td>
+				
+						{% if reservation.client.protege %}
+										<i>
+										{% endif %}
+										<a href="/admin/chambres/client/{{reservation.client.id}}" 	{% if reservation.client.protege %} onclick="return protege()" 	{% endif %}>{{ reservation.client.nom|capfirst }} <small>{{ reservation.client.tourOperateur.nom }}</small></a> 
+					{% if reservation.client.optionJusquau %}
+					OPTION AU {{ reservation.client.optionJusquau }}
+					{% endif %}
+					<br />
+<small><a href="/easyPoS/arrhes/{{reservation.client.id}}">arrhes</a></small>
+					{% comment %}<br />
+					
+					<small><a href="/magie/{{reservation.id}}" 	{% if reservation.client.protege %} onclick="return protege()" 	{% endif %}>Magie</a> </small>
+						{% if reservation.client.protege %}
+										</i>
+										{% endif %}
+										{% endcomment %}
+				</td>
+				<td>
+					{% for ch in reservation.chambresAssignees.all %}
+					{{ ch.nom }}</br>
+					{% endfor %}
+						{% ifnotequal reservation.placesDortoir 0 %}
+					{{ reservation.placesDortoir }} lits dortoir
+					{% endifnotequal %}
+				</td>
+				<td>
+					{{ reservation.dateArrivee|date }}
+				</td>
+				<td>
+					{{ reservation.dateDepart|date }}
+				</td>
+					<td>
+						<a href="/chambres/planning/{{ reservation.dateArrivee.year }}/{{ reservation.dateArrivee.month }}/{{ reservation.dateArrivee.day }}/{{ reservation.dateDepart.year }}/{{ reservation.dateDepart.month }}/{{ reservation.dateDepart.day }}">{{reservation.nbNuits }}</a>
+				</td>
+				<td>
+						{% ifnotequal reservation.chambres 0 %}
+					{{ reservation.chambres }} chambres <br />
+					{% endifnotequal %}
+					{% ifnotequal reservation.chambresSingle 0 %}
+					{{ reservation.chambresSingle }} chambres Single<br />
+					{% endifnotequal %}
+					{% ifnotequal reservation.chambresDoubles 0 %}
+					{{ reservation.chambresDoubles }} chambres Doubles<br />
+					{% endifnotequal %}
+					{% ifnotequal reservation.chambresTriples 0 %}
+					{{ reservation.chambresTriples }} chambres Triples<br />
+					{% endifnotequal %}
+					{% ifnotequal reservation.chambresTwin 0 %}
+					{{ reservation.chambresTwin }} chambres Twin<br />
+					{% endifnotequal %}
+					{% ifnotequal reservation.chambresQuadruples 0 %}
+					{{ reservation.chambresQuadruples }} chambres Quadruples<br />
+					{% endifnotequal %}
+					{% ifnotequal reservation.chambresQuintuples 0 %}
+					{{ reservation.chambresQuintuples }} chambres Quintuples<br />
+					{% endifnotequal %}
+					{% ifnotequal reservation.placesDortoir 0 %}
+					{{ reservation.placesDortoir }} Places Dortoir<br />
+					{% endifnotequal %}
+				</td>
+				{% if reservation.resaVide %}
+				<td class="rouge" >
+					ReservationVide </td>
+				{% else %}
+				{% ifequal  reservation.chAAssigner 0 %}
+				<td class="vert" >
+					OK
+					{% else %}
+					{% ifequal  reservation.chAAssigner -1  %}
+     					<td class="rouge" >
+						Trop de chambres assignees ({{ reservation.chAssignees}})
+						{% else %}
+							<td class="jaune" >
+						{{ reservation.chAAssigner}} chambres a assigner
+
+					{% endifequal %}
+					{% endifequal %}
+ 					{% endif %}
+					
+						
+					</td><!-- td>
+					<span class="bouton" id="bouton_texte" onclick="javascript:afficher_cacher('texte_{{reservation.id}}');">Afficher le texte</span></td -->
+					<td><!-- style="visibility:hidden" id="texte_{{reservation.id}}"-->
+						{% if reservation.client.diversGrand %}
+								<a href="#" id="dialog_link{{reservation.id}}" class="ui-state-default ui-corner-all">Voir Divers</a>
+								<div id="dialog{{reservation.id}}" title="Dialog Title"><p>{{ reservation.client.divers|linebreaks|wordwrap:40 }}</p></div>
+								{% else %}
+								{{ reservation.client.divers|linebreaks|wordwrap:40 }}
+					{% endif %}
+				
+				{{ reservation.infoSupplementaire|safe }}<small> Pris le {{ reservation.client.creation|date:"d/m/y" }}</small>	</td>
+		</tr>
+			{% endfor %}
+		</table>
+		{% else %}
+		<p>Aucune resa enregistree.</p>
+		{% endif %}
+
+
+
+	
+
+
+	
+
+
+
+		<A NAME="libres"></A>
+			<h3>Libres</h3>
+		<small>	<a href="#top">haut de page</a> </small>
+		<table border>
+		<tr>
+			{% for d in prochainsJours %}
+			{% if d == dateDemandee %}
+			<td class="vert">
+			{% else %}
+			<td>
+			{% endif %}
+				<small>	<a href="/chambres/{{ d.year}}/{{d.month}}/{{d.day}}#libres">{{ d|date }}</a></small>
+			</td>
+			{% endfor %}
+		</tr>
+		<tr>
+			<td>
+				<small>
+		<a href="/chambres/{{prev}}#libres">Jour Precedent</a>
+				</small>
+			</td>
+			<td>
+				<small>
+		<a href="/chambres/{{next}}#libres">Jour suivant</a>
+				</small>
+			</td>
+		</tr>
+	</table>
+	<div class="couleurfoncee5">
+
+		{% if libre %}
+		<table border>
+			<table>
+				<tr><td><table border>
+			<tr>
+				<th>
+					Chambre
+				</th>
+				<th>
+					Petits lits
+				</th>
+				<th>
+					Grands Lits
+				</th>
+				<th>
+					note
+				</th>
+				<th>
+					Date de prochaine occupation
+				</th>
+			
+			</tr>
+			{% for ch in oneDayStat.libre %}
+			<tr>
+				<td>
+					{{ ch.nom }}
+				</td>
+				<td>
+				 {{ ch.petitsLits }}
+				</td>
+				<td>
+				 {{ ch.grandsLits }}
+			 </td>
+				<td>
+				 {{ ch.note }}
+			 </td>
+			 <td>
+				 {% if ch.occupe %}
+				 <a href="/chambres/{{ch.occupe.dateArrivee.year}}/{{ch.occupe.dateArrivee.month}}/{{ch.occupe.dateArrivee.day}}">
+					 {{ ch.occupe.dateArrivee|date }} 
+				 </a>
+				 par <a href="/admin/chambres/client/{{ ch.occupe.client.id}}">
+					 {{ ch.occupe.client.nom }} 
+				 </a>
+				 {% endif %}
+			 </td>
+			</tr>
+			{% endfor %}
+			<tr>
+				<td>
+					Dortoir
+				</td>
+				<td>
+					{{ nbPlacesLibreDortoir }}
+				</td>
+			</tr>
+	</table></td>
+	<td>
+		{% for desc,nb in oneDayStat.tableauLibres.items %}
+					{{ nb }} avec {{ desc }}<br />
+					{% endfor %}
+				</td>
+			</tr>
+		</table>
+		{% else %}
+		<p>Aucune libre.</p>
+		{% endif %}
+
+	</div>
+
+
+
+<A NAME="departs"></A>
+				<h3>Departs</h3>
+		<small>	<a href="#top">haut de page</a> </small>
+		<table border>
+		<tr>
+			{% for d in prochainsJours %}
+			{% if d == dateDemandee %}
+			<td class="vert">
+			{% else %}
+			<td>
+			{% endif %}
+				<small>	<a href="/chambres/{{ d.year}}/{{d.month}}/{{d.day}}#departs">{{ d|date }}</a></small>
+			</td>
+			{% endfor %}
+		</tr>
+		<tr>
+			<td>
+				<small>
+		<a href="/chambres/{{prev}}#departs">Jour Precedent</a>
+				</small>
+			</td>
+			<td>
+				<small>
+		<a href="/chambres/{{next}}#departs">Jour suivant</a>
+				</small>
+			</td>
+		</tr>
+	</table>
+	<div class="couleurfoncee4">
+		{% if departs %}
+		<table border>
+			<tr>
+				<th>
+					Nom
+				</th>
+				<th>
+					Chambres
+				</th>
+				<th>
+					Nb Nuits
+				</th>
+				<th>
+					ch reservees
+				</th>
+				<th>
+					Date Arrivee
+				</th>
+				<th>?</th>			
+				<th>?</th>			
+				<th> Commentaires </th>
+			</tr>
+			{% for reservation in departs %}
+			<tr>
+				{% if reservation.partis  %}
+				<td class="vert">
+				{% else %}
+				<td>
+				{% endif %}
+						{% if reservation.client.protege %}
+										<i>
+										{% endif %}
+										<a href="/admin/chambres/client/{{reservation.client.id}}" 	{% if reservation.client.protege %} onclick="return protege()" {% endif %}>{{ reservation.client.nom|capfirst }} <small>{{ reservation.client.tourOperateur.nom }}</small></a>
+						{% if reservation.client.protege %}
+										</i>
+										{% endif %}
+					<br />
+<small><a href="/easyPoS/arrhes/{{reservation.client.id}}">arrhes</a></small>
+				</td>
+				<td>
+					{% for ch in reservation.chambresAssignees.all %}
+					{{ ch.nom }}</br>
+					{% endfor %}
+					{% ifnotequal reservation.placesDortoir 0 %}
+					{{ reservation.placesDortoir }} lits dortoir
+					{% endifnotequal %}
+				</td>
+				<td>
+					{{reservation.nbNuits }}
+				</td>
+					<td>
+					{% ifnotequal reservation.chambres 0 %}
+					{{ reservation.chambres }} chambres <br />
+					{% endifnotequal %}
+					{% ifnotequal reservation.chambresSingle 0 %}
+					{{ reservation.chambresSingle }} chambres Single<br />
+					{% endifnotequal %}
+					{% ifnotequal reservation.chambresDoubles 0 %}
+					{{ reservation.chambresDoubles }} chambres Doubles<br />
+					{% endifnotequal %}
+					{% ifnotequal reservation.chambresTriples 0 %}
+					{{ reservation.chambresTriples }} chambres Triples<br />
+					{% endifnotequal %}
+					{% ifnotequal reservation.chambresTwin 0 %}
+					{{ reservation.chambresTwin }} chambres Twin<br />
+					{% endifnotequal %}
+					{% ifnotequal reservation.chambresQuadruples 0 %}
+					{{ reservation.chambresQuadruples }} chambres Quadruples<br />
+					{% endifnotequal %}
+					{% ifnotequal reservation.chambresQuintuples 0 %}
+					{{ reservation.chambresQuintuples }} chambres Quintuples<br />
+					{% endifnotequal %}
+					{% ifnotequal reservation.placesDortoir 0 %}
+					{{ reservation.placesDortoir }} Places Dortoir<br />
+					{% endifnotequal %}
+				</td>
+				<td>
+					{{ reservation.dateArrivee|date}}
+				</td>
+				{% if reservation.partis  %}
+				<td class="vert">
+				{% else %}
+				<td>
+				{% endif %}
+				<a href="{{day}}/parti/{{reservation.id}}">PAY&#201;</a>
+			</td>
+				{% if reservation.aEtePrepare  %}
+				<td class="rouge">
+				{% else %}
+				<td>
+				{% endif %}
+			<a href="{{day}}/prepareFacture/{{reservation.id}}">PrepareFacture</a></td>
+		<td>{{ reservation.client.divers|linebreaks }}	{{ reservation.infoSupplementaire|safe }} <small> Pris le {{ reservation.client.creation|date:"d/m/y H:m" }}</small>	</td>
+			
+			</tr>
+			{% endfor %}
+		</table>
+		{% else %}
+		<p>Aucun depart enregistree.</p>
+		{% endif %}
+	</div>
+
+
+		<A NAME="arrivees"></A><h3>Arrivees</h3>
+		<small>	<a href="#top">haut de page</a> </small>
+			<A HREF="javascript:affichage_popup('/chambres/{{year}}/{{month}}/{{day}}/imprimerArrivees','popup_1');">IMPRIMER</A></h3>
+		<table border>
+		<tr>
+			{% for d in prochainsJours %}
+			{% if d == dateDemandee %}
+			<td class="vert">
+			{% else %}
+			<td>
+			{% endif %}
+				<small>	<a href="/chambres/{{ d.year}}/{{d.month}}/{{d.day}}#arrivees">{{ d|date }}</a></small>
+			</td>
+			{% endfor %}
+		</tr>
+		<tr>
+			<td>
+				<small>
+		<a href="/chambres/{{prev}}#arrivees">Jour Precedent</a>
+				</small>
+			</td>
+			<td>
+				<small>
+		<a href="/chambres/{{next}}#arrivees">Jour suivant</a>
+				</small>
+			</td>
+		</tr>
+	</table>
+	<div class="couleurfoncee3">
+		{% if arrivees %}
+		<table border>
+			<tr>
+				<th>
+					Nom
+				</th>
+				<th>
+					Chambres
+				</th>
+				<th>
+					Resa Demandee
+				</th>
+				<th>
+					Arrivee
+				</th>
+				<th>
+					Depart
+				</th>
+				<th>
+					Nb Nuits
+				</th>
+				<th> Commentaires </th>
+				<th> arri</th>
+			</tr>
+			{% for reservation in arrivees %}
+			<tr>
+				{% if reservation.arrives  %}
+				<td class="vert">
+				{% else %}
+				<td>
+				{% endif %}
+					{% if reservation.client.protege %}
+										<i>
+										{% endif %}
+										<a href="/admin/chambres/client/{{reservation.client.id}}" 	{% if reservation.client.protege %} onclick="return protege()" {% endif %}>{{ reservation.client.nom|capfirst }} <small>{{ reservation.client.tourOperateur.nom }}</small></a>
+						{% if reservation.client.protege %}
+										</i>
+										{% endif %}
+					<br />
+<small><a href="/easyPoS/arrhes/{{reservation.client.id}}">arrhes</a></small>
+				</td>
+
+
+				{% if reservation.resaVide %}
+				<td class="rouge" >
+					<small><i>ReservationVide</i></small>
+				{% else %}
+				{% ifequal  reservation.chAAssigner 0 %}
+				{% if reservation.assignationsOk.0 %}
+				<td class="vert">
+					{% else %}
+					<td class="rouge">
+						<small><i>{{ reservation.assignationsOk.1 }}</i></small><br />
+					{% endif %}
+					{% else %}
+					{% ifequal  reservation.chAAssigner -1  %}
+     					<td class="rouge" >
+							<small><i>Trop de chambres assignees ({{ reservation.chAssignees}})</i></small><br />
+						{% else %}
+						<td class="jaune" title="{{ oneDayStat.libreStr }}">
+								<small><i>{{ reservation.chAAssigner}} chambres a assigner</i></small><br />
+
+					{% endifequal %}
+					{% endifequal %}
+ 					{% endif %}
+
+
+
+					{% if reservation.chambresAssignees.all %}
+						{% for ch in reservation.chambresAssignees.all %}
+							{{ ch.nom }}</br>
+						{% endfor %}
+					 {% endif %}
+						
+						</td><td>
+					{% ifnotequal reservation.chambres 0 %}
+					{{ reservation.chambres }} chambres <br />
+					{% endifnotequal %}
+					{% ifnotequal reservation.chambresSingle 0 %}
+					{{ reservation.chambresSingle }} chambres Single<br />
+					{% endifnotequal %}
+					{% ifnotequal reservation.chambresDoubles 0 %}
+					{{ reservation.chambresDoubles }} chambres Doubles<br />
+					{% endifnotequal %}
+					{% ifnotequal reservation.chambresTriples 0 %}
+					{{ reservation.chambresTriples }} chambres Triples<br />
+					{% endifnotequal %}
+					{% ifnotequal reservation.chambresTwin 0 %}
+					{{ reservation.chambresTwin }} chambres Twin<br />
+					{% endifnotequal %}
+					{% ifnotequal reservation.chambresQuadruples 0 %}
+					{{ reservation.chambresQuadruples }} chambres Quadruples<br />
+					{% endifnotequal %}
+					{% ifnotequal reservation.chambresQuintuples 0 %}
+					{{ reservation.chambresQuintuples }} chambres Quintuples<br />
+					{% endifnotequal %}
+					{% ifnotequal reservation.placesDortoir 0 %}
+					{{ reservation.placesDortoir }} Places Dortoir<br />
+					{% endifnotequal %}
+				</td>
+				<td>
+					{{ reservation.dateArrivee|date }}
+				</td>
+				<td>
+					{{ reservation.dateDepart|date }}
+				</td>
+				<td>
+					{{reservation.nbNuits }}
+				</td>
+				<td>{{ reservation.client.divers|linebreaks }}
+					{{ reservation.infoSupplementaire|safe }}<small> Pris le {{ reservation.client.creation|date:"d/m/y H:m" }}</small>		
+				</td>
+				{% if reservation.arrives  %}
+				<td class="vert">
+				{% else %}
+				<td>
+				{% endif %}
+				<a href="{{day}}/arrive/{{reservation.id}}">Ici</a>
+			</td>
+			</tr>
+			{% endfor %}
+		</table>
+		{% else %}
+		<p>Aucune arrivee enregistree.</p>
+		{% endif %}
+	</div>
+		
+<A NAME="changements"></A>
+				<h3>Changements</h3>
+		<small>	<a href="#top">haut de page</a> </small>
+
+		{% if changements %}
+		<table border>
+			<tr>
+				<th>
+					Nom
+				</th>
+				<th>
+					Chambre Origine
+				</th>
+				<th>
+					Chambre Destination
+				</th>
+			
+			
+			</tr>
+			{% for resaDep,resaArr in changements %}
+			<tr>
+				<td>
+					<a href="/admin/chambres/client/{{resaDep.client.id}}">{{ resaDep.client.nom }}</a>
+				</td>
+				<td>
+					{% for ch in resaDep.chambresAssignees.all %}
+					{{ ch.nom }}</br>
+					{% endfor %}
+					{% ifnotequal resaDep.placesDortoir 0 %}
+					{{ resaDep.placesDortoir }} lits dortoir
+					{% endifnotequal %}
+				</td>
+				<td>
+					{% for ch in resaArr.chambresAssignees.all %}
+					{{ ch.nom }}</br>
+					{% endfor %}
+					{% ifnotequal resaArr.placesDortoir 0 %}
+					{{ resaArr.placesDortoir }} lits dortoir
+					{% endifnotequal %}
+				</td>
+			</tr>
+			{% endfor %}
+		</table>
+		{% else %}
+		<p>Aucun changement enregistre.</p>
+		{% endif %}
+
+      <A NAME="menages"></A>
+		<h1>Menages</h1>
+		<small>	<a href="#top">haut de page</a> </small>
+		<h3>
+			<A HREF="javascript:affichage_popup('/chambres/{{year}}/{{month}}/{{day}}/imprimerCh','popup_1');">IMPRIMER</A></h3>
+	<table border>
+		<tr>
+			{% for d in prochainsJours %}
+			{% if d == dateDemandee %}
+			<td class="vert">
+			{% else %}
+			<td>
+			{% endif %}
+				<small>	<a href="/chambres/{{ d.year}}/{{d.month}}/{{d.day}}#menages">{{ d|date }}</a></small>
+			</td>
+			{% endfor %}
+		</tr>
+		<tr>
+			<td>
+				<small>
+		<a href="/chambres/{{prev}}#menages">Jour Precedent</a>
+				</small>
+			</td>
+			<td>
+				<small>
+		<a href="/chambres/{{next}}#menages">Jour suivant</a>
+				</small>
+			</td>
+		</tr>
+	</table>
+	  
+	<div class="couleurfoncee1">
+				{% if menages %}
+		<table border>
+			<tr>
+				<th>
+					Nom
+				</th>
+				<th>
+					Chambres
+				</th>
+				<th>
+					Date d'arrivee
+				</th>
+				<th>
+					Date Depart
+				</th>
+			</tr>
+			{% for reservation in menages %}
+			<tr>
+				<td>
+					{{ reservation.client.nom }}
+				</td>
+				<td>
+					{% for ch in reservation.chambresAssignees.all %}
+					{{ ch.nom }}</br>
+					{% endfor %}
+						{% ifnotequal reservation.placesDortoir 0 %}
+					{{ reservation.placesDortoir }} lits dortoir
+					{% endifnotequal %}
+				</td>
+				<td>
+					{{ reservation.dateArrivee|date }}
+				</td>
+				<td>
+					{{ reservation.dateDepart|date }}
+				</td>
+			</tr>
+			{% endfor %}
+			<th colspan=4>
+				Total:{{ oneDayStat.nbMenages }}
+			</th>
+		</table>
+		{% else %}
+		<p>Aucun menage enregistree.</p>
+		{% endif %}
+
+		<h3>Blancs</h3>
+		{% if blancs %}
+		<table border>
+			<tr>
+				<th>
+					Nom
+				</th>
+				<th>
+					Chambres
+				</th>
+			</tr>
+			{% for reservation in blancs %}
+			<tr>
+				<td>
+					{{ reservation.client.nom }}
+				</td>
+				<td>
+					{% for ch in reservation.chambresAssignees.all %}
+					{{ ch.nom }}</br>
+					{% endfor %}
+					{% ifnotequal reservation.placesDortoir 0 %}
+					{{ reservation.placesDortoir }} lits dortoir
+					{% endifnotequal %}
+				</td>
+			</tr>
+			{% endfor %}
+				<th colspan=4>
+				Total:{{ oneDayStat.nbBlancs }}
+			</th>
+		</table>
+		{% else %}
+		<p>Aucun blanc enregistree.</p>
+		{% endif %}
+	</div>
+
+		<A NAME="repas"></A>
+		<h1>Repas du soir </h1>
+		<small>	<a href="#top">haut de page</a> </small>
+		<h3> <A HREF="javascript:affichage_popup('/chambres/{{year}}/{{month}}/{{day}}/imprimerRepas','popup_1');">IMPRIMER</A></h3>
+	<table border>
+		<tr>
+			{% for d in prochainsJours %}
+			{% if d == dateDemandee %}
+			<td class="vert">
+			{% else %}
+			<td>
+			{% endif %}
+				<small>	<a href="/chambres/{{ d.year}}/{{d.month}}/{{d.day}}#repas">{{ d|date }}</a></small>
+			</td>
+			{% endfor %}
+		</tr>
+		<tr>
+			<td>
+				<small>
+		<a href="/chambres/{{prev}}#repas">Jour Precedent</a>
+				</small>
+			</td>
+			<td>
+				<small>
+		<a href="/chambres/{{next}}#repas">Jour suivant</a>
+				</small>
+			</td>
+		</tr>
+	</table>
+	<div class="couleurfoncee2">
+		<h3>Anciens</h3>
+			{% include "chambres/tableauRepas.html" with repas=repas.anciens %}
+		<h3>Nouveaux</h3>
+			{% include "chambres/tableauRepas.html" with repas=repas.nouveaux %}
+			<h3>Booking Potentiels</h3>
+			{% include "chambres/tableauRepas.html" with repas=repas.nouveauxBooking %}
+			<h3>Toutal</h3>
+			{% include "chambres/tableauRepas.html" with repas=repas.total %}
+	
+	</div>
+
+{% endblock %}

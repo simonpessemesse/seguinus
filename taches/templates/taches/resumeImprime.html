@@ -1,0 +1,20 @@
+
+<html><body>
+	
+		<ul>
+			{% for t in taches %}<li>
+						{% if t.multiligne %}
+								{{ t.description|linebreaks }}
+						{% else %}
+								{{ t.description }} 
+						{% endif %}
+						{% if t.rappel %}
+							R
+						{% endif %}
+						</li>
+					{% endfor %}
+				</ul>
+											
+	
+			</body>
+		</html>

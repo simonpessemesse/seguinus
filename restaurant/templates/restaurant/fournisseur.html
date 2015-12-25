@@ -1,0 +1,66 @@
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="/static/print.css" media="print" />
+	</head>
+	{% if print %}
+	<body onload="window.print();">
+	{% else %}
+	<body>
+	{% endif %}
+		<table>
+			<tr>
+				{% for t in tuples %}
+				<td valign="top">
+					<h4>Fiche pour {{ t.0.nom }} <small>{% if print %}Le {{ now|date }}{% else %}<a href="reset">resetTemp</a>{% endif %}</small></h4>
+					<small><small>{% for c in t.0.contacts.all %} {{ c }} {% endfor %}</small></small>
+		<table border>
+			<tr>
+				{% if print %}
+				<td>
+				</td>
+				<td>
+					Reste
+				</td>
+				<td>
+					Commande
+				</td>
+				{% endif %}
+			</tr>
+			{% for f in t.1 %}
+			<tr>
+				<td>
+				{% if print %}
+					{{f.nom}}
+					{% else %}
+					<a href="/admin/restaurant/fourniture/{{f.id}}">{{f.nom}}</a>
+				{% endif %}
+				{% if f.dateDebut %}
+				<small><i>{{ f.dateDebut }}</i></small>
+				{% endif %}
+				</td>
+				{% if print %}
+				<td> &nbsp;
+				</td>
+				<td> &nbsp;
+				</td>
+				{% else %}
+				<td>
+					{% if f.prix %}
+					{{ f.prix }}
+					{% endif %}
+				</td>
+				<td>
+					<a href="{{f.id}}/up">up</a>
+					<a href="{{f.id}}/down">down</a>
+					{{ f.note }}
+				</td>
+				{% endif %}
+			</tr>
+			{% endfor %}
+		</table>
+	</td>
+	{% endfor %}
+</tr>
+</table>
+	</body>
+</html>

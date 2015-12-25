@@ -1,0 +1,41 @@
+body
+{
+background-color : black;
+color : lightgrey;
+/*font-family : monospace;*/
+}
+
+a
+{ 
+	color : lightblue;
+/* 	color : lightblue; */
+}
+
+.vert {
+background-color:#556B2F;
+}
+.blanc {
+background-color:#C1C1C1;
+color:#000000;
+}
+.jaune {
+background-color:#B8860B;
+}
+.rouge {
+background-color:#DC143C;
+}
+.couleurfoncee1{
+	background-color:brown;
+}
+.couleurfoncee2{
+	background-color:teal;
+}
+.couleurfoncee3{
+	background-color:purple;
+}
+.couleurfoncee4{
+	background-color:darkgoldenrod;
+}
+.couleurfoncee5{
+	background-color:dimgray;
+}

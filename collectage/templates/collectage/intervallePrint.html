@@ -1,0 +1,53 @@
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="/static/print.css" media="print" /> 
+	</head>
+	<body  onLoad="window.print();window.close()">
+		<h4>{{ emp.individu.prenom }} {{ emp.individu.nom }} pour le mois de {{ dd|date:"F Y" }}</h4>
+		Cocher la case "exact" apres les heures indiquees qui doivent etre faite si ces indications correspondent a la realite, sinon cocher la case "inexact" et ecrire en dessous le heures reellement effectuees et les repas reellement pris
+		{% for m in an %}
+<h4>{{ m.1.6|date:"F"|capfirst }}</h4>
+{% for w in m %}
+<table border>
+	<tr>
+{% for d in w %}
+<td>
+			{% if d %}
+			{{ d.jour|date:"D d M Y" }}<br />
+									{% for h in d.heuresPlanifiees %}
+											{% if h.tempsTravaille %}
+											{{ h.tempsTravaille }} minutes
+											{% else %}
+											 de {{h.heureDebut|time:"H:i" }} a {{h.heureFin|time:"H:i"}}
+											 {% endif %}
+											 {% if h.absence %}
+											 non effectuees qui auraient du l'etre
+											 {% else %}
+											  
+											{{ h.nbRepasPris }} repas pris <br />
+											 {% endif %}
+											{% if h.commentaire %}
+											{{ h.commentaire }}
+											{% endif %}
+											&#9744;&nbsp;exact &#9744;&nbsp;inexact:<br />
+											minutes travaillees:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+											repas pris:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+									
+									{% endfor %}
+			{% else %}
+			{% endif %}
+</td>
+
+{% endfor %}
+</tr>
+</table>
+</td><td>Signature de l'employe:<br /><br /></td>
+</tr>
+	{% endfor %}
+{% endfor %}
+
+		<br />
+		<br />
+	
+	</body>
+</html>

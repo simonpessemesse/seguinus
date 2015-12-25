@@ -1,0 +1,302 @@
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="/static/print.css" media="print" /> 
+		<title>
+			{% if devis %}
+			{% else %}
+			{% if f.factureAssociee %}
+			Avoir
+			{% else %}
+			Facture 
+			{% endif %}
+			n°{% if f.numero %}
+					{{ f.numero }}
+					{% else %}
+					{{ donnees.numeroFactureCourante }}
+					{% endif %} 
+					{% endif %}
+					{% if f.clientNomFinal %}
+					Client: {{f.clientNomFinal}}
+					{% else %}
+					{% if f.client %}
+					{% if f.client.nom|length > 0 %}
+					Client: {{f.client.nom}}
+					{% endif %} 
+					{% endif %}
+					{% endif %} 
+		</title>
+	</head>
+	{% if imprime %}
+		<body onLoad="window.print();window.close()">
+		{% else %}
+		<body>
+		<a href="/easyPoS/factures/caisse/{{prev}}">Caisse du jour</a>
+		<a href="/easyPoS/">Retour Resume</a>
+		<a href="/easyPoS/factures/doubles/{{prochain}}">Doubles du jour</a>
+		{% endif %}
+		<table width=400>
+			<tr >
+				<td colspan="2" align=center>
+		<h2>
+			{{ donnees.adresse|linebreaks }}
+		</h2>
+			
+	</td>
+</tr>
+		
+			<col width="230">
+			<col width="170">
+			<tr>
+				<td align="left">
+		<h5>
+			<br />
+			Tel: {{ donnees.telephone }} 
+			<br />
+			Email: {{ donnees.email }}
+			<br />
+			http://www.aubergedesseguins.com
+		</h5>
+	</td>
+	<td>
+		<img width="170" src="/static/seguins.jpg">
+	</td>
+
+</tr>
+</table>
+		<table width=400>
+			<tr>
+				<td>
+						{% if f.clientNomFinal %}
+					Client: {{f.clientNomFinal}}
+					{% else %}
+					{% if f.client %}
+					{% if f.client.nom|length > 0 %}
+					Client: {{f.client.nom}}
+					{% endif %} 
+					{% endif %}
+					{% endif %} 
+
+
+
+				</td>
+			</tr>
+		</table>
+		<table width=400>
+			<tr>
+				<td align=left>
+					Date
+					{% if f.dateVente %}
+					:{{ f.dateVente|date:"d/m/Y" }}
+					{% else %}
+					:{{ today|date:"d/m/Y" }}
+					{% endif %}
+				</td>
+				<td align=right>
+				{% if devis %}
+				{% comment %} Bon n&ordm; {{ f.id }} {% endcomment %}
+				{% else %}
+					{% if f.factureAssociee %}
+					Avoir
+					{% else %}
+					Facture 
+					{% endif %} 
+					n&ordm;
+					{% if f.numero %}
+					:{{ f.numero }}
+					{% else %}
+					:{{ donnees.numeroFactureCourante }}
+					{% endif %}
+					{% endif %}
+				</td>
+			</tr>
+					{% if f.factureAssociee %}
+					<tr>
+						<td>
+							Facture associee n&ordm; :{{f.factureAssociee.numero }}
+						</td>
+					</tr>
+					{% endif %} 
+		</table>
+		<table border rules="rows" cellspacing="5" width="400">
+			<caption>
+				D&eacute;tails:
+		</caption>
+  <COL >
+  <COL width="60">
+  <COL width="50">
+  <COL width="70">
+			
+			<tr>
+				<th>
+					Libell&eacute; Article
+				</th>
+				<th>
+					Prix
+				</th>
+				<th>
+					Quantit&eacute;
+				</th>
+				<th>
+					Montant
+				</th>
+			</tr>
+			{% for ligne in f.lignefacture_set.all|dictsort:"position" %}
+			<tr>
+				<td>
+					{% if ligne.produit %}
+					{{ ligne.produit.nom }}
+				</td>
+				<td align="right">
+					{% if ligne.prixUnitaireFinal == 0 %}
+					0 &euro;
+					{% else %}
+					{% if ligne.prixUnitaireFinal  %}
+					{{ ligne.prixUnitaireFinal|floatformat:2 }} &euro;
+					{% else %}
+					{{ ligne.produit.prix|floatformat:2 }} &euro;
+					{% endif %}
+					{% endif %}
+				</td>
+				<td align="center">
+					x {{ ligne.quantite }} =
+				</td>
+				<td align="right">
+					{% if ligne.montant == 0 %}
+					Offert
+					{% else %}
+					{{ ligne.montant|floatformat:2 }} &euro;
+					{% endif %}
+					{% else %}
+					{{ ligne.libelle }}
+					{% endif %}
+				</td>
+			</tr>
+			{% endfor %}
+			<tfoot >
+			<tr>
+				<th align>
+					Total
+				</th>
+				<th colspan=3 align="right">
+				 {{ f.total|floatformat:2 }} &euro;
+				</th>
+		</tr>
+			</tfoot>
+
+		</table>
+		<br />
+		<table border rules="cols" width="300">
+			<tr>
+				<th>
+					Taux
+				</th>
+				<th>
+					Bases HT
+				</th>
+				<th>
+					Tva
+				</th>
+				<th>
+					TTC
+				</th>
+			</tr>
+			{% for p in f.portions %}
+			<tr>
+				<td align="right">
+					{{ p.taux|floatformat:2 }} %
+				</td>
+				<td align="right">
+					{{ p.BaseHT|floatformat:2 }} &euro;
+				</td>
+				<td align="right">
+					{{ p.TVA|floatformat:2 }} &euro;
+				</td>
+				<td align="right">
+					{{ p.TTC|floatformat:2 }} &euro;
+				</td>
+			</tr>
+			{% endfor %}
+			{% if f.asDeuxPortions %}
+			<tfoot>
+				<th align="center">Total:</th>
+				<td align="right">	{{ f.montantHT|floatformat:2 }} &euro;</td>
+				<td align="right">{{f.montantTVA|floatformat:2 }} &euro;
+				</td>
+				<td align="right">{{f.total|floatformat:2 }} &euro;
+				</td>
+			</tfoot>
+			{% endif %}
+
+		</table>
+		<br />
+		<table border rules="cols" width=</td>
+			</tr>
+
+		</table>
+		<br />
+			<table width="400">
+				<tr>
+					<td width="180">
+					</td>
+					<td align="right" width="100">
+		<h3>
+						Net &agrave; payer: 
+		</h3>
+					</td>
+				<td align="right">
+		<h3>
+					{{ f.total|floatformat:2 }} &euro;
+		</h3>
+					</td>
+				</tr>
+				</table>
+					<table width="400">
+		{% for paiement in f.paiement_set.all %}
+				<tr>
+					<td align="right">
+						R&eacute;gl&eacute;: 
+					{% if paiement.arrhe %}
+					{{ paiement.moyenPaiement.nom }} d'arrhes de {{ paiement.montant|floatformat:2 }} &euro; 
+					{% else %}
+					{{ paiement.moyenPaiement.nom }} de {{ paiement.montant|floatformat:2 }} &euro; 
+					{% endif %}
+					</td>
+				</tr>
+				{% endfor %}
+				{% if f.totalDu != f.total %}
+			<table width="400">
+				<tr>
+					<td width="180">
+					</td>
+					<td align="right" width="100">
+		<h3>
+					Reste d&ugrave;: 
+		</h3>
+					</td>
+				<td align="right">
+		<h3>
+						{{ f.totalDu|floatformat:2 }} &euro;
+		</h3>
+					</td>
+				</tr>
+				{% endif %}
+			</table>
+			<table width="400">
+				<tr>
+					<td align="center">
+						<small>
+							SIRET: {{ donnees.siret}} 
+						</small>
+					</td>
+				</tr>
+				<tr>
+					<td align="center">
+						<small>
+							TVA INTRA : {{ donnees.numeroTva }}
+						</small>
+					</td>
+				</tr>
+			</table>
+
+	</body>
+</html>

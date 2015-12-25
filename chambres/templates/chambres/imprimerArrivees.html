@@ -1,0 +1,166 @@
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="/static/print.css" media="print" />
+	</head>
+	<body onLoad="window.print();window.close()">
+		<table>
+			<tr>
+				<td>
+
+
+						<table border>
+			<tr>
+				<th>
+					Nom
+				</th>
+				<th>
+					Chambres
+				</th>
+				<th>
+					Resa Demandee
+				</th>
+				<th>
+					Arrivee
+				</th>
+				<th>
+					Depart
+				</th>
+				<th>
+					Nb Nuits
+				</th>
+				<th> Commentaires </th>
+				<th> arri</th>
+			</tr>
+			{% for reservation in arrivees %}
+			<tr>
+				{% if reservation.arrives  %}
+				<td class="vert">
+				{% else %}
+				<td>
+				{% endif %}
+						{% if reservation.client.protege %}
+					<a href="/admin/chambres/client/{{reservation.client.id}}"  onclick="return protege()">{{ reservation.client.nom|capfirst }} <small>{{ reservation.client.tourOperateur.nom }}</small></a>
+					{% else %}
+					<a href="/admin/chambres/client/{{reservation.client.id}}">{{ reservation.client.nom|capfirst }} <small>{{ reservation.client.tourOperateur.nom }}</small></a>
+					{% endif %}
+				</td>
+				<td>
+					{% if reservation.chambresAssignees.all %}
+						{% for ch in reservation.chambresAssignees.all %}
+							{{ ch.nom }}</br>
+						{% endfor %}
+					 {% endif %}
+						
+						</td><td>
+					{% ifnotequal reservation.chambres 0 %}
+					{{ reservation.chambres }} chambres <br />
+					{% endifnotequal %}
+					{% ifnotequal reservation.chambresSingle 0 %}
+					{{ reservation.chambresSingle }} chambres Single<br />
+					{% endifnotequal %}
+					{% ifnotequal reservation.chambresDoubles 0 %}
+					{{ reservation.chambresDoubles }} chambres Doubles<br />
+					{% endifnotequal %}
+					{% ifnotequal reservation.chambresTriples 0 %}
+					{{ reservation.chambresTriples }} chambres Triples<br />
+					{% endifnotequal %}
+					{% ifnotequal reservation.chambresTwin 0 %}
+					{{ reservation.chambresTwin }} chambres Twin<br />
+					{% endifnotequal %}
+					{% ifnotequal reservation.chambresQuadruples 0 %}
+					{{ reservation.chambresQuadruples }} chambres Quadruples<br />
+					{% endifnotequal %}
+					{% ifnotequal reservation.chambresQuintuples 0 %}
+					{{ reservation.chambresQuintuples }} chambres Quintuples<br />
+					{% endifnotequal %}
+					{% ifnotequal reservation.placesDortoir 0 %}
+					{{ reservation.placesDortoir }} Places Dortoir<br />
+					{% endifnotequal %}
+				</td>
+				<td>
+					{{ reservation.dateArrivee|date }}
+				</td>
+				<td>
+					{{ reservation.dateDepart|date }}
+				</td>
+				<td>
+					{{reservation.nbNuits }}
+				</td>
+				<td>{{ reservation.client.divers|linebreaks }}
+					{% if reservation.client.tourOperateur %}
+					<b>Demander voucher?</b>
+					{% endif %}
+				</td>
+				{% if reservation.arrives  %}
+				<td class="vert">
+				{% else %}
+				<td>
+				{% endif %}
+				<a href="{{day}}/arrive/{{reservation.id}}">Ici</a>
+			</td>
+			</tr>
+			{% endfor %}
+		</table>
+	</td>
+	<td>
+			{% if libre %}
+		<table border>
+			<tr>
+				<th>
+					Chambre
+				</th>
+				<th>
+					Petits lits
+				</th>
+				<th>
+					Grands Lits
+				</th>
+				<th>
+					Date de prochaine occupation
+				</th>
+			
+			</tr>
+			{% for ch in libre %}
+			<tr>
+				<td>
+					{{ ch.nom }}
+				</td>
+				<td>
+				 {{ ch.petitsLits }}
+				</td>
+				<td>
+				 {{ ch.grandsLits }}
+				
+			 </td>
+			 <td>
+				 {% if ch.occupe %}
+				 <a href="/chambres/{{ch.occupe.dateArrivee.year}}/{{ch.occupe.dateArrivee.month}}/{{ch.occupe.dateArrivee.day}}">
+					 {{ ch.occupe.dateArrivee|date }} 
+				 </a>
+				 par <a href="/admin/chambres/client/{{ ch.occupe.client.id}}">
+					 {{ ch.occupe.client.nom }} 
+				 </a>
+				 {% endif %}
+			 </td>
+			</tr>
+			{% endfor %}
+			<tr>
+				<td>
+					Dortoir
+				</td>
+				<td>
+					{{ nbPlacesLibreDortoir }}
+				</td>
+			</tr>
+		</table>
+		{% else %}
+		<p>Aucune libre.</p>
+		{% endif %}
+		
+
+</td>
+</tr>
+</table>
+	</body>
+</html>
+

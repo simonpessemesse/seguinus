@@ -1,0 +1,53 @@
+<h1>Recapitulatif </h1>
+<a href="/menuspensioncomplete/{{prev}}">Semaine Precedente</a>   
+<a href="/menuspensioncomplete/{{next}}">Semaine Suivante</a>
+{% if journees %}
+<table border>
+	<tr>
+		<td>
+			Jour
+		</td>
+		<td>
+			Plat midi
+		</td>
+		<td>
+			Dessert midi
+		</td>
+		<td>
+			Entree Soir
+		</td>
+		<td>
+			Plat Soir
+		</td>
+		<td>
+			Dessert Soir
+		</td>
+	</tr>
+	{% for jour in journees %}
+	<tr>
+		<td>
+			{{ jour.date }}
+		</td>
+		<td>
+			{{ jour.platMidi|linebreaks }}
+		</td>
+		<td>
+			{{ jour.dessertMidi|linebreaks }}
+		</td>
+		<td>
+			{{ jour.entreeSoir|linebreaks }}
+		</td>
+		<td>
+			{{ jour.platSoir|linebreaks }}
+		</td>
+		<td>
+			{{ jour.dessertSoir|linebreaks }}
+		</td>
+	</tr>
+    	{% endfor %}
+    </table>
+{% else %}
+    <p>Aucun menu enregistre.</p>
+{% endif %}
+
+

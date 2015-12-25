@@ -1,0 +1,41 @@
+
+{% extends "base.html" %}
+{% block content %}	
+			<h3>
+			Factures Trouvees 
+		</h3>
+		<table border>
+			<tr>
+				<th>
+					Numero
+				</th>
+				<th>client</th>
+				<th>
+					Montant
+				</th>
+				<th>
+					Du
+				</th>
+			{% for f in factures %}
+			<tr>
+				<td>
+					{{ f.etat }}
+					<a href="/easyPoS/facture/{{f.id}}">facture numero {{f.numero}} dateVente: {{f.dateVente|date}} a {{f.dateVente|time}}</a>
+				</td>
+				<td>
+					{{ f.clientNomFinal }}
+				</td>
+				<td>
+					{{f.total|floatformat:2 }} &euro;
+				</td>
+				<td>
+					{{ f.totalDu|floatformat:2 }} &euro;
+				</td>
+				<td>
+					<a href="/easyPoS/facture/{{f.id}}/show">montre</a>
+				</td>
+			</tr>
+			{% endfor %}
+		</table>
+
+{% endblock %}

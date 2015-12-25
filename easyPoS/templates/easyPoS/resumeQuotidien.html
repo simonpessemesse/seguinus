@@ -1,0 +1,312 @@
+	
+
+{% extends "base.html" %}
+{% block title %}
+Resume {{ titre }}
+{% endblock %} 
+
+
+{% block content %}	
+		<h1>Resume {{ titre }}</h1>
+		<a href="/easyPoS/factures/{{prev}}">Periode Precedente</a>
+		<a href="/easyPoS/"> Retour Resume</a>
+		<a href="/easyPoS/factures/{{prochain}}">Periode suivante</a>
+		taxe de sejour: {{ rapport.taxeSejour }}
+		taxe de sejour exoneree: {{ rapport.taxeSejourExoneree }}
+		{% if afficheEncaissementsDetailles %}
+		<h3>
+			Paiements effectues 
+		</h3>
+			<A HREF="javascript:affichage_popup('/easyPoS/factures/{{date.year}}/{{date.month}}/{{date.day}}/imprimer','popup_1');">IMPRIMER</A></h3>
+		<table >
+		{% for key, value in rapport.pClasse.items %}
+			<tr>
+				<th>
+					{{ key }}
+				</th>
+				<td>
+					<table border>
+						<tr>
+							<th>
+								Montant
+							</th>
+							<th>
+								Heure
+							</th>
+							<th>
+								Facture
+							</th>
+							<th>
+								See
+							</th>
+						</tr>
+						{% for p in value %}
+						<tr>
+							<td align=right>
+								{{ p.montant|floatformat:2 }} &euro;
+							</td>
+							<td>
+								<a href="/admin/easyPoS/paiement/{{ p.id }}">{{ p.date|time }}</a>
+							</td>
+							<td>
+								{% if p.facture %}
+								<a href="/easyPoS/facture/{{ p.facture.id }}">Numero: {{ p.facture.numero }} Montant facture : {{ p.facture.total|floatformat:2}} &euro;</a> du 
+					{{ p.facture.dateVente|date:"d/m/Y" }}
+								{% else %}
+								<a href="/easyPoS/arrhes/{{ p.arrhe.client.id }}">Arrhes de {{ p.arrhe.client.nom}}</a>
+								{% endif %}
+							</td>
+							<td>
+								<a href="/easyPoS/facture/{{p.facture.id}}/show">see</a>
+							</td>
+							{% ifequal  p.facture.etat "B" %}
+							<td>
+								Brouillon
+							</td>
+							{% endifequal %}
+						</tr>
+						{% endfor %}
+					</table>
+				</td>
+			</tr>
+		{% endfor %}
+			
+		</table>
+		{% endif %}
+			<h3>Par famille</h3>
+		<table border>
+			<tr>
+				<th>
+					Famille
+				</th>
+				<th>
+					Total
+				</th>
+				<th>
+					%
+				</th>
+				<th> 
+					Detail
+				</th>
+				{% for f in rapport.familles %}
+				<tr>
+				<td>
+					{{ f.famille }}
+				</td>
+				<td align=right>
+					{{ f.total|floatformat:2 }} &euro;
+				</td>
+				<td>
+					{{ f.pourcent|floatformat:2 }}%
+				</td>
+				<td>
+				<table border>
+					<tr>
+				<th>
+					Taux de tva
+				</th>
+				<th>
+					TTC
+				</th>
+				<th>
+					HT
+				</th>
+			</tr>
+
+				{% for tva,montants in f.tva.items %}
+					<tr>
+						<td>
+					Taux: {{ tva }}%
+				</td>
+				<td align=right> 
+					{{montants.0|floatformat:2}} &euro;
+				</td>
+				<td align=right>
+					{{montants.1|floatformat:2}} &euro;
+					</td>
+				</tr>
+					{% endfor %}
+				</table>
+				</td>
+			</tr>
+			{% endfor %}
+				
+
+			</tr>
+			
+		</table>
+		<h3>
+			Encaissements
+		</h3>
+		<table border>
+			<tr>
+				<td></td>
+				<td>Sur Facture</td>
+				<td>Sur Arrhes</td>
+				<td>Rmbts trop percus</td>
+				<td>Total</td>
+				<td>%</td>
+			</tr>
+			{% for m in rapport.moyens %}
+			<tr>
+				<td>
+					{{m.moyen.nom}}
+				</td>
+				<td align=right>
+					{{m.totalSurFacture|floatformat:2}} &euro;
+				</td>
+				<td align=right>
+					{{m.totalSurArrhes|floatformat:2}} &euro;
+				</td>
+				<td align=right>
+					{{m.totalTropPercus|floatformat:2}} &euro;
+				</td>
+				<td align=right>
+					{{m.total|floatformat:2}} &euro;
+				<td>
+					{{ m.pourcent|floatformat:2}}%
+				</td>
+
+			</tr>
+			{% endfor %}
+			<tr>
+				<th>
+					Total:
+				</th>
+				<th colspan="3">
+				</th>
+				<th >
+					{{ rapport.totalTotaux|floatformat:2}} &euro;
+				</th>
+			</tr>
+		</table>
+
+
+
+		<h3>
+			Liste des tva
+		</h3>
+				<table border>
+			<tr>
+				<th>
+					Taux
+				</th>
+				<th>
+					Bases HT
+				</th>
+				<th>
+					Tva
+				</th>
+				<th>
+					TTC
+				</th>
+			</tr>
+			{% for p in rapport.sommePortions %}
+			<tr>
+				<td align="right">
+					{{ p.taux }} %
+				</td>
+				<td align="right">
+					{{ p.BaseHT|floatformat:2 }} &euro;
+				</td>
+				<td align="right">
+					{{ p.TVA|floatformat:2 }} &euro;
+				</td>
+				<td align="right">
+					{{ p.TTC|floatformat:2 }} &euro;
+				</td>
+			</tr>
+			{% endfor %}
+			<tr>
+				<th>
+					Total:
+				</th>
+				<td align="right">
+					{{ rapport.totBase|floatformat:2 }} &euro;
+				</td>
+				<td align="right">
+					{{ rapport.totTVA|floatformat:2 }} &euro;
+				</td>
+				<td align="right">
+					{{ rapport.totTTC|floatformat:2 }} &euro;
+				</td>
+
+			</table>
+		
+		<h3>
+			Cumul des debiteurs 
+		</h3>
+		{{ debiteurs|floatformat:2 }}&euro;
+					<h3>
+			Factures Validees 
+		</h3>
+		<table border>
+			<tr>
+				<th>
+					Numero
+				</th>
+				<th>
+					Montant
+				</th>
+				<th>
+					Voir
+				</th>
+				<th>
+					Client
+				</th>
+			{% for f in factures %}
+			<tr>
+				<td>
+					<a href="/easyPoS/facture/{{f.id}}">facture numero {{f.numero}} validee le {{f.dateVente|date}} a {{f.dateVente|time}}</a>
+				</td>
+				<td>
+					{{f.total|floatformat:2 }} &euro;
+				</td>
+				<td>
+					<a href="/easyPoS/facture/{{f.id}}/show">montre</a>
+				</td>
+				<td>
+					{% if f.clientNomFinal %}
+					{{ f.clientNomFinal }}<br />
+					{% endif %}
+					{{ f.client.nom }}
+				</td>
+			</tr>
+			{% endfor %}
+			<tr>
+				<th>
+					Total:
+				</th>
+				<td>
+					{{ rapport.totalValide|floatformat:2 }} &euro;
+				</td>
+			</tr>
+		</table>
+
+		<h2>Remises <a href="remisesCheque">de cheque</a> a faire:</h2>
+			<h3><a href="valide">Je valide le total: {{total|floatformat:2 }} &euro; pour {{nb}} cheques</a></h3>
+			<table border>
+				{% for c in cheques %}
+				<tr>
+					<td align="right">
+						{{c.montant|floatformat:2 }} &euro;
+					</td>
+					<td>
+						{{c.date|date}}
+					</td>
+
+				</tr>
+				{% endfor %}
+				<tr>
+					<th>
+						Total: {{total|floatformat:2 }} &euro; 
+					</th>
+					<th>
+						{{ nb }} cheques
+					</th>
+				</tr>
+			</table>
+			{% for k,v in chequeParMontant %}
+			{{ v }}x{{ k|floatformat:2 }} ;
+			{% endfor %}
+{% endblock %}

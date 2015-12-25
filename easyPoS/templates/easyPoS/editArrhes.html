@@ -1,0 +1,56 @@
+
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ client }}</h1>
+<table>
+	<tr><td>
+		<h3>Cheques non encaisses:</h3>
+		<ul>
+		{% for a in arrhes %}
+			<li>Cheque de {{ a.montantChequeNonEncaisse }}&euro; le {{ a.dateArrivee|date }} {{ a.dateArrivee.year}}  <a href="{{a.id}}">Encaisser?</a> <a href="sup/{{a.id}}">Detruire?</a></li>
+		{% endfor %}
+		</ul>
+
+		<form action="" method="post">{% csrf_token %}
+		{{ nonEncaissesForm.as_p }}
+		<input type="submit" value="Ajouter" />
+		</form>
+
+
+
+		<h3>Arrhes Encaissees</h3>
+		<ul>{% for a in paiements %}
+			<li>{{ a }}</li>
+		{% endfor %}</ul>
+		<form action="" method="post">{% csrf_token %}
+		{{ paiementForm.as_p }}
+		<input type="submit" value="Ajouter" />
+		</form>
+	
+	</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	</td><td valign="top">
+	<h3>Modifs Resas Repas</h3>
+	<a href="{% url 'restaurant:ajouteModifResa' client.id %}">Ajout modification</a>
+	<br />
+	<br />
+	<br />
+		{% for m in modifs %}
+		<table><tr><td>
+					<a href="{% url 'restaurant:supprime' m.id %}">Supprimer</a>
+				</td><td>&nbsp;&nbsp;&nbsp;&nbsp;
+				</td><td>
+					<a href="/admin/restaurant/resaresto/{{ m.id }}">{{ m }}</a>
+		</td></tr></table>
+		{% endfor %}
+
+
+
+
+
+	</td></tr>
+</table>
+
+
+
+			{% endblock %}
+

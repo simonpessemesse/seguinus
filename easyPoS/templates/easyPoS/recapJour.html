@@ -1,0 +1,27 @@
+	
+
+{% extends "base.html" %}
+{% block title %}
+Resume 
+{% endblock %} 
+{% block content %}	
+<ul>
+	{% for f in factures %}
+	<li>
+	<a href="/easyPoS/facture/{{ f.id }}">{{ f }}</a></li>
+	{% endfor %}
+</ul>
+<table border>
+	{% for c in lignes %}
+	<tr>
+		<td>
+			{{ c.quantite }} x {{ c.article.nom }} a {{ c.prix|floatformat:2 }} 
+		</td>
+		<td><ul>{% for l in c.lignes %}
+				<li>{{ l.quantite }} sur <a href="/easyPoS/facture/{{ l.facture.id }}">{{ l.facture }}</a></li>
+				{% endfor %}</ul>
+		</td>
+	</tr>
+	{% endfor %}
+</table>
+{% endblock %}

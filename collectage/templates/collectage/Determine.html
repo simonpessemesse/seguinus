@@ -1,0 +1,62 @@
+<html>
+	<body>
+		<h1>Contrat à Durée Déterminée de date à date</h1>
+		ENTRE<br />
+		La société : {{ entreprise.denomination }}<br />
+		Adresse : {{ entreprise.adresse }}<br />
+		Numéro Urssaf : {{ entreprise.numeroUrssaf }}<br /> 
+		ET : <br />
+		{{ object.individu.denom }} <br />
+		Adresse : {{ object.individu.adresse }} <br />
+		Numéro de Sécurité sociale : {{ object.individu.numeroSecuriteSociale }}<br /> 
+		<h3>IL A ÉTÉ CONVENU ET ARRÊTÉ CE QUI SUIT : </h3>
+		<h2>Article1 : Objet</h2>
+La société {{ entreprise.denomination }} engage {{ object.individu.denom }} sous contrat à durée déterminée en remplacement provisoire de M................. qui est absent pour ............
+<h2>Article 2 : Fonction</h2>
+M  {{ object.individu.denom }} est embauché en qualité de {{object.emploi}} au niveau ................... à l'échelon ................... 
+Vos fonctions consisteront notamment à : {{ object.fonction }}<br />
+Ces fonctions sont données à titre indicatif et ne sont pas exhaustives ni définitives. 
+<h2>Article 3 : Durée du contrat</h2>
+Le présent contrat prendra effet le {{object.dateDebut|date:"d F Y"}} pour se terminer le {{ object.dateFin|date:"d F Y" }} <br />
+Sa durée est fixée à ................... mois. <br /> 
+Toutefois, si besoin est, il pourra être renouvelé une fois au-delà de ce terme par accord entre les parties. Dans ce cas, un avenant qui fixera les conditions de ce renouvellement, sera alors soumis à M {{ object.individu.denom }} avant le   ............  
+<h2>Article 4 : Période d'essai</h2>
+La période d'essai débutera le  {{object.dateDebut|date:"d F Y"}} et aura une durée de 7 jours <br />
+Au cours de cette période, chacune des parties pourra rompre librement le contrat sans préavis ni indemnité. <br />
+<h2>Article 5 : Rémunération</h2>
+{{ object.individu.denom }}  percevra un salaire brut mensuel de {{ object.nombreHeuresSemaine|floatformat }}h/Semaine au SMIC, avantages en nature compris.  
+<h2>Article 6 : Horaires de travail</h2>
+L’horaire hebdomadaire de travail est de {{ object.nombreHeuresSemaine|floatformat }} heures hebdomadaires, soit {{ object.hMois|floatformat:2 }} heures mensuelles. {% if object.nombreHeuresSemaine > 35 %} Celui-ci inclus la réalisation de 4 heures supplémentaires par semaine, de 35 à 39 heures qui sont majorées à un taux de 10 % et qui sont comprises dans votre rémunération brute mensuelle.{% endif%}
+<h2>Article 7 : Heures supplémentaires</h2>
+Vous pourrez être amené dans l’exercice de vos fonctions à effectuer des heures supplémentaires au-delà de  {{ object.nombreHeuresSemaine|floatformat }}  heures mais dans le respect de la législation en vigueur. 
+<h2>Article 8 : Jours de repos</h2>
+Vous avez droit à 2 jours de repos hebdomadaire, mais ceux-ci peuvent être suspendus en tout ou partie conformément à la convention collective nationale des CHR du 30 avril 1997. Dans ce cas, ils donneront lieu à compensation en temps ou en argent à la fin de la saison. 
+<h2>Article 9 : Congés payés</h2>
+Conformément à la législation en vigueur, vous bénéficiez de 2,5 jours ouvrables de congés payés par mois de travail effectif. 
+À l’issue de votre contrat de travail, vous percevrez donc une indemnité de congés payés égale à 10 % de votre salaire brut perçu. 
+<h2>Article 10 : Caisse de retraite et prévoyance</h2>
+{{ object.individu.denom }}  sera affilié à la caisse de retraite complémentaire Mornay<br />
+Vous bénéficierez également d'un régime de prévoyance complémentaire auprès de HCR Santé 
+<h2>Article 11 : Règlement intérieur</h2>
+{{ object.individu.denom }} s’engage à se conformer aux dispositions du règlement intérieur de l'établissement.
+<h2>Article 12 : Convention collective</h2>
+Vous bénéficiez des dispositions de la convention collective des CHR du 30 avril 1997 et de ses deux avenant n° 2 et n°2 bis du 5 février 2007.
+Vous pouvez la consulter auprès de internet
+<h2>Article 13 : Indemnité de précarité</h2>
+A l’issu de son contrat, M {{ object.individu.denom }} aura droit à une indemnité de précarité égale à 10% de son salaire brut perçu.
+<br /><br /><br />
+Fait en 2 exemplaires <br />
+À Buoux , le   {{object.dateDebut|date:"d F Y"}} <br />
+Signature de l'employeur <br />
+(Nom et titre du signataire) <br /><br /><br />
+
+
+
+Signature du salarié<br />
+(Précédée de la mention « Lu et approuvé » de la main du salarié) <br /> <br /> <br /><br /><br /><br />
+
+
+
+
+	</body>
+</html>

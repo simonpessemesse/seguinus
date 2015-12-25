@@ -1,0 +1,77 @@
+<html>
+	<head>
+		<title>
+			Encaissements de {{date|date:"F Y"}}
+		</title>
+	</head>
+	<body>
+		<h1>Encaissements de {{date|date:"F Y"}}</h1>
+		<a href="/easyPoS/factures/encaissementsParPeriode/{{prev}}">Mois Precedent</a>
+		<a href="/easyPoS/"> Retour Resume</a>
+		<a href="/easyPoS/factures/encaissementsParPeriode/{{prochain}}">Mois suivant</a>
+
+		<table border>
+		{% for e in encaissements %} 
+		<tr>
+			<td>
+				<a href="/easyPoS/factures/{{e.0.year}}/{{e.0.month}}/{{e.0.day}}">{{e.0|date}}</a>
+			</td>
+			<td>
+			<table border>
+			{% for t in e.1 %}
+				<tr>
+				<td colspan="2" width="100">
+					{{t.moyen.nom}}
+				</td>
+				<td align=right>
+					<table width="150">
+						{% if t.moyen.nom == "CB" %}
+						<tr bgcolor="lightgrey">
+							{% else  %}
+							<tr>
+							{% endif %}
+							{% if t.totalSurFacture != 0 %}
+							<th align="left">Sur Facture</th>
+							<td align="right">{{t.totalSurFacture|floatformat:2}} &euro;</td>
+							{% endif %}
+						</tr>
+						<tr>
+							{% if t.totalSurArrhes != 0 %}
+							<th align="left">Arrhes</th>
+							<td align="right">{{t.totalSurArrhes|floatformat:2}} &euro;</td>
+							{% endif %}
+						</tr>
+							<tr>
+							{% if t.totalTropPercus != 0 %}
+							<th align="left">Rmts trop percus</th>
+							<td align="right">{{t.totalTropPercus|floatformat:2}} &euro;</td>
+							{% endif %}
+						</tr>
+					</table>
+				</td>				
+				</tr>
+				{% endfor %}
+			</table>
+		</td>
+		<td>
+			Total:{{ e.2|floatformat:2}} &euro;
+		</td>
+		</tr>
+		{% endfor %}
+	</table>
+	<h2>	Total: </h2>
+		<ul>
+		{% for k,i in total.items %}
+		<li>Sur facture {{k}}:{{i.0}}</li>
+		<li>Arrhes {{k}}:{{i.1}}</li>
+		<li>Rbmts trop percus {{k}}:{{i.2}}</li>
+		
+			{% endfor %}
+			<li><b>Total </b> {{ totalGeneral }} </li>
+		</ul>
+	
+
+
+
+	</body>
+</html>

@@ -1,0 +1,29 @@
+	{% for r in rs %}
+	<h3>Entre le {{ r.rPrec|date }} et le {{ r.rCour|date }}: {{r.total|floatformat:2 }} &euro; pour {{r.nb}} cheques</h3>
+			<table border>
+				{% for c in r.chs %}
+				<tr>
+					<td align="right">
+						{{c.montant|floatformat:2 }} &euro;
+					</td>
+					<td>
+						{{c.date|date}}
+					</td>
+
+				</tr>
+				{% endfor %}
+				<tr>
+					<th>
+						Total: {{r.total|floatformat:2 }} &euro; 
+					</th>
+					<th>
+						{{ r.nb }} cheques
+					</th>
+				</tr>
+			</table>
+<a href="/admin/easyPoS/remisecheque/{{r.id}}">{{ r.date }}</a>
+{% endfor %}
+{% for r in remises %}
+<li><a href="/admin/easyPoS/remisecheque/{{r.id}}">{{ r.date }}</a></li>
+{% endfor %}
+</ul>

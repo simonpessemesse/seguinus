@@ -1,0 +1,29 @@
+
+{% extends "base.html" %}
+{% block content %}
+<h1>Plats</h1>
+
+<table border>
+	<tr valign="top">
+		{% for nom,plats in tout %}
+		<td>
+			<table><tr>
+					<th>
+						{{nom}}
+				</th>
+			</tr>
+	{% for f in plats %}
+	<tr>
+		<td>
+			<a href="/admin/restaurant/plat/{{f.id}}">{{ f.nom }}</a>
+		</td>
+	</tr>
+	{% endfor %}
+</table>
+</td>
+{% endfor %}
+</tr>
+</table>
+
+{% endblock %}
+

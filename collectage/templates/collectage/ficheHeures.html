@@ -1,0 +1,97 @@
+<html>
+	<head>
+	</head>
+	<body>
+		
+<h2>Releve du nombre d'heures travaillées, du nombre de repas, et de jours de repos pris. </h2>
+			Etablissement : {{ entreprise.adresse }}. {{ entreprise.denomination }}
+<table>
+	<tr>
+		<th>
+			Nom-prénom du salarie:
+		</th>
+		<td>
+			{{ contrat.individu.prenom }} {{ contrat.individu.nom }}
+		</td>
+		<th>
+			Poste Occupé:
+		</th>
+		<td>
+			{{ contrat.emploi}}
+		</td>
+		<th align="left">
+		 Duree hebdomadaire de travail du salarié:
+		</th>
+		<td>
+		</td>
+	</tr>
+	<tr>
+		<th align="left">
+			debut de contrat:
+		</th>
+		<td>
+		</td>
+		<th align="left">
+			fin de contrat:
+		</th>
+		<td>
+		</td>
+		<th align="left">
+				Durée du temps de pause par repas pris dans l'entreprise:
+		</th>
+		<td>
+			30 minutes
+		</td>
+	</tr>
+
+</table>
+<table border   >
+	<tr>
+		<th>
+			Semaines
+		</th>
+		<th>Lun</th>
+		<th>Mar</th>
+		<th>Mer</th>
+		<th>Jeu</th>
+		<th>Ven</th>
+		<th>Sam</th>
+		<th>Dim</th>
+		<th>Total Hebdo</th>
+		<th>Repas</th>
+		<td><b>Repos</b> journee</td><td>1/2 journee</td>
+		<th>Emargement</th>
+
+	{% for s in semaines %}
+	<tr>
+		<th>
+			lun {{ s.0|date:"d/m/y" }} au dim {{ s.6|date:"d/m/y" }}
+		</th>
+		<td> &nbsp;
+		</td>
+		<td> &nbsp;
+		</td>
+		<td> &nbsp;
+		</td>
+		<td> &nbsp;
+		</td>
+		<td> &nbsp;
+		</td>
+		<td> &nbsp;		</td>
+		<td> &nbsp;
+		</td>
+		<td> &nbsp;
+		</td>
+		<td> &nbsp;
+		</td>
+		<td> &nbsp;
+		</td>
+		<td> &nbsp;
+		</td>
+		<td> &nbsp;
+		</td>
+	</tr>
+	{% endfor %}
+</table>
+</body>
+</html>

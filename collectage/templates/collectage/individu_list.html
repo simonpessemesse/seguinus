@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block content %}	
+<table border>
+	<tr>
+		<td>
+			<a href="/admin/collectage/individu/add"> Ajouter un individu</a>
+		</td>
+		<td>
+			<a href="/admin/collectage/contrat/add"> Ajouter un contrat</a>
+		</td>
+		<td>
+			<a href="mois">Mail Comptable Du Mois</a>
+		</td>
+		<td>
+			<a href="registre">Registre unique du personnel</a>
+		</td>
+		<td>
+			<a href="dif">Lettres Du Dif</a>
+		</td>
+
+	</tr>
+</table>
+<table>
+	<tr>
+		<th>Nom Personne</th>
+		<th>contrats Associes</th>
+	{% for object in object_list %}
+	
+	<tr>
+		<td>
+			<a href="/admin/collectage/individu/{{object.id}}">{{ object.prenom }} {{ object.nom }}</a>, {{ object.age }} ans
+		</td>
+		<td>
+			<table border>
+				<tr>
+					<td>Editer le contrat</td>
+					<td>Voir le contrat</td>
+					<td>FNE</td>
+					<td>Fiche mutuelle a Envoyer comptable</td>
+					<td>Fiche Heures</td>
+				</tr>
+				{% for p in object.contrat_set.all|dictsort:"dateDebut" %}
+				<tr>
+					<td>
+						<a href="/admin/collectage/contrat/{{p.id}}">{{ p }}</a>
+					</td>
+					<td>
+						<a href="rh/ct/{{p.id}}">Contrat</a> {{ p.congesPayes }}</br >
+					</td>
+					<td>
+						<a href="rh/fne/{{p.id}}">Fiche Nouvelle Embauche</a>
+					</td>
+					<td>
+						<a href="rh/mutuelle/{{p.id}}">Fiche Comptable Mutuelle</a>
+					</td>
+			<td>
+			<a href="rh/ficheHeures/{{p.id}}">Fiche des heures</a>
+		</td>
+				</tr>
+		{% endfor %}
+	</table>
+		</td>
+		<td>
+			{{ object.numeroSecuriteSociale }}
+		</td>
+	</tr>
+		{% endfor %}
+
+	</table>
+	<ul>
+	{% for c in contrats %}
+	<li>
+	<a href="rh/ct/{{c.id}}">{{c}} de {{ c.individu }}</a>
+			</li>
+	{% endfor %}
+	</ul>
+{% endblock %}
+

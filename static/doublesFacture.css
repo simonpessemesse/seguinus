@@ -1,0 +1,11 @@
+body,th,td,caption { /* Modifications : la couleur de fond de page - la police - l'unité utilisée pour la taille de la police  */ 
+    font-size :5pt; 
+	font-family: arial, verdana, sans-serif;
+} 
+ 
+#page { /* Modifications : suppression de la bordure - marges */ 
+    margin :0; 
+    border :none; 
+} 
+
+

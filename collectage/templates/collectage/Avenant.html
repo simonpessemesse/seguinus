@@ -1,0 +1,84 @@
+<html>
+	<body>
+
+
+
+<h1>Avenant de renouvellement</h1>
+Avenant de reconduction au contrat saisonnier
+
+	ENTRE<br />
+		La société : {{ entreprise.denomination }}<br />
+		Adresse : {{ entreprise.adresse }}<br />
+		Numéro Urssaf : {{ entreprise.numeroUrssaf }}<br /> 
+		ET : <br />
+		{{ object.individu.denom }} <br />
+		Adresse : {{ object.individu.adresse }} <br />
+		Numéro de Sécurité sociale : {{ object.individu.numeroSecuriteSociale }}<br /> 
+
+		Conformément aux dispositions de l'article L. 122-1-2 du Code du travail, nous vous proposons par la présente le renouvellement de votre engagement à durée déterminée arrivant normalement à échéance le  {{ object.dateDebut|date:"d F Y" }}<br />
+
+		Sous réserve de votre accord, cet engagement sera renouvelé pour une durée déterminée jusqu'au {{ object.dateFin|date:"d F Y" }}, date à laquelle il prendra alors automatiquement fin.<br />
+
+		En ce qui concerne les conditions applicables au cours de cette période de renouvellement, elles resteront celles actuellement en vigueur.<br />
+
+		Nous vous demandons de nous confirmer votre accord sur les termes de la présente par la signature d'un exemplaire précédée de la mention « lu et approuvé » et ceci au plus tard le  {{ object.dateDebut|date:"d F Y" }} , date d'échéance du contrat en cours, faute de quoi le renouvellement envisagé serait privé d'effet et votre engagement prendrait alors automatique fin à cette date. <br />
+		Signature<br />
+		<br />
+
+		<h1>Avenant au contrat saisonnier</h1>
+
+	ENTRE<br />
+		La société : {{ entreprise.denomination }}<br />
+		Adresse : {{ entreprise.adresse }}<br />
+		Numéro Urssaf : {{ entreprise.numeroUrssaf }}<br /> 
+		ET : <br />
+		{{ object.individu.denom }} <br />
+		Adresse : {{ object.individu.adresse }} <br />
+		Numéro de Sécurité sociale : {{ object.individu.numeroSecuriteSociale }}<br /> 
+
+		Conformément aux dispositions de l'article L. 122-1-2 du Code du travail, nous vous proposons par la présente le renouvellement de votre engagement à durée déterminée arrivant normalement à échéance le  {{ object.dateDebut|date:"d F Y" }}<br />
+
+		Sous réserve de votre accord, cet engagement sera renouvelé pour une durée déterminée jusqu'au {{ object.dateFin|date:"d F Y" }}, date à laquelle il prendra alors automatiquement fin.<br />
+
+		En ce qui concerne les conditions applicables au cours de cette période de renouvellement, elles resteront celles actuellement en vigueur, sauf la durée de travail qui passent à {{ object.nombreHeuresSemaine }}h/semaine sur deux jours consecutifs de travail.<br />
+
+		Nous vous demandons de nous confirmer votre accord sur les termes de la présente par la signature d'un exemplaire précédée de la mention « lu et approuvé » et ceci au plus tard le  {{ object.dateDebut|date:"d F Y" }} , date d'échéance du contrat en cours, faute de quoi le renouvellement envisagé serait privé d'effet et votre engagement prendrait alors automatique fin à cette date. <br />
+		Signature<br />
+		<br />
+		<br />
+
+		<h1>Avenant au contrat saisonnier</h1>
+
+	ENTRE<br />
+		La société : {{ entreprise.denomination }}<br />
+		Adresse : {{ entreprise.adresse }}<br />
+		Numéro Urssaf : {{ entreprise.numeroUrssaf }}<br /> 
+		ET : <br />
+		{{ object.individu.denom }} <br />
+		Adresse : {{ object.individu.adresse }} <br />
+		Numéro de Sécurité sociale : {{ object.individu.numeroSecuriteSociale }}<br /> <br /><br />
+		Il a été convenu et arrêté ce qui suit :
+		<br /><br />
+		<h3>Article 1 : Modification de votre contrat de travail</h3>
+<br />
+Votre contrat de travail conclu le ...................................................... est modifié dans ses dispositions concernant ................................................................................................................................................ (préciser la nature de la modification : lieu de travail, salaire, durée du travail, qualification, etc.).
+<br />
+Cette modification résulte de ........................................................................ (préciser les circonstances et raisons de la modification).
+<br />
+Cette modification prendra effet à compter du ...................................................................
+<br />
+Fait en double exemplaire
+<br />À ................................. Le ....................................
+<br />
+ 
+
+Signature de l'employeur<br />
+(préciser le nom et le titre du signataire)
+<br />
+<br /><br /><br />
+
+<br />Signature du salarié
+<br />(précédée de la mention "lu et approuvé" de la main du salarié)
+<br /><br />
+	</body>
+</html>

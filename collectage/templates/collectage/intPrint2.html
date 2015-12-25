@@ -1,0 +1,42 @@
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="/static/print.css" media="print" /> 
+	</head>
+	<body onLoad="window.print();window.close()">
+		<h1>Resumes des heures de {{ emp.prenom }} {{ emp.nom }} du {{ dd }} au {{ df }}</h1>
+		<table border>
+			<tr>
+				{% for r in resumes %}
+				<td valign="top">
+					<table>
+						<tr>
+							<td>
+								{{ r.jour|date }}
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<table>
+									{% for h in r.heuresPlanifiees %}
+									<tr>
+										<td>
+											<a href="{{h.employe.id}}/">{{h.employe}}</a> de <a href="/admin/collectage/heureplanifiee/{{h.id}}">{{h.heureDebut|time:"H:i" }} a {{h.heureFin|time:"H:i"}}</a> 
+											{% if h.commentaire %}
+											{{ h.commentaire }}
+											{% endif %}
+										</td>
+									</tr>
+									{% endfor %}
+							</table>
+							</td>
+						</tr>
+					</table>
+				</td>
+				{% endfor %}
+			</tr>
+		</table>
+		<br />
+		<br />
+		Signature de l'employé:
+	</body>
+</html>

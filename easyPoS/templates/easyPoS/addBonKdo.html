@@ -1,0 +1,22 @@
+
+{% extends "base.html" %}
+{% block content %}
+
+
+<form action="" method="post">{% csrf_token %}
+{{ bonKdoForm.as_p }}
+
+<h3>Cheques non encaisse:</h3>
+
+{{ nonEncaissesForm.as_p }}
+
+
+
+<h3>Arrhes Encaissees</h3>
+{{ paiementForm.as_p }}
+<input type="submit" value="Ajouter" />
+</form>
+
+
+			{% endblock %}
+

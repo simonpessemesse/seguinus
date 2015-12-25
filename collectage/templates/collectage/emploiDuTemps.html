@@ -1,0 +1,18 @@
+
+{% extends "base.html" %}
+{% block title %}
+{% endblock %}
+{% block content %}
+		<table border>
+			<tr>
+				<td>
+					<a href="/admin/collectage/heureplanifiee/add/">ajouter heure</a>
+				</td>
+			</tr>
+		</table>
+		<br />
+		{% for p in preDefinis %}
+		<a href="{{p.1}}">{{p.0}}</a>
+		<br />
+		{% endfor %}
+		{% endblock %}

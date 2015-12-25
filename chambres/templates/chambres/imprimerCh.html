@@ -1,0 +1,187 @@
+<html>
+	<body onLoad="window.print();window.close()">
+		Petits dej aujourd'hui: Entre {{ hier.repas.minimum }} et {{ hier.repas.maximum }} et Petits dej demain: Entre {{ oneDayStat.repas.minimum }} et {{ oneDayStat.repas.maximum }} 
+		<table>
+			<tr>
+				<td>
+
+		<small>
+		{% if changements %}
+						Changements
+
+		<table border>
+			<tr>
+				<th>
+			<small>		Nom</small>
+				</th>
+				<th>
+				<small>	Chambre Origine</small>
+				</th>
+				<th>
+				<small>	Chambre Destination</small>
+				</th>
+			
+			
+			</tr>
+			{% for resaDep,resaArr in changements %}
+			<tr>
+				<td>
+				<small>	<a href="/admin/chambres/client/{{resaDep.client.id}}">{{ resaDep.client.nom }}</a></small>
+				</td>
+				<td>
+				<small>	{% for ch in resaDep.chambresAssignees.all %}
+					{{ ch.nom }}</br>
+					{% endfor %}
+					{% ifnotequal resaDep.placesDortoir 0 %}
+					{{ resaDep.placesDortoir }} lits dortoir
+					{% endifnotequal %}</small>
+				</td>
+				<td>
+				<small>	{% for ch in resaArr.chambresAssignees.all %}
+					{{ ch.nom }}</br>
+					{% endfor %}
+					{% ifnotequal resaArr.placesDortoir 0 %}
+					{{ resaArr.placesDortoir }} lits dortoir
+					{% endifnotequal %}</small>
+				</td>
+			</tr>
+		</table>
+			{% endfor %}
+		{% endif %}
+
+				{% if menages %}
+		Menages
+		<table border>
+			<tr>
+				<td>
+					<small>	Nom </small>
+				</td>
+				<td>
+				<small>	Chambres</small>
+				</td>
+				<td>
+			<small>		Date d'arrivee</small>
+				</td>
+				<td>
+				<small>	Date Depart</small>
+				</td>
+			</tr>
+			{% for reservation in menages %}
+			<tr>
+				<td>
+				<small>	{{ reservation.client.nom }}</small>
+				</td>
+				<td>
+				<small>	{% for ch in reservation.chambresAssignees.all %}
+					{{ ch.nom }}</br>
+					{% endfor %}
+						{% ifnotequal reservation.placesDortoir 0 %}
+					{{ reservation.placesDortoir }} lits dortoir
+					{% endifnotequal %}</small>
+				</td>
+				<td>
+				<small>	{{ reservation.dateArrivee|date }}</small>
+				</td>
+				<td>
+	<small>				{{ reservation.dateDepart|date }}</small>
+				</td>
+			</tr>
+			{% endfor %}
+				<th colspan=4>
+				Total:{{ oneDayStat.nbMenages }}
+			</th>
+		</table>
+		{% endif %}
+
+		{% if blancs %}
+		Blancs
+		<table border>
+			<tr>
+				<td>
+			<small>		Nom</small>
+				</td>
+				<td>
+				<small>	Chambres</small>
+				</td>
+			</tr>
+			{% for reservation in blancs %}
+			<tr>
+				<td>
+			<small>		{{ reservation.client.nom }}</small>
+				</td>
+				<td>
+				<small>	{% for ch in reservation.chambresAssignees.all %}
+					{{ ch.nom }}</br>
+					{% endfor %}
+					{% ifnotequal reservation.placesDortoir 0 %}
+					{{ reservation.placesDortoir }} lits dortoir
+					{% endifnotequal %}</small>
+				</td>
+			</tr>
+			{% endfor %}
+					<th colspan=4>
+				Total:{{ oneDayStat.nbBlancs }}
+			</th>
+		</table>
+		{% endif %}
+	</small>
+</td>
+<td>
+		{% if arrivees %}
+		<small>	Arrivees</small>
+		<table border>
+			<tr>
+				<th><small>
+					Chambres
+			</small></th>
+				<th><small>
+					Trucs
+			</small></th>
+			</tr>
+			{% for reservation in arrivees %}
+			<tr>
+				<td><small>
+					{% if reservation.chambresAssignees.all %}
+						{% for ch in reservation.chambresAssignees.all %}
+							{{ ch.nom }}</br>
+						{% endfor %}
+					 {% endif %}
+						
+					 </small></td><td><small>
+					{% ifnotequal reservation.chambres 0 %}
+					{{ reservation.chambres }} chambres <br />
+					{% endifnotequal %}
+					{% ifnotequal reservation.chambresSingle 0 %}
+					{{ reservation.chambresSingle }} chambres Single<br />
+					{% endifnotequal %}
+					{% ifnotequal reservation.chambresDoubles 0 %}
+					{{ reservation.chambresDoubles }} chambres Doubles<br />
+					{% endifnotequal %}
+					{% ifnotequal reservation.chambresTriples 0 %}
+					{{ reservation.chambresTriples }} chambres Triples<br />
+					{% endifnotequal %}
+					{% ifnotequal reservation.chambresTwin 0 %}
+					{{ reservation.chambresTwin }} chambres Twin<br />
+					{% endifnotequal %}
+					{% ifnotequal reservation.chambresQuadruples 0 %}
+					{{ reservation.chambresQuadruples }} chambres Quadruples<br />
+					{% endifnotequal %}
+					{% ifnotequal reservation.chambresQuintuples 0 %}
+					{{ reservation.chambresQuintuples }} chambres Quintuples<br />
+					{% endifnotequal %}
+					{% ifnotequal reservation.placesDortoir 0 %}
+					{{ reservation.placesDortoir }} Places Dortoir<br />
+					{% endifnotequal %}
+			</small></td>
+			</td>
+			</tr>
+			{% endfor %}
+		</table>
+		{% endif %}
+</td>
+</tr>
+
+</table>
+estimations demain {{ menDem }} menage et {{ blcDem }} blancs , estimations apres demain {{ menAp }} menage et {{ blcAp }} blancs
+	</body>
+</html>

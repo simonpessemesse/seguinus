@@ -1,0 +1,74 @@
+
+{% extends "base.html" %}
+{% block content %}
+<h1>Gestion des heures</h1>
+<h3>
+<table border>
+	<tr>
+		<td>
+			<a href="/admin/collectage/plage/add">Ajouter Plage</a>
+		</td>
+		<td>
+			<a href="/admin/collectage/plage/">Editer les heures</a>
+		</td>
+		<td>
+			<a href="/chambres/today">Aller au resume du jour</a>
+		</td>
+	</table>
+</h3>
+<br ><br><br>
+
+<form method="post">
+{{ form.as_p }}
+<input type="submit" value="Voir!" />
+</form>
+<br />
+
+{% if t %}
+<h1>Calcul pour <a href="/admin/collectage/personne/{{t.personne.id}}">{{t.personne.nom|capfirst}}</a></h1>
+<table border>
+	<tr>
+		<th>Jour</th>
+		<th>Heure debut</th>
+		<th>Heure fin</th>
+		<th>Duree</th>
+		<th>Commentaire</th>
+	</tr>
+	{% for f in t.plages %}
+	<tr>
+		<td>
+			<a href="/admin/collectage/plage/{{f.plage.id}}">{{ f.heureDebut|date:"l d F Y" }}</a>
+		</td>
+		{% if f.FatalError %}
+		<td class="rouge">
+			{% else %}
+			<td>
+				{% endif %}
+			{{ f.heureDebut|time:"H:i" }}
+		</td>
+		<td>
+			{{ f.heureFin|time:"H:i" }}
+		</td>
+		{% if f.pasSur %}
+		<td class="jaune">
+			{% else %}
+			<td>
+				{% endif %}
+			{{ f.duree }}
+		</td>
+		<td>
+			{{ f.commentaire }}
+		</td>
+	</tr>
+	{% endfor %}
+	<tr>
+		<th colspan=3>Total pour {{ t.nbJours }} journees</th>
+		<td>{{t.heur}}</td>
+		<td> Donc en enlevant les repas: {{t.sansRepas}}</td>
+
+</table>
+{% endif %}
+
+
+
+{% endblock %}

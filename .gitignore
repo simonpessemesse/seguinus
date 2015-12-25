@@ -55,3 +55,36 @@ docs/_build/
 
 # PyBuilder
 target/
+
+*.bz2
+data.json
+*.prof
+*.gpg
+*.log
+random_seed
+*.orig
+*_EDIT*
+*DONNEES*
+*.pyc
+*~
+*swp
+db.zip
+db.bz2
+*.bak
+*.lock
+work in progress*
+static/plotkit*
+static/MochiKit*
+monitoring/*
+push.bat
+autocommit.sh
+*Thumbs.db
+*.mno
+test/*
+program.pid
+*ttf
+*.mo
+db.sqlite3
+*json
+2015-*
+banque.txt

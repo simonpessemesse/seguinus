@@ -1,0 +1,147 @@
+
+{% extends "base.html" %}
+{% block title %}
+VuePapier{{jours.1.jour.year}}
+{% endblock %}
+{% block content %}
+
+
+		<table border width="{{largeur}}">
+		<tr>
+			{% for j in jours %}
+			<td valign="top" width=200>
+				<table border valign='top' id="{{j.id}}">
+					<tr>
+						{% if j.ferie %}
+						<td class="vert">
+							{% else %}
+						<td>
+							{% endif %}
+							<a href="/chambres/{{j.jour.year}}/{{j.jour.month}}/{{j.jour.day}}#recapitulatif">{{j.jour|date}}</a>
+							{% if j.raison %}
+							<br />{{ j.raison }}
+							{% endif %}
+						</td>
+					</tr>
+						<tr>
+						<td>
+					{% if j.tot = 24 or j.tot = 29 or j.tot = 28 or j.tot = 27 or j.tot = 26 or j.tot = 25 %}
+							<div class="jaune">
+						{% else %}
+						{% if j.tot > 29 %}
+							<div class="rouge">
+						{% else %}
+							<div>
+						{% endif %}
+						{% endif %}
+						total: {{ j.tot }} {% if j.totSures != j.tot %}( {{ j.totSures }} ){% endif %}
+						</div>
+							{% if j.nbDortoir %}
+							<br />
+						{% if j.nbDortoir = 20 or j.nbDortoir = 21 %}
+							<div class="jaune">
+							<small>dortoir: {{ j.nbDortoir }}</small>
+						</div>
+						{% else %}
+						{% if j.nbDortoir > 21 %}
+							<div class="rouge">
+							<small>dortoir: {{ j.nbDortoir }}</small>
+						</div>
+						{% else %}
+							<small>dortoir: {{ j.nbDortoir }}</small>
+						{% endif %}
+						{% endif %}
+			
+
+							{% endif %}
+						</td>
+					</tr>
+					<tr>
+						<td >
+							<table border >
+								{% for r in j.resas %}
+								<tr>
+									<td width="70">
+										{% if r.client.arrhesVersees or r.arrives %}
+										<b>
+											{% endif %}
+										{{r.vuePapier|linebreaks}}		
+										{% if r.client.arrhesVersees or r.arrives %}
+										</b>
+											{% endif %}
+									</td>
+									<td>
+										{% if r.client.optionJusquau %}
+										<tt>
+										{% endif %}
+										{% if r.client.protege %}
+										<i>
+										{% endif %}
+										<a href="/admin/chambres/client/{{r.client.id}}/" {% if r.client.protege %} onclick="return protege()" {% endif %}>{{r.client.nom}}</a> <small><a href="/easyPoS/arrhes/{{r.client.id}}">A</a></small>
+										<!-- a href="/chambres/{{r.client.id}}/"> {{ r.client.nom }}</a -->
+										{% if r.client.protege %}
+										</i>
+										{% endif %}
+										{% if r.client.optionJusquau %}
+										</tt>
+										{% endif %}
+									</td>
+								</tr>
+								{% endfor %}
+								</table>
+						</td>
+					</tr>
+						<tr>
+						<td>
+					{% if j.tot = 24 or j.tot = 29 or j.tot = 28 or j.tot = 27 or j.tot = 26 or j.tot = 25 %}
+							<div class="jaune">
+						{% else %}
+						{% if j.tot > 29 %}
+							<div class="rouge">
+						{% else %}
+							<div>
+						{% endif %}
+						{% endif %}
+						total: {{ j.tot }} {% if j.totSures != j.tot %}( {{ j.totSures }} ){% endif %}
+						</div>
+							{% if j.nbDortoir %}
+							<br />
+						{% if j.nbDortoir = 20 or j.nbDortoir = 21 %}
+							<div class="jaune">
+							<small>dortoir: {{ j.nbDortoir }}</small>
+						</div>
+						{% else %}
+						{% if j.nbDortoir > 21 %}
+							<div class="rouge">
+							<small>dortoir: {{ j.nbDortoir }}</small>
+						</div>
+						{% else %}
+							<small>dortoir: {{ j.nbDortoir }}</small>
+						{% endif %}
+						{% endif %}
+			
+
+							{% endif %}
+						</td>
+					</tr>
+				
+				
+				</table>
+				<table valign="bottom">
+						<tr valign="bottom">
+						<td valign="bottom">
+							<form  method="post">{% csrf_token %}
+								{{ j.form.as_p }}
+								<input type="submit" value="Go" />
+							</form>
+							<small>{{j.jour|date}}</small>
+						</td>
+					</tr>
+				</table>
+			</td>
+			{% endfor %}
+		</tr>
+		</table>
+		<a href="etatResas">etat reservations</a>
+			{% endblock %}
+

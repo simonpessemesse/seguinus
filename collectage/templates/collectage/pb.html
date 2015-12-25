@@ -1,0 +1,57 @@
+
+{% extends "base.html" %}
+{% block title %}
+{% endblock %}
+{% block content %}
+<table border>
+	<tr>
+		<td>
+			<a href="/admin/collectage/pourboire/add">Ajouter pourboire</a>
+			</td><td><a href="/admin/collectage/donpourboire/add">Ajouter don</a>
+		</td>
+	</tr>
+</table>
+
+<table border>
+	{% for i in indivs %}
+	{% if i.estGrand %}
+	<tr>
+		<td><a href="show/{{i.individu.id}}">{{ i.individu }}</a></td><td>{{ i.montant|floatformat:2 }}</td>
+		<td>    <a href="{{i.individu.id}}/{{ i.dizaineInferieure }}">Dizaine Inferieure</a></td>
+		<td>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="{{i.individu.id}}">Solder Totalement</a></td>
+	</tr>
+	{% endif %}
+	{% endfor %}
+	</table>
+<table>
+	<tr>
+		<td valign="top">
+	<ul>
+{% for p in pb %}
+<li>
+<a href="/admin/collectage/pourboire/{{p.id}}">
+{{ p.montant }} Euros le 
+{{ p.date|date }} entre
+{% for i in p.individus.all %}
+{{i.prenom}},
+{% endfor %}</a>{{ p.commentaire }}
+</li>
+{% endfor %}
+</ul>
+</td>
+<td>
+	<ul>
+	{% for d in dons %}
+	<li>
+	<a href="/admin/collectage/donpourboire/{{ d.id }}">
+		{{ d.individu }}, de {{ d.montant }} le {{ d.date|date }} {{ d.commentaire }}
+	</a>
+	</li>
+	{% endfor %}
+</ul>
+</td>
+</tr>
+</table>
+
+
+	{% endblock %}

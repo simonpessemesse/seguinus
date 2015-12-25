@@ -1,0 +1,55 @@
+
+
+{% extends "base.html" %}
+
+{% block content %}		
+		<h1>Gestions des factures</h1>
+		<table border>
+			<tr>
+				<td>
+					<a href="/admin/easyPoS">Interface d'administration</a>
+				</td>
+				<td>
+					<a href="/chambres/today">GESTION HOTEL</a>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<a href="factures/{{date|date:"Y/m/d"}}">Caisse du jour</a>
+				</td>
+				<td>
+					<a href="factures/{{hier|date:"Y/m/d"}}">Caisse de hier</a>
+				</td>
+				<td>
+					<a href="factures/doubles/{{date|date:"Y/m/d"}}">Doubles du jour</a>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<a href="factures/{{date|date:"Y/m"}}">Caisse du mois</a>
+				</td>
+				<td>
+					<a href="factures/encaissementsParPeriode/{{date|date:"Y/m"}}">Encaissements du mois</a>
+				</td>
+				<td>
+					<a href="factures/doubles/{{date|date:"Y/m"}}">Doubles du mois</a>
+				</td>
+				</tr>
+				<tr>
+				<td>
+					<a href="produits">Liste des produits</a>
+				</td>
+				<td>
+					<a href="produits/stats">Stats Produits</a>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<a href="arrhes">Arrhes/Bons Cadeaux</a>
+				</td>
+			</tr>
+
+		</table>
+		{{ debug|linebreaks }}
+		
+{% endblock %}

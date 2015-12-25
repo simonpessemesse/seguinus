@@ -1,0 +1,34 @@
+	<table border>
+			<tr>
+			
+				<th>
+					nombrePersonnes
+				</th>
+				<th>
+					personnes
+				</th>
+			</tr>
+			{% for k,v in repas.stat.items %}
+			<tr>
+				<td>
+					{{ v|length }}
+			x
+					{{ k}}
+				</td>
+				<td>
+				
+						{% for nom,ch,viei,dep,enfants in v %}
+						
+						{{ nom|capfirst }} dans <small>{% for c in ch%}{{c.nom}},{% endfor %} arrivee: {{ viei }} depart: {{ dep }}</small><br />
+						
+							{% endfor %}
+					
+				</td>
+			</tr>
+			{% endfor %}
+			<tr>
+				<td class="rouge">
+					Total: {{ repas.total }}({{ repas.totalKid }})
+				</td>
+			</tr>
+		</table

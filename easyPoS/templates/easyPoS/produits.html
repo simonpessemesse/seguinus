@@ -1,0 +1,59 @@
+
+
+{% extends "base.html" %}
+
+{% block content %}	
+	<a href="/factures/"> Retour Resume</a>
+<a href="/admin/easyPoS/produit/add">Ajouter un produit</a>
+<h1>Liste alphabetique</h1>
+<table border>
+	<tr>
+		<th>
+			Nom
+		</th>
+		<th>
+			Prix
+		</th>
+		<th>
+			Tva
+		</th>
+		<th>
+			Famille
+		</th>
+		<th>
+			Categorie
+		</th>
+	</tr>
+	{% for p in prods %}
+	{% ifequal p.tva.nom "Taux reduit" %}
+	<tr class="vert">
+		{% else %}
+	<tr class="jaune">
+		{% endifequal %}
+		<td>
+			{% if p.actif %}
+			<a href="/admin/easyPoS/produit/{{p.id}}">{{ p.nom }}</a>
+			{% else %}
+			<s><a href="/admin/easyPoS/produit/{{p.id}}">{{ p.nom }}</a></s>
+			{% endif %}
+		</td>
+		<td align="right">
+			{{ p.prix|floatformat:2 }}
+		</td>
+		<td>
+			{{ p.tva }}
+		</td>
+		<td>
+			{{ p.famille }}
+		</td>
+		<td>
+			{% for i in p.categories.all %}
+			{{i}},
+			{% endfor %}
+		</td>
+	</tr>
+	{% endfor %}
+</table>
+
+
+{% endblock %}

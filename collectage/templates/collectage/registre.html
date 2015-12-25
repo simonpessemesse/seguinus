@@ -1,0 +1,60 @@
+
+{% extends "base.html" %}
+{% block content %}
+<h1>Registre unique du personnel</h1>
+<table border>
+	<tr>
+		<th>Nom Prenom</th>
+		<th>Num Secu</th>
+		<th>Nationalite</th>
+		<th>Date de naissance</th>
+		<th>Sexe</th>
+		<th>Emploi Qualification</th>
+		<th>Debut</th>
+		<th>Fin</th>
+		<th>Type du contrat</th>
+	</tr>
+	{% for l in lignes %}
+	<tr>
+		<td>
+			<a href="/admin/collectage/individu/{{l.individu.id}}">{{ l.individu.nom }} {{ l.individu.prenom }}</a>
+		</td>
+		<td>
+			{{ l.individu.numeroSecuriteSociale }}
+		</td>
+		<td>
+			{{ l.individu.nationalite }}
+		</td>
+		<td>
+			{{ l.individu.dateNaissance|date:"d/m/y" }}
+		</td>
+		<td>
+			{{ l.individu.sexe }}
+		</td>
+		<td>
+			{{ l.emploi }}
+		</td>
+		<td>
+			{{ l.debut }}
+		</td>
+		<td>
+			{{ l.fin }}
+		</td>
+		<td>
+			{{ l.typecontrat }}
+		</td>
+		<td><small>
+			<ul>
+			{% for c in l.contrats %}
+			<li><a href="/admin/collectage/contrat/{{c.id}}">{{ c }}</a></li>
+			{% endfor %}
+	</ul></small>
+		</td>
+		</tr>
+	{% endfor %}
+
+</table>
+
+
+{% endblock %}
+

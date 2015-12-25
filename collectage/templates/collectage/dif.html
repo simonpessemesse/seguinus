@@ -1,0 +1,47 @@
+<html>
+	<body>
+		<h1>Liste des Lettres </h1>
+		{% for c in contrats %}
+
+		{{ c.individu }}
+		{{ c.individu.adresse|linebreaks }}
+		<br />
+A Buoux le {{ jour }}
+		<br />
+Objet : Droit Individuel Formation
+		<br />
+		<br />
+Madame, Monsieur,
+		<br />
+		Nous vous informons par le présent courrier  que vous avez acquis {{ c.dif }} heures au titre du droit individuel à la formation pour la période du {{ c.dateDebut }} au {{ jour }}
+		<br />
+Vous en souhaitant bonne réception,
+		<br />
+Je vous prie d’agréer, Madame, Monsieur, mes sentiments les meilleurs.
+		<br />
+
+Josette Pessemesse
+
+		<br />
+Signature
+ 
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+{% endfor %}
+</body>
+</html>
+
+
+
+
+
+
+

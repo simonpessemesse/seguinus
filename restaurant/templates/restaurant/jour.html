@@ -1,0 +1,109 @@
+
+<html>
+	<body>
+Resume du {{ dateDemandee|date }}
+	<table border>
+		<tr>
+			{% for d in prochainsJours %}
+			{% if d == dateDemandee %}
+			<td class="vert">
+			{% else %}
+			<td>
+			{% endif %}
+				<small>	<a href="/restaurant/{{ d.year}}/{{d.month}}/{{d.day}}">{{ d|date }}</a></small>
+			</td>
+			{% endfor %}
+		</tr>
+		<tr>
+			<td>
+				<small>
+				</small>
+			</td>
+			<td>
+				<small>
+				</small>
+			</td>
+		</tr>
+	</table>
+			nbResas: 
+			{{ nbResa }}  
+			<b>			total
+			{{ total.total }} ( {{ total.totalPensio }} pensios et {{ total.totalPassage }} passagers )</b>
+			<br />
+{% for key,item in parNb %}
+		{{item|length}}x{{ key }}, 
+		{% endfor %}
+			<table>
+				<tr>
+					<td>
+						<table border>
+							<tr><th colspan="2">Pass: {{ total.totalEnfantsPassage }} enfants, {{ total.adultesPassage }} adultes</th></tr>
+{% for key,item in passClass %}
+<tr>
+	<td>
+		{{item|length}}x{{ key }}
+	</td>
+	<td>
+		{% for i in item %}
+		<a href="/admin/restaurant/resa/{{i.id}}">{{ i.nb }}({{i.nbEnfants}})p {{ i.nom }}</a><br />
+		{% endfor %}
+		<br />
+		<br />
+		<br />
+	</td>
+</tr>
+
+{% endfor %}
+<tr>
+	<td>
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+	</td>
+</tr>
+</table>
+</td><td>
+<table border>
+								<tr><th colspan="2">Pensios: {{ total.totalEnfantsPensio }} enfants, {{ total.adultesPensio }} adultes</th></tr>
+{% for key,item in pensClass %}
+<tr>
+	<td>
+		{{item|length}}x{{ key }}
+	</td>
+	<td>
+		{% for i in item %}
+		<a href="/admin/restaurant/resa/{{i.id}}">{{ i.nb }}({{i.nbEnfants}})p {{ i.nom }}</a><br />
+		{% endfor %}
+		<br />
+		<br />
+		<br />
+	</td>
+</tr>
+
+{% endfor %}
+<tr>
+	<td>
+		<br />
+		<br />
+		<br />
+		<br />
+		<br />
+	</td>
+</tr>
+</table>
+
+</tr>
+</table>
+<table>
+		{% for r in resas %}
+	<tr>
+		<td>
+			<a href="/admin/restaurant/resa/{{r.id}}">{{ r.nb }}p {{ r.nom }}</a>
+		</td>
+	</tr>
+	{% endfor %}
+</table>
+</body>
+</html>

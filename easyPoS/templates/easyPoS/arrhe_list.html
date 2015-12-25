@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}	
+<table>
+	<tr>
+		<td><a href="ajoutBonCadeau">Ajouter un bon cadeau</a></td>
+		<td>     <a href="..">Retour Arriere</a></td>
+	</tr>
+	<tr>
+		<td>
+			<a href="?kdo=True">Voir seulement les bons kdo</a>
+		</td>
+		<td>
+			<a href="?chnon=True">Voir seulement les cheques non encaisses</a>
+		</td>
+		<td>
+			<a href="?enorp=True">Voir les encaissements non associes a une facture</a>
+		</td>
+		<td>
+			<a href="?tout=True">Voir tout</a>
+		</td>
+	</tr>
+
+</table>
+<h2>{{titre}}</h2>
+<table border>
+	<tr>
+		<th> Nom Client </th>
+		<th> Montant </th>
+		<th>resas Associees</th>
+	{% for object in object_list %}
+	<tr>
+		<td>
+			<a href="/admin/chambres/client/{{object.client.id}}">{{ object.client.nom }}</a>
+			<br /><small>
+			<a href="{{object.client.id}}">Arrhes</a></small>
+		</td>
+		<td {% if object.vieux %}class="rouge"{% endif %}>
+			{% for p in object.paiement_set.all %}	{{ object.description }} le {{ p.date|date }} {{ p.date.year}} 
+			{% empty %}{% if object.estBleu %}<font  color="lightgreen">{% endif %}Cheque non encaisse de {{ object.montantChequeNonEncaisse }}&euro; le {{ object.date|date }} {{ object.date.year }}{% if object.estBleu %}</font>{% endif %} <a href="{{object.id}}/chColor">switch</a>  <a href="{{object.id}}/encaisse">encaisse</a> <a href="{{object.id}}/detruit">detruit</a>
+				{% endfor %}
+		</td>
+		<td>
+			<table>
+				{% for i in object.client.reservation_set.all %}
+				<tr>
+					<td {% if object.passe %}class="rouge"{% endif %}>{{ i }}{{ i.dateArrivee.year }}</td>
+					<td><a href="/chambres/{{i.dateArrivee|date:"Y/m/d"}}#recapitulatif">Aller au premier jour</a></td>
+				</tr>
+				{% endfor %}
+			</table>
+		</td>
+	</tr>
+		{% endfor %}
+
+	</table>
+	{{ total }}
+{% endblock %}

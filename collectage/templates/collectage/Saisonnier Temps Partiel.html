@@ -1,0 +1,92 @@
+<html>
+	<body>
+		<h1>Contrat saisonnier a temps partiel</h1>
+		ENTRE<br />
+		La société : {{ entreprise.denomination }}<br />
+		Adresse : {{ entreprise.adresse }}<br />
+		Numéro Urssaf : {{ entreprise.numeroUrssaf }}<br /> 
+		ET : <br />
+		{{ object.individu.denom }} <br />
+		Adresse : {{ object.individu.adresse }} <br />
+		Numéro de Sécurité sociale : {{ object.individu.numeroSecuriteSociale }}<br /> 
+		<h3>IL A ÉTÉ CONVENU ET ARRÊTÉ CE QUI SUIT : </h3>
+		<h2>Article1 : Objet</h2>
+La société {{ entreprise.denomination }} engage {{ object.individu.denom }} sous contrat à durée déterminée saisonnier à temps partiel
+<h2>Article 2 : Fonction</h2>
+M  {{ object.individu.nom }} {{ object.individu.prenom }} est embauché en qualité de {{object.emploi}} au niveau 1 à l'échelon 1 <br />
+Vos fonctions consisteront notamment à : {{ object.fonction }}<br />
+Ces fonctions sont données à titre indicatif et ne sont pas exhaustives ni définitives. 
+<h2>Article 3 : Durée du contrat</h2>
+Le présent contrat prendra effet le {{object.dateDebut|date:"d F Y"}} pour se terminer le {{ object.dateFin|date:"d F Y" }} <br />
+Sa durée est fixée à {{ object.nbMois|floatformat:1 }} mois. <br /> 
+Il pourra être renouvelé une fois pour une durée égale au plus ou au moins à celle du contrat initial mais dans la limite de la durée de la saison. <br />
+<h2>Article 4 : Période d'essai</h2>
+La période d'essai débutera le  {{object.dateDebut|date:"d F Y"}} et aura une durée de {{ object.dureePeriodeEssai }} jours <br />
+Au cours de cette période, chacune des parties pourra rompre librement le contrat sans préavis ni indemnité. <br />
+
+
+
+
+
+<h2>Article 5 : Durée du travail et répartition des horaires</h2>
+
+{{ object.individu.denom }} effectuera {{ object.nombreHeuresSemaine }}  heures de travail par semaine</br />
+<br />
+Cette durée hebdomadaire sera répartie de la façon suivante : ................................................ (indiquez précisément la répartition de l'horaire entre les jours de la semaine / ou les semaines du mois).
+<br /><br />
+Les horaires de travail, pour chaque journée travaillée, lui seront communiqués par écrit selon les modalités suivantes : ...................................................................................; (précisez). 
+<br /><br />
+Chaque journée de travail ne pourra pas comporter plus d’1 coupure (temps de repas non compris). Cette coupure est d’une durée maximum de 2 heures.
+<br /><br /><br />
+OU
+<br /><br /><br />
+Cette coupure est de ................................................................................................ (comprise entre plus de deux heures jusqu’à 5 heures).<br /> En contrepartie, le salarié bénéficie au cours de la journée de deux séquences de travail de 3 heures consécutives et d’un contrat de 24 heures minimum de travail par semaine.<br /><br />
+Toutefois cette répartition de l'horaire de travail pourra être modifiée en fonction des besoins de l’entreprise, et notamment pour les raisons suivantes : ................................................  (précisez).<br />
+
+Dans ce cas, cette modification des horaires de travail interviendra de la manière suivante : ..............................................................; (précisez).<br />
+{{ object.individu.denom}}  sera informé par lettre de cette modification au moins 7 jours à l'avance. Toutefois, en cas de circonstance exceptionnelle, ce délai pourra être ramené à 3 jours.<br /> Dans ce cas, {{ object.individu.denom }} bénéficiera d’un repos compensateur de 10 % des heures effectuées par jour de retard par rapport au délai de prévenance de 7 jours. <br /><br />
+
+
+
+
+<h2>Article 6 : Heures complémentaires</h2>
+
+En fonction des besoins de l'entreprise, {{object.individu.denom }} pourra être conduit à effectuer des heures complémentaires, dans la limite de ........................................................... heures par semaine (ou par mois), en plus de son horaire de base tel que défini à l'article 4 du présent contrat. Le nombre total d’heures de travail effectuées, heures complémentaires comprises, ne doit pas être supérieure à 35 H par semaine.
+<br /><br />
+Conformément à l’article 13.4 de l’avenant n°2 du 5 février sur le temps de travail, il est précisé que les heures complémentaires :
+<br />
+-effectuées dans la limite de 1/10ème de l'horaire hebdomadaire ou mensuel indiqué à l'article 4 du présent contrat, bénéficieront d’une majoration de 5 % ;
+<br />
+-effectuées au-delà de cette limite donneront lieu à une majoration de salaire de 25 %.
+
+
+<h2>Article 7 : Rémunération</h2>
+{{ object.individu.denom }}  percevra un salaire brut mensuel de {{ object.nombreHeuresSemaine|floatformat }}h/Semaine au SMIC, avantages en nature compris.  
+
+<h2>Article 8 : Congés payés</h2>
+Conformément à la législation en vigueur, vous bénéficiez de 2,5 jours ouvrables de congés payés par mois de travail effectif. 
+<h2>Article 10 : Caisse de retraite et prévoyance</h2>
+{{ object.individu.denom }}  sera affilié à la caisse de retraite complémentaire Mornay, 14 rue STHRAU, 75631 Paris Cedex 1<br />
+Vous bénéficierez également d'un régime de prévoyance complémentaire auprès de HCR Santé
+<h2>Article 11 : Règlement intérieur</h2>
+{{ object.individu.denom }} s’engage à se conformer aux dispositions du règlement intérieur de l'établissement.
+<h2>Article 12 : Convention collective</h2>
+Vous bénéficiez des dispositions de la convention collective des CHR du 30 avril 1997 et de ses deux avenant n° 2 et n°2 bis du 5 février 2007.
+Vous pouvez la consulter auprès de Simon Pessemesse ou Amelie Pessemesse.
+<br /><br />
+Fait en 2 exemplaires <br />
+À Buoux , le   {{object.dateDebut|date:"d F Y"}} <br />
+Signature de l'employeur <br />
+(Nom et titre du signataire) <br /><br /><br />
+
+
+
+Signature du salarié<br />
+(Précédée de la mention « Lu et approuvé » de la main du salarié) <br /> <br /> <br /><br /><br /><br />
+
+
+
+
+
+	</body>
+</html>

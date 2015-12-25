@@ -1,0 +1,174 @@
+
+{% extends "base.html" %}
+{% block content %}
+		<table border>
+		<tr>
+	<td>
+				<small>
+		<a href="/taches/{{prev}}/0">Jour Precedent</a>
+				</small>
+			</td>
+			<td>
+				<a href="/chambres/{{year}}/{{month}}/{{day}}">GOSEGUINUS</a>
+			</td>
+			<td>
+				<small>
+		<a href="/taches/{{next}}/0">Jour suivant</a>
+				</small>
+			</td>
+	
+
+
+			{% for d in prochainsJours %}
+			{% if d == dateDemandee %}
+			<td class="vert">
+			{% else %}
+			<td>
+			{% endif %}
+			<small>	<a href="/taches/{{ d.year}}/{{d.month}}/{{d.day}}/0">{{ d|date }}</a></small>
+			</td>
+			{% endfor %}
+				<th>
+					<a href="{{day}}?Recent=True">Taches effectuees recemment</a></th><th>
+					<a href="{{day}}?Modif=True">Taches modifiees recemment</a></th><th>
+					<a href="/admin/chambres/tache/add/">Ajouter Tache</a></th>
+			</tr>
+	</table>
+		<table width=100%>
+			<tr>
+				<td WIDTH=65%>
+
+				<table border>
+					<col>
+					<col  width="50">
+					<col  width="20">
+					<col  width="20">
+					<col  width="20">
+					<col  width="65">
+					<col  width="65">
+						<tr>
+						<th>
+							Description
+						</th>
+						<th>
+							x
+						</th>
+						<th>
+							x
+						</th>
+						<th>
+							x
+						</th>
+						<th>
+							x
+						</th>
+						<th>
+							x
+						</th>
+							</tr>
+					{% for t in taches %}
+					<tr>
+						<td 
+								title='Creation:{{t.creation|date:"d/m/y H:i"}} Modif:{{t.modification|date:"d/m/y H:i"}}'
+							>
+								<a href="/admin/chambres/tache/{{ t.id }}">
+						{% if t.multiligne %}
+								{{ t.description|linebreaks }}
+						{% else %}
+								{{ t.description }} 
+						{% endif %}
+						{% if t.rappel %}
+						<small>Rappel: {{t.rappel|time }}</small>
+						{% endif %}
+						</a>
+						</td>
+						<td
+						{% ifequal t.priorite "B" %}
+						class="vert" 
+						{% endifequal %}
+						{% ifequal t.priorite "M" %}
+						 class="jaune"
+						{% endifequal %}
+						{% ifequal t.priorite "H" %}
+						  class="rouge"
+							{% endifequal %}
+
+							><small><a href="/taches/{{year}}/{{month}}/{{day}}/delEx/{{t.id}}/{{cat}}">c'est fait</a></small>
+						</td>
+						<td><small><a href="/taches/{{year}}/{{month}}/{{day}}/up/{{t.id}}/{{cat}}">Up</a></small>
+						</td>
+						<td><small><a href="/taches/{{year}}/{{month}}/{{day}}/down/{{t.id}}/{{cat}}">Down</a></small>
+						</td>
+						<td><small><a href="/taches/{{year}}/{{month}}/{{day}}/aSuivre/{{t.id}}/{{cat}}">aSuivre</a></small>
+						</td>
+						<td><small><a href="/taches/{{year}}/{{month}}/{{day}}/report/{{t.id}}/{{cat}}">Report</a></small>
+						</td>
+						{% if t.estPeriodique %}
+						<td> Periodique </td>
+						{% endif %}
+					</tr>
+					{% endfor %}
+											
+				</table>
+			</td>
+			<td valign="top" WIDTH=35%>
+				<table border>
+					<tr>
+						<td>
+						</td>
+						<td>
+							Basses
+						</td>
+						<td>
+							Moyennes
+						</td>
+						<td>
+							Critiques
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<a href="/taches/{{year}}/{{month}}/{{day}}/0">General</a>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<a href="/taches/{{year}}/{{month}}/{{day}}/999999999">Periodiques</a>
+						</td>
+					</tr>
+					{% for e in entites %}
+					<tr>
+						<td>
+							<a href="{{e.id}}">{{ e }}</a>
+						</td>
+						{% if e.b > 0%}
+						<td class="vert">
+							{% else %}
+						<td>
+						{% endif %}
+							{{ e.b }}
+						</td>
+						{% if e.m > 0%}
+						<td class="jaune">
+							{% else %}
+						<td>
+						{% endif %}
+							{{ e.m }}
+						</td>
+						{% if e.h > 0%}
+						<td class="rouge">
+							{% else %}
+						<td>
+						{% endif %}
+							{{ e.h }}
+						</td>
+					</tr>
+					{% endfor %}
+				</table>
+
+				</td>
+			</tr>
+		</table>
+				<br />
+
+{% endblock %}

@@ -1,0 +1,75 @@
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="/static/doublesFacture.css" media="print" />
+	</head>
+	<body>
+		{% if month %}
+		<h1>Doubles de {{date|date:"F Y"}}</h1>
+		<a href="/factures/doubles/{{prev}}">Mois Precedent</a>
+		<a href="/factures/"> Retour Resume</a>
+		<a href="/factures/doubles/{{prochain}}">Mois suivant</a>
+		{% else %}
+		<h1>Doubles du {{date|date:"l d F Y"}}</h1>
+		<a href="/factures/doubles/{{prev}}">Jour Precedent</a>
+		<a href="/factures/"> Retour Resume</a>
+		<a href="/factures/doubles/{{prochain}}">Jour suivant</a>
+		{% endif %}
+		<br />
+		<br />
+		{% for f in all %}
+		{% if f.factureAssociee %}
+		Avoir
+		{% else %}
+		Facture
+		{% endif %}
+		Num&eacute;ro:
+		{{ f.numero }}
+		{% if f.factureAssociee %}
+		Associe a la facture {{ f.factureAssociee.numero }}
+		{% endif %}
+			{% if f.client %}
+			{% if f.client.nom %}
+					Client:
+					{{f.client.nom}}
+				{% endif %}
+				{% endif %}
+					Date:
+					{% if f.dateVente %}
+					{{ f.dateVente|date:"d/m/Y" }}
+					{% else %}
+					{{ f.modification|date:"d/m/Y" }}
+					{% endif %};;
+			{% for ligne in f.lignefacture_set.all|dictsort:"position" %}
+					{% if ligne.produit %}
+					{{ ligne.produit.nom }}
+						{% if ligne.prixUnitaireFinal %}
+					{{ ligne.prixUnitaireFinal|floatformat:2 }} &euro;
+					{% else %}
+					{{ ligne.produit.prix|floatformat:2 }} &euro;
+					{% endif %}
+					x {{ ligne.quantite }}
+					= {{ ligne.montant|floatformat:2 }} &euro;;
+					{% else %}
+					{{ ligne.libelle }};
+					{% endif %}
+			{% endfor %}
+
+
+						Total TTC: 
+					{{ f.total|floatformat:2 }} &euro;
+						Montant TVA: 
+					{{ f.montantTVA|floatformat:2 }} &euro;
+		{% for paiement in f.paiement_set.all %}
+						Pay&eacute;: 
+					{% if paiement.arrhe %}
+					Le {{ paiement.arrhe.creation|date:"d/m/Y" }} {{ paiement.moyenPaiement.nom }} d'arrhes de {{ paiement.montant|floatformat:2 }} &euro; 
+					{% else %}
+					Le {{ paiement.date|date:"d/m/Y" }} {{ paiement.moyenPaiement.nom }} de {{ paiement.montant|floatformat:2 }} &euro; 
+					{% endif %}
+				{% endfor %}
+					Restant du: {{ f.totalDu|floatformat:2 }} &euro;
+					<br />	
+		{% endfor %}
+	</body>
+
+</html>

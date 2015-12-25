@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% for m in an %}
+{% for w in m %}
+<table border>
+	<tr>
+		<td>
+			cuisine
+		</td>
+	{% for d in w %}
+		<td>
+				{% if d %}
+				<a href="/chambres/{{d.dateDemandee.year}}/{{d.dateDemandee.month}}/{{d.dateDemandee.day}}#recapitulatif">{{ d.dateDemandee|date }}</a>
+					{{ d.total }}
+				{% else %}
+				{% endif %}
+		</td>
+
+	{% endfor %}
+</tr>
+<tr>
+	<td>&nbsp;</td>
+	{% for d in w %}
+	<td>&nbsp;</td>
+	{% endfor %}
+</tr>
+</table>
+<br />
+<br />
+
+
+<table border>
+	<tr>
+		<td>
+			service
+		</td>
+	{% for d in w %}
+		<td>
+				{% if d %}
+				<a href="/chambres/{{d.dateDemandee.year}}/{{d.dateDemandee.month}}/{{d.dateDemandee.day}}#recapitulatif">{{ d.dateDemandee|date }}</a>
+					{{ d.total }}
+				{% else %}
+				{% endif %}
+		</td>
+
+	{% endfor %}
+</tr>
+<tr>
+	<td>&nbsp;</td>
+	{% for d in w %}
+	<td>&nbsp;</td>
+	{% endfor %}
+</tr>
+</table>
+<br />
+<br />
+
+
+<table border>
+	<tr>
+		<td>
+			plonge
+		</td>
+	{% for d in w %}
+		<td>
+				{% if d %}
+				<a href="/chambres/{{d.dateDemandee.year}}/{{d.dateDemandee.month}}/{{d.dateDemandee.day}}#recapitulatif">{{ d.dateDemandee|date }}</a>
+					{{ d.total }}
+				{% else %}
+				{% endif %}
+		</td>
+
+	{% endfor %}
+</tr>
+<tr>
+	<td>&nbsp;</td>
+	{% for d in w %}
+	<td>&nbsp;</td>
+	{% endfor %}
+</tr>
+</table>
+<br />
+<br />
+
+
+<table border>
+	<tr>
+		<td>
+			menage
+		</td>
+	{% for d in w %}
+		<td>
+				{% if d %}
+				<a href="/chambres/{{d.dateDemandee.year}}/{{d.dateDemandee.month}}/{{d.dateDemandee.day}}#recapitulatif">{{ d.dateDemandee|date }}</a>
+					{{ d.men }}
+				{% else %}
+				{% endif %}
+		</td>
+
+	{% endfor %}
+</tr>
+<tr>
+	<td>&nbsp;</td>
+	{% for d in w %}
+	<td>&nbsp;</td>
+	{% endfor %}
+</tr>
+</table>
+<br />
+<br />
+
+
+<table border>
+	<tr>
+		<td>
+			petit dej:
+		</td>
+	{% for d in w %}
+		<td>
+				{% if d %}
+				<a href="/chambres/{{d.dateDemandee.year}}/{{d.dateDemandee.month}}/{{d.dateDemandee.day}}#recapitulatif">{{ d.dateDemandee|date }}</a>
+					{{ d.petitDej }}
+				{% else %}
+				{% endif %}
+		</td>
+
+	{% endfor %}
+</tr>
+<tr>
+	<td>&nbsp;</td>
+	{% for d in w %}
+	<td>&nbsp;</td>
+	{% endfor %}
+</tr>
+</table>
+{% endfor %}
+{% endfor %}
+<br />
+<br />
+			{% endblock %}

@@ -1,0 +1,79 @@
+
+{% extends "base.html" %}
+{% block title %}
+{% endblock %}
+{% block content %}
+<h2>Resume de {{ resumTotal.contrat.individu}} {{ resumTotal.contrat.nombreHeuresSemaine }} h</h2>
+		<a href="/collectage/emploiDuTemps">retour au resume</a><br />
+		{% if resumTotal.nbHeures %}
+		<a href="/admin/collectage/contrat/{{ resumTotal.contrat.id }}">Contrat</a><br/>
+		<a href="preremplir">preremplir</a><br />
+		<a href="reset">reset</a>
+		<a href="/admin/collectage/heureplanifiee/add">Ajouter Heure</a>
+		{% endif %}
+
+		<table border>
+			<tr>
+				{% for r in resumes %}
+				<td valign="top">
+					<table>
+						<tr>
+							{% if r.jour == today %}
+							<td class="rouge">
+								{% else %}
+							<td>
+								{% endif %}
+								{{ r.jour|date }}
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<table>
+									{% for h in r.heuresPlanifiees %}
+									<tr>
+										{% if h.absence %}
+										<td class="rouge">
+											{% else %}
+										<td>
+											{% endif %}
+											{% if h.tempsTravaille %}
+											<a href="{{h.employe.id}}/">{{h.employe}}</a> de <a href="/admin/collectage/heureplanifiee/{{h.id}}">{{ h.tempsTravaille }} minutes</a> 
+											{% else %}
+											<a href="{{h.employe.id}}/">{{h.employe}}</a> de <a href="/admin/collectage/heureplanifiee/{{h.id}}">{{h.heureDebut|time:"H:i" }} a {{h.heureFin|time:"H:i"}}</a> 
+											{% endif %}
+											{% if h.commentaire %}
+											{{ h.commentaire }}
+											{% endif %}
+										</td>
+									</tr>
+									{% endfor %}
+									{% if r.totalParJour %}
+									<tr>
+										<td>
+											Total: {{ r.totalParJour }} 
+										</td>
+									</tr>
+									{% endif %}
+							</table>
+							</td>
+						</tr>
+					</table>
+				</td>
+				{% endfor %}
+			</tr>
+		</table>
+		{% if resumTotal.nbHeures %}
+		Total des heures: {{resumTotal.nbHeures}} <br />
+		Nombre de repas: {{resumTotal.repas}}<br />
+		Total des heures sans repas: {{resumTotal.heuresSansRepas}}
+		{% endif %}<br />
+		{% for s in semaines.semaines %}
+		{{ s.joli }}<br />
+		{% endfor %}
+		{{ semaines.joli }}
+		{{ resumTotal.enCours|linebreaks }}
+
+
+		<A HREF="javascript:affichage_popup('print','popup_1');">IMPRIMER</A>
+	</body>
+	{% endblock %}

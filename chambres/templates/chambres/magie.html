@@ -1,0 +1,11 @@
+
+{% extends "base.html" %}
+{% block content %}
+		<form method="POST" >{% csrf_token %}
+			{{ tableau|safe }}	
+			<input type="hidden" name="referer" value="{{referer}}">
+			<input type="submit" value="Enregistrer"> 			
+			</form>
+			{% endblock %}
+
+

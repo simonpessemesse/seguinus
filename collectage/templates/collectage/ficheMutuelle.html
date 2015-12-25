@@ -1,0 +1,31 @@
+<html>
+	<head>
+		<title>
+			Fiche Mutuelle de {{ object.invididu.prenom }} {{ object.individu.nom }}
+		</title>
+	</head>
+	<body>
+
+
+
+
+
+<h1>Fiche affiliation salarié frais de santé HCR</h1>
+Raison Sociale : {{ entreprise.denomination }}<br />
+Adresse : {{ entreprise.adresse }}<br />
+<h5>Renseignements sur le salarié :</h5>
+Nom :  {{ object.individu.nom }}<br />
+Prénom :  {{ object.individu.prenom }}<br />
+Adresse : {{ object.individu.adresse }}<br />
+Date de naissance : {{ object.individu.dateNaissance|date:"d F Y" }} commune :       {{ object.individu.communeNaissance }}     <br />     
+N° sécurité sociale : {{ object.individu.numeroSecuriteSociale }}<br />
+Type de contrat : {{ object.get_typeDuContrat_display }}<br /> 
+date d’entrée :   {{object.dateDebut|date:"d F Y"}} <br /> 
+date de fin si CDD :  {{object.dateFin|date:"d F Y"}}  <br /> 
+Situation de famille :  {{ object.individu.get_situationDeFamille_display }}<br />
+Travaille dans un autre hotel/café/restaurant : NON
+
+
+
+	</body>
+</html>
