@@ -1,0 +1,97 @@
+[
+{
+ "model": "easyPoS.donneesentreprise",
+ "fields": {
+  "adresse": "rue de l'exemple",
+  "actif": true,
+  "fax": "0123456789",
+  "telephone": "0123456789",
+  "email": "example@example.com",
+  "numeroFactureCourante": 2,
+  "denomination": "entreprise test",
+  "derniereSauvegarde": "2015-12-24T17:42:46",
+  "numeroTva": "123456789FR",
+  "dernierEnvoiCaisses": null,
+  "siret": "123456789",
+  "numeroUrssaf": "123456789"
+ },
+ "pk": 1
+},
+{
+ "model": "easyPoS.tva",
+ "fields": {
+  "creation": "2015-12-24T17:45:39.943",
+  "taux": "20",
+  "nom": "Taux normal",
+  "modification": "2015-12-24T17:45:39.943"
+ },
+ "pk": 1
+},
+{
+ "model": "easyPoS.famille",
+ "fields": {
+  "nom": "Hotel"
+ },
+ "pk": 1
+},
+{
+ "model": "easyPoS.categorie",
+ "fields": {
+  "creation": "2015-12-24T17:43:54.519",
+  "nom": "Frequents",
+  "modification": "2015-12-24T17:44:28.998"
+ },
+ "pk": 1
+},
+{
+ "model": "easyPoS.produit",
+ "fields": {
+  "tva": 1,
+  "actif": true,
+  "nom": "Consommation 5.5",
+  "modification": "2015-12-24T17:46:28.604",
+  "famille": 1,
+  "creation": "2015-12-24T17:45:58.132",
+  "prix": "1",
+  "categories": [
+   1
+  ]
+ },
+ "pk": 1
+},
+{
+ "model": "easyPoS.moyenpaiement",
+ "fields": {
+  "nom": "Espece"
+ },
+ "pk": 1
+},
+{
+ "model": "easyPoS.moyenpaiement",
+ "fields": {
+  "nom": "CB"
+ },
+ "pk": 2
+},
+{
+ "model": "easyPoS.moyenpaiement",
+ "fields": {
+  "nom": "Cheque"
+ },
+ "pk": 3
+},
+{
+ "model": "easyPoS.moyenpaiement",
+ "fields": {
+  "nom": "ANCV"
+ },
+ "pk": 4
+},
+{
+ "model": "easyPoS.moyenpaiement",
+ "fields": {
+  "nom": "Virement"
+ },
+ "pk": 5
+}
+]
