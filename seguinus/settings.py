@@ -108,8 +108,4 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
 
-CACHES = {
-    'default': {
-    }
-}
 USE_X_FORWARDED_HOST = True
