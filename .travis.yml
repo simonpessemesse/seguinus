@@ -11,4 +11,4 @@ env:
 install:
   - pip install -q Django==$DJANGO_VERSION
 # command to run tests
-script: unittest
+script: python manage.py test
