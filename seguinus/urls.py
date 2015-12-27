@@ -1,6 +1,7 @@
 import django
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
+import chambres
 
 urlpatterns = [
     # Examples:
@@ -11,7 +12,7 @@ urlpatterns = [
 	url(r'^chambres/',include('chambres.urls')),
 	url(r'^taches/',include('taches.urls')),
 	url(r'^menus/',include('menus.urls')),
-	url(r'^$','chambres.views.racine'),
+	url(r'^$',chambres.views.racine),
 
 	url(r'^collectage/', include('collectage.urls')),
 	url(r'^restaurant/', include('restaurant.urls' )),
