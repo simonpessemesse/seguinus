@@ -4,16 +4,16 @@ from django.contrib import admin
 from restaurant import views
 
 
-urlpatterns = patterns('restaurant.views',
-	    url(r'^$', 'index', name="restaurant"),
-    url(r'^plats$', 'plats'),
-    url(r'^(?P<annee>\d+)/(?P<mois>\d+)/(?P<jour>\d+)$', 'jour'),
-    url(r'^(?P<fournisseur>\d+)/$', 'fournisseur'),
-    url(r'^(?P<fournisseur>\d+)/reset$', 'fournisseurReset'),
-    url(r'^c/(?P<lon>\d+)/$', 'compose'),
-    url(r'^c/(?P<lon>\d+)/reset$', 'composeReset'),
-    url(r'^(?P<fournisseur>\d+)/(?P<produit>\d+)/up$', 'up'),
-    url(r'^(?P<fournisseur>\d+)/(?P<produit>\d+)/down$', 'down'),
-	url(r'^ajoutModif/(?P<client_id>\d+)/$', views.ajouteModifResa, name='ajouteModifResa'),
-	url(r'^supprime/(?P<resaResto_id>\d+)/$', views.supprimeModifResa, name='supprime'),
-	)
+urlpatterns = [
+	    url(r'^$',  views.index, name="restaurant"),
+    url(r'^plats$',  views.plats),
+    url(r'^(?P<annee>\d+)/(?P<mois>\d+)/(?P<jour>\d+)$',  views.jour),
+    url(r'^(?P<fournisseur>\d+)/$',  views.fournisseur),
+    url(r'^(?P<fournisseur>\d+)/reset$',  views.fournisseurReset),
+    url(r'^c/(?P<lon>\d+)/$',  views.compose),
+    url(r'^c/(?P<lon>\d+)/reset$',  views.composeReset),
+    url(r'^(?P<fournisseur>\d+)/(?P<produit>\d+)/up$',  views.up),
+    url(r'^(?P<fournisseur>\d+)/(?P<produit>\d+)/down$',  views.down),
+	url(r'^ajoutModif/(?P<client_id>\d+)/$', views.ajouteModifResa),
+	url(r'^supprime/(?P<resaResto_id>\d+)/$', views.supprimeModifResa),
+	]
