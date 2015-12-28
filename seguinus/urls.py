@@ -1,7 +1,9 @@
+import django
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
+import chambres
 
-urlpatterns = patterns('',
+urlpatterns = [
     # Examples:
     # url(r'^$', 'seguinus.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
@@ -10,13 +12,13 @@ urlpatterns = patterns('',
 	url(r'^chambres/',include('chambres.urls')),
 	url(r'^taches/',include('taches.urls')),
 	url(r'^menus/',include('menus.urls')),
-	url(r'^$','chambres.views.racine'),
+	url(r'^$',chambres.views.racine),
 
 	url(r'^collectage/', include('collectage.urls')),
 	url(r'^restaurant/', include('restaurant.urls' )),
 	url(r'^telephones/', include('telephones.urls')),
 	url(r'^easyPoS/', include('easyPoS.urls')),
 
-	url(r'^accounts/login/$', 'django.contrib.auth.views.login'),
-)
+	url(r'^accounts/', include('django.contrib.auth.urls')),
+        ]
 
