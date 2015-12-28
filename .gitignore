@@ -86,3 +86,5 @@ program.pid
 db.sqlite3
 2015-*
 banque.txt
+seguins/settings.py
+preferences.py
