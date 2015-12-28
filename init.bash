@@ -1,5 +1,5 @@
 cd seguinus
-cp -n settings.py.example settings.py
+cp -nv settings.py.example settings.py
 cd ..
-cp -n preferences.example preferences.py
-python manage.py loaddata initData.json
+cp -nv preferences.py.example preferences.py 
+python manage.py loaddata initData.json # TODO only execute this if there was no previous settings.py
