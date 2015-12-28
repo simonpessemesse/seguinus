@@ -10,5 +10,7 @@ env:
 # command to install dependencies
 install:
   - pip install -q Django==$DJANGO_VERSION
+before_script:
+  - bash init.bash
 # command to run tests
 script: python manage.py test
