@@ -78,7 +78,7 @@ Et voila, vous voila sur une sorte de tableau de bord de la partie facturation. 
 
 Captures d'écran
 ----------------
-.. image:: _static/im.png 
+.. image:: _static/caisse_du_jour.png 
 
 
 .. toctree::
