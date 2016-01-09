@@ -78,8 +78,22 @@ Et voila, vous voila sur une sorte de tableau de bord de la partie facturation. 
 
 Captures d'écran
 ----------------
-.. image:: _static/caisse_du_jour.png 
-
+.. image:: _static/arrivees.png
+.. image:: _static/caisse_du_jour.png
+.. image:: _static/departs.png
+.. image:: _static/details_facture.png
+.. image:: _static/fiche_heure_mois.png
+.. image:: _static/liste_des_employes_et_contrats.png
+.. image:: _static/mail_comptable.png
+.. image:: _static/menages.png
+.. image:: _static/programme_facturation2.png
+.. image:: _static/programme_facturation.png
+.. image:: _static/recapitulatif.png
+.. image:: _static/repas_du_soir.png
+.. image:: _static/resume_des_jours_a_venir.png
+.. image:: _static/suite_caisse.png
+.. image:: _static/vue_planning_matricielle.png
+.. image:: _static/vue_planning_par_jour.png
 
 .. toctree::
    :maxdepth: 2
