@@ -36,7 +36,7 @@ python manage.py test
 
 * Repo owner or admin
 
-simon pessemesse
+Simon Pessemesse
 
 simon.pessemesse@gmail.com
 
