@@ -5,7 +5,8 @@ it is written in python 3, using pyqt4, and django
 
 ### Status
 [![Build Status](https://api.travis-ci.org/simonpessemesse/seguinus.svg)](https://travis-ci.org/simonpessemesse/seguinus)
-[doc](http://seguinus.readthedocs.org/en/latest/)
+
+[readthedocs.org](http://seguinus.readthedocs.org/en/latest/)
 
 ### How do I get set up? ###
 
