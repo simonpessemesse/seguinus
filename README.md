@@ -7,7 +7,13 @@ it is written in python 3, using pyqt4, and django
 
 * Summary of set up
 
-copy the repository, install dependencies, run init.bash, run easyPoS_run.py
+copy the repository, install dependencies, run init.sh, run easyPoS_run.py
+```bash
+git clone https://github.com/simonpessemesse/seguinus.git
+sh init.sh
+python3 easyPoS_run.py
+
+```
 
 * Configuration
 
