@@ -1,16 +1,16 @@
 language: python
 python:
-  - "3.3"
   - "3.4"
   # does not have headers provided, please ask https://launchpad.net/~pypy/+archive/ppa
   # maintainers to fix their pypy-dev package.
   - "pypy"
 env:
   - DJANGO_VERSION=1.8
+  - DJANGO_VERSION=1.9
 # command to install dependencies
 install:
   - pip install -q Django==$DJANGO_VERSION
 before_script:
-  - bash init.bash
+  - bash init.sh
 # command to run tests
 script: python manage.py test

@@ -19,7 +19,7 @@ Seguinus est prevu pour une utilisation en local en monoutilisateur/monoposte. T
 
 **Attention, ce projet est un vrai bordel avec des trucs sales dans tous les sens et un code trés peu nettoyé**
 
-Il a au debut été developpé et utilisé sous windows, maintenant il l'est uniquement sous linux, mais ca devrait fonctionner a peu prés sur toutes les plateformes ayant django et pyqt fonctionnel (quoique pour la sauvegarde en gpg il y aurait peut etre des modifications a faire)
+Il a au debut été developpé et utilisé sous windows, maintenant il l'est uniquement sous linux, mais ca devrait fonctionner (avec des légères modification) a peu prés sur toutes les plateformes ayant django et pyqt fonctionnel (quoique pour la sauvegarde en gpg il y aurait peut etre des modifications a faire)
 
 Philosophie
 -----------
@@ -33,8 +33,7 @@ Architecture
 ------------
 
 Tout repose sur django, avec pour des raisons de simplicité de deploiement sqlite comme base de données, mais moyennant quelques modification mineures, le programme devrait parfaitement fonctionner avec n'importe base de données prise en charge par django.
-Pour l'instant il est compatible avec django 1.2, pour les autres versions, cela devrait etre possible de le faire fonctionner en changeant deux trois trucs.
-La majorité de l'application est web, en local, cependant la partie d'edition des factures est en PyQt, avec une fenêtre par facture, car l'interface devait être optimisée pour la saisie et les modification rapides de factures (quand on a 20 factures à preparer en 2 minutes a la fin d'un gros service c'est bien pratique tiens!) 
+La majorité de l'application est web, en local (ou pas d'ailleurs), cependant la partie d'edition des factures est en PyQt, avec une fenêtre par facture, car l'interface devait être optimisée pour la saisie et les modification rapides de factures (quand on a 20 factures à preparer en 2 minutes a la fin d'un gros service c'est bien pratique tiens!) 
 Etant fainéant par nature, j'utilise extensivement l'interface d'administration de django pour ajouter/editer/supprimer les reservations/taches/produits. Il en resulte une ergonomie parfois douteuse, mais un reel allegement de code chiant écrire.
 La premiere partie a avoir ete developpee est la partie des reservations, puis est venue la gestion des taches, la facturation, et enfin le suivi des heures.
 
@@ -65,7 +64,7 @@ J'ai fait une version pour que vous puissiez le tester facilement sous linux, (q
 
   git clone https://github.com/simonpessemesse/seguinus.git
   cd seguinus
-  sh init.bash
+  sh init.sh
   python3 easyPoS_run.py
 
 

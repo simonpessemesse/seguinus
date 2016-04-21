@@ -1,8 +1,13 @@
 # seguinus
 seguinus is an hotel/restaurant booking and billing system 
 
-
 it is written in python 3, using pyqt4, and django
+
+### Status
+[![Build Status](https://api.travis-ci.org/simonpessemesse/seguinus.svg)](https://travis-ci.org/simonpessemesse/seguinus)
+
+[readthedocs.org](http://seguinus.readthedocs.org/en/latest/)
+
 ### How do I get set up? ###
 
 * Summary of set up
@@ -10,6 +15,7 @@ it is written in python 3, using pyqt4, and django
 copy the repository, install dependencies, run init.sh, run easyPoS_run.py
 ```bash
 git clone https://github.com/simonpessemesse/seguinus.git
+cd seguinus
 sh init.sh
 python3 easyPoS_run.py
 
