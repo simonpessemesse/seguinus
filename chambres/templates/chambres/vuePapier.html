@@ -1,5 +1,17 @@
 
 {% extends "base.html" %}
+{# Load CSS and JavaScript #}
+{% block head %}
+{# Load the tag library #}
+{% load bootstrap3 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+{% endblock %}
 {% block title %}
 VuePapier{{jours.1.jour.year}}
 {% endblock %}
@@ -127,17 +139,15 @@ VuePapier{{jours.1.jour.year}}
 				
 				
 				</table>
-				<table valign="bottom">
-						<tr valign="bottom">
-						<td valign="bottom">
-							<form  method="post">{% csrf_token %}
-								{{ j.form.as_p }}
-								<input type="submit" value="Go" />
+							<form class="form" method="post">
+                                                            {% csrf_token %}
+
+                                                            {% bootstrap_form j.form layout='inline' %}
+                                                            {% buttons %}
+    <button type="submit" class="btn btn-primary" value="Go">Go  </button>
+  {% endbuttons %}
 							</form>
 							<small>{{j.jour|date}}</small>
-						</td>
-					</tr>
-				</table>
 			</td>
 			{% endfor %}
 		</tr>

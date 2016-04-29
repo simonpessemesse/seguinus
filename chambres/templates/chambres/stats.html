@@ -45,6 +45,7 @@
 {% load admin_urls %}
 
 		<h3>Recapitulatif du {{ dateDemandee|date }} </h3>
+                <nav class="navbar">
 		<table border>
 			<tr>
 				<td class="jaune">
@@ -66,6 +67,7 @@
 				<a href="{% url 'pb' %}">pb</a></td>
 			</tr>
 	</table>
+        </nav>
 	<table border>
 		<tr>
 			{% for d in prochainsJours %}
