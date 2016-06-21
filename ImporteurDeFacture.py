@@ -105,6 +105,26 @@ class LigneFacture2:
         self.account_id = 624
         self.quantity = 1.0
         self.name = "fromage"
+
+        self.uom_id = 1
+        self.product_id = 835
+        self.price_unit = 20.0
+        self.invoice_line_tax_ids = [1]
+        self.price_subtotal = 20.0
+        self.sequence = 10
+        self.currency_id = 1
+        self.price_subtotal_signed = 20.0
+        self.partner_id = 465
+        self.account_id = 624
+        self.invoice_id = 1719
+        self.company_currency_id = 1
+        self.account_analytic_id = False
+        self.create_uid = 1
+        self.company_id = 1
+        self.origin = False
+        self.quantity = 1.0
+        self.write_uid = 1
+        self.discount = 0.0
         pass
 
 def convertisseur_d_instance_en_dico(instance):
@@ -142,30 +162,25 @@ def lisLaDonnee(c,classe,id):
     toCreate = {}
     for k, v in record.items():
         if "name" in k:
-
-            print ("self."+str(k),"=", v)
-
+            pass
+            #print ("self."+str(k),"=", v)
+        v1 = v
+        if type(v) is list and len(v) == 2:
+            v1 = v[0]
         if k in classe.requiredFields:
    #         print(k,v)
-            v1=v
-            if type(v) is list and len(v) == 2:
-                v1 = v[0]
+
    #         print ("self."+str(k),"=", v)
             toCreate[k] = v1
-            print(k,"=",v,"00000000000000000000")
-        else:
-            print(k,"=",v)
-    return toCreate
+
+
+
+        print("self."+str(k),"=",v1)
+
+    return toCreate,record
 
 def ecrisLaDonnee(db,uid,password,models,classe):
     pass
-if False:
-    toCreate=lisLaDonnee(c,Facture2,1602)
-    print()
-    toCreate=lisLaDonnee(c,LigneFacture2,1279)
-    print()
-    print()
-    toCreate=lisLaDonnee(c,Product,835)
 
 
 #print(toCreate)
@@ -185,6 +200,16 @@ def creerClient(c,nom):
 def creerFacture(c,facture):
     f=Facture2()
     l=LigneFacture2()
+
+    d = convertisseur_d_instance_en_dico(f)
+    cli = creerClient(c, facture.clientNomFinal)
+    d["partner_id"] = cli
+    print("before", d)
+    idFacture = c.getModels().execute_kw(c.db, c.getUid(), c.password, "account.invoice", "create", [d])
+    print("after")
+
+    print(idFacture, " a ete cree")
+
 
 
     idLignes = []
@@ -206,6 +231,7 @@ def creerFacture(c,facture):
 
         temp = c.getModels().execute_kw(c.db, c.getUid(), c.password, "product.template", "create", [dicoProd])
         dicoProd["product_tmpl_id"]=temp
+        dicoProd["invoice_id"]=idFacture
         print(dicoProd)
         prod = c.getModels().execute_kw(c.db, c.getUid(), c.password, "product.product", "create", [dicoProd])
 
@@ -220,27 +246,45 @@ def creerFacture(c,facture):
         print(nid,"a été creeEEEEE")
         idLignes.append(nid)
 
-    d=convertisseur_d_instance_en_dico(f)
-    cli=creerClient(c,facture.clientNomFinal)
 
-    d["partner_id"]=cli
     d["invoice_line_ids"]=[idLignes]
 
-    print("before",d)
-    id=c.getModels().execute_kw(c.db,c.getUid(),c.password,"account.invoice","create",[d])
-    print("after")
+    c.getModels().execute_kw(c.db, c.getUid(), c.password, 'account.invoice', 'write', [[idFacture], {
+        'invoice_line_ids': [idLignes]
+    }])
+    for idl in idLignes:
+        print("OO",idl,idFacture)
+        c.getModels().execute_kw(c.db, c.getUid(), c.password, 'account.invoice.line', 'write', [[idl], {
+            'invoice_id': idFacture
+        }])
 
-    print(id," a ete cree")
 
 #pp=Product()
 #dicoProd = convertisseur_d_instance_en_dico(pp)
 #print("PPPPPPPPPPP",dicoProd)
 #prod = c.getModels().execute_kw(c.db, c.getUid(), c.password, "product.product", "create", [dicoProd])
-
-fs=Facture.objects.all()
+if True:
+    fs=Facture.objects.all()
 #creerFacture(c,fs[1])
-for f in fs:
-    if f.client and f.client.nom:
-        creerFacture(c,f)
-#for i in range(10):
+    for f in fs:
+        if f.client and f.client.nom:
+            creerFacture(c,f)
+else:
+     c.getModels().execute_kw(c.db, c.getUid(), c.password, 'account.invoice', 'write', [[1719], {
+        'invoice_line_ids': "[1279]"
+        }])
+     c.getModels().execute_kw(c.db, c.getUid(), c.password, 'account.invoice.line', 'write', [[1279], {
+         'invoice_id': "1719"
+     }])
+     toCreate,r = lisLaDonnee(c, Facture2, 1602)
+     print()
+     toCreate,r = lisLaDonnee(c, Facture2, 1719)
+     print()
+
+     toCreate,r = lisLaDonnee(c, LigneFacture2, 1279)
+     print()
+     print()
+#     toCreate,r = lisLaDonnee(c, Product, 835)
+
+                #for i in range(10):
  #   id = c.getModels().execute_kw(c.db, c.getUid(), c.password, 'account.invoice', 'create', [toCreate])
