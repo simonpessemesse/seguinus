@@ -56,7 +56,7 @@ class Fournisseur(models.Model):
 	nom = models.CharField(max_length=500)
 	adresse = models.CharField(max_length=500,blank=True)
 	telephone = models.CharField(max_length=500,blank=True)
-	contacts=models.ManyToManyField(Contact,blank=True)
+	contacts=models.ManyToManyField(Contact,blank=True,null=True)
 	def __str__(self):
 		return self.nom
 
