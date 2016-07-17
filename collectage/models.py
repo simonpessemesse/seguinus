@@ -60,7 +60,13 @@ class Individu(models.Model):
 	def __str__(self):
 		return self.prenom+" "+self.nom
 	def denom(self):
-		return self.get_denomination_display()+" "+self.prenom+" "+self.nom
+		try:
+			dem=self.get_denomination_display()
+			if dem is None:
+				dem=""
+		except:
+			dem=""
+		return dem+" "+self.prenom+" "+self.nom
 	def anniv(self,year):
 		if not self.dateNaissance:
 			return "inconnu"
