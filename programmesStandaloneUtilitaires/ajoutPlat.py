@@ -2,6 +2,7 @@
 
 
 from . import configureEnvironnement
+configureEnvironnement.setup()
 
 from .seguinus.restaurant.models import Fourniture, Fournisseur, Plat, Menu
 

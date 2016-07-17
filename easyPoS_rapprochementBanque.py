@@ -2,6 +2,7 @@
 # coding: utf-8
 from decimal import *
 import configureEnvironnement
+configureEnvironnement.setup()
 
 import django
 

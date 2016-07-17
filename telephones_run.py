@@ -3,6 +3,7 @@ import preferences
 import fileinput
 
 import configureEnvironnement
+configureEnvironnement.setup()
 
 os.chdir("..")
 

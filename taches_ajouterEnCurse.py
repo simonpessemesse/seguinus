@@ -2,6 +2,7 @@
 # coding: utf-8
 
 import configureEnvironnement
+configureEnvironnement.setup()
 
 import django
 

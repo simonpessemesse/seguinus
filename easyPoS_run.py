@@ -16,6 +16,7 @@ except IOError:
     sys.exit(0)
 
 import configureEnvironnement
+configureEnvironnement.setup()
 import reconfigurePaths
 import os
 

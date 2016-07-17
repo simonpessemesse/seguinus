@@ -1,5 +1,6 @@
 # coding: utf-8
 import configureEnvironnement
+configureEnvironnement.setup()
 
 from restaurant.models import Fourniture, Fournisseur
 

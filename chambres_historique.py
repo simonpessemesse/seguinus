@@ -1,4 +1,5 @@
 import configureEnvironnement
+configureEnvironnement.setup()
 import os
 import preferences
 from easyPoS.models import Facture, DonneesEntreprise, Paiement, MoyenPaiement, PortionTVA, Arrhe, Produit, Tva, \

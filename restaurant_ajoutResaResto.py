@@ -1,5 +1,6 @@
 # coding: utf-8
 import configureEnvironnement
+configureEnvironnement.setup()
 
 first = input("Quelle date? (rien==aujourd'hui)  ")
 

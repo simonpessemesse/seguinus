@@ -2,6 +2,7 @@
 
 import webbrowser
 import configureEnvironnement
+configureEnvironnement.setup()
 
 import django
 

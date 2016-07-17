@@ -1,5 +1,6 @@
 # coding: utf-8
 import configureEnvironnement
+configureEnvironnement.setup()
 
 
 def levenshtein(s1, s2):

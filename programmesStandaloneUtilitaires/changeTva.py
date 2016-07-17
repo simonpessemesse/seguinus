@@ -1,4 +1,5 @@
 from . import configureEnvironnement
+configureEnvironnement.setup()
 from datetime import datetime
 import os
 from . import preferences
