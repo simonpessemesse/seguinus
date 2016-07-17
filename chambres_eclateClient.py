@@ -25,7 +25,3 @@ for r in c.reservation_set.all():
         rr.save()
         rr.chambresAssignees.add(ch)
         rr.save()
-
-
-
-# print c
