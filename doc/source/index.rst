@@ -34,7 +34,7 @@ Architecture
 
 Tout repose sur django, avec pour des raisons de simplicité de deploiement sqlite comme base de données, mais moyennant quelques modification mineures, le programme devrait parfaitement fonctionner avec n'importe base de données prise en charge par django.
 La majorité de l'application est web, en local (ou pas d'ailleurs), cependant la partie d'edition des factures est en PyQt, avec une fenêtre par facture, car l'interface devait être optimisée pour la saisie et les modification rapides de factures (quand on a 20 factures à preparer en 2 minutes a la fin d'un gros service c'est bien pratique tiens!) 
-Etant fainéant par nature, j'utilise extensivement l'interface d'administration de django pour ajouter/editer/supprimer les reservations/taches/produits. Il en resulte une ergonomie parfois douteuse, mais un reel allegement de code chiant écrire.
+J'utilise extensivement l'interface d'administration de django pour ajouter/editer/supprimer les reservations/taches/produits. Il en resulte une ergonomie parfois douteuse, mais un reel allegement de code chiant écrire.
 La premiere partie a avoir ete developpee est la partie des reservations, puis est venue la gestion des taches, la facturation, et enfin le suivi des heures.
 
 Gestion des reservations
