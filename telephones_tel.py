@@ -3,8 +3,8 @@
 import webbrowser
 import configureEnvironnement
 
-
 import django
+
 django.setup()
 import sys
 import preferences
@@ -18,29 +18,29 @@ class Example(QtGui.QWidget):
         QtGui.QWidget.__init__(self, parent)
         self.initUI()
 
-    def remplisListe(self,text=None):
+    def remplisListe(self, text=None):
         print(self.edit.text())
-        contacts=Contact.objects.filter(nomTags__icontains=self.edit.text()).order_by("nomTags")
+        contacts = Contact.objects.filter(nomTags__icontains=self.edit.text()).order_by("nomTags")
         self.liste.clear()
         for c in contacts:
-            item=QtGui.QListWidgetItem(c.nomTags+"\t"+c.numero)
-            item.idTruc=c.id
+            item = QtGui.QListWidgetItem(c.nomTags + "\t" + c.numero)
+            item.idTruc = c.id
             self.liste.addItem(item)
 
     def ajoutC(self):
         print("ouvre")
-        webbrowser.open(preferences.URL+"/admin/telephones/contact/add/")
-    def test(self,item):
-        webbrowser.open(preferences.URL+"/admin/telephones/contact/{0}".format(item.idTruc))
-    def initUI(self):
+        webbrowser.open(preferences.URL + "/admin/telephones/contact/add/")
 
-#        self.label = QtGui.QLabel(self)
-#        self.label.setText("")
+    def test(self, item):
+        webbrowser.open(preferences.URL + "/admin/telephones/contact/{0}".format(item.idTruc))
+
+    def initUI(self):
+        #        self.label = QtGui.QLabel(self)
+        #        self.label.setText("")
         self.edit = QtGui.QLineEdit(self)
 
-        self.liste=QtGui.QListWidget(self)
-        self.ajout=QtGui.QPushButton("Ajouter un Contact")
-
+        self.liste = QtGui.QListWidget(self)
+        self.ajout = QtGui.QPushButton("Ajouter un Contact")
 
         hbox = QtGui.QVBoxLayout()
         hbox.addWidget(self.ajout)
@@ -49,10 +49,9 @@ class Example(QtGui.QWidget):
         self.setLayout(hbox)
 
         self.remplisListe()
-        
 
         self.connect(self.edit, QtCore.SIGNAL('textChanged(QString)'), self.remplisListe)
-        self.connect(self.liste,QtCore.SIGNAL('itemClicked (QListWidgetItem *)'),self.test)
+        self.connect(self.liste, QtCore.SIGNAL('itemClicked (QListWidgetItem *)'), self.test)
         self.connect(self.ajout, QtCore.SIGNAL('clicked()'), self.ajoutC)
         print("bon")
 
@@ -63,7 +62,7 @@ class Example(QtGui.QWidget):
         return
         self.liste.setText(text)
         self.liste.adjustSize()
-    
+
 
 app = QtGui.QApplication(sys.argv)
 exm = Example()

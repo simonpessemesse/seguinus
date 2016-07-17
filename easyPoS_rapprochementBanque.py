@@ -41,7 +41,7 @@ for k, v in TParJour.items():
     total = 0
     for t in v.paiements:
         total += t.montant
-    #		print(t)
+    # print(t)
     v.total = total
 
 # for k,v in TParJour.items():
