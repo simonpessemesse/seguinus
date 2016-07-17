@@ -89,3 +89,8 @@ banque.txt
 *settings.py
 *program.pid
 preferences.py
+.idea
+bin/
+easyPoS/data.json
+include/
+staticPROD
