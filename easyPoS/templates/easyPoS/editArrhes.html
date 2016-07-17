@@ -30,13 +30,13 @@
 	</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	</td><td valign="top">
 	<h3>Modifs Resas Repas</h3>
-	<a href="{% url 'restaurant:ajouteModifResa' client.id %}">Ajout modification</a>
+	<a href="{% url 'ajouteModifResa' client.id %}">Ajout modification</a>
 	<br />
 	<br />
 	<br />
 		{% for m in modifs %}
 		<table><tr><td>
-					<a href="{% url 'restaurant:supprime' m.id %}">Supprimer</a>
+					<a href="{% url 'supprime' m.id %}">Supprimer</a>
 				</td><td>&nbsp;&nbsp;&nbsp;&nbsp;
 				</td><td>
 					<a href="/admin/restaurant/resaresto/{{ m.id }}">{{ m }}</a>

@@ -14,6 +14,6 @@ urlpatterns = [
     url(r'^c/(?P<lon>\d+)/reset$',  views.composeReset),
     url(r'^(?P<fournisseur>\d+)/(?P<produit>\d+)/up$',  views.up),
     url(r'^(?P<fournisseur>\d+)/(?P<produit>\d+)/down$',  views.down),
-	url(r'^ajoutModif/(?P<client_id>\d+)/$', views.ajouteModifResa),
-	url(r'^supprime/(?P<resaResto_id>\d+)/$', views.supprimeModifResa),
+	url(r'^ajoutModif/(?P<client_id>\d+)/$', views.ajouteModifResa,name="ajouteModifResa"),
+	url(r'^supprime/(?P<resaResto_id>\d+)/$', views.supprimeModifResa,name="supprime"),
 	]
