@@ -12,13 +12,14 @@ import sys
 import unittest
 
 from . import gnupg
+
 try:
-	from io import StringIO
+    from io import StringIO
 except ImportError:
-	from io import StringIO
+    from io import StringIO
 
 __author__ = "Vinay Sajip"
-__date__  = "$07-Jan-2010 18:20:21$"
+__date__ = "$07-Jan-2010 18:20:21$"
 
 ALL_TESTS = True
 
@@ -79,243 +80,251 @@ WdPQjKEfKnr+bW4yubwMUYKyAJ4uiE8Rv/oEED1oM3xeJqa+MJ9V1w==
 =sqld
 -----END PGP PUBLIC KEY BLOCK-----"""
 
+
 def is_list_with_len(o, n):
-	return isinstance(o, list) and len(o) == n
+    return isinstance(o, list) and len(o) == n
+
 
 def compare_keys(k1, k2):
-	"Compare ASCII keys"
-	k1 = k1.split('\n')
-	k2 = k2.split('\n')
-	del k1[1] # remove version lines
-	del k2[1]
-	return k1 != k2
+    "Compare ASCII keys"
+    k1 = k1.split('\n')
+    k2 = k2.split('\n')
+    del k1[1]  # remove version lines
+    del k2[1]
+    return k1 != k2
+
 
 class GPGTestCase(unittest.TestCase):
-	def setUp(self):
-		hd = os.path.join(os.getcwd(), 'keys')
-		if os.path.exists(hd):
-			self.assertTrue(os.path.isdir(hd),
-							"Not a directory: %s" % hd)
-			shutil.rmtree(hd)
-		self.homedir = hd
-		self.gpg = gnupg.GPG(gnupghome=hd, gpgbinary='gpg')
+    def setUp(self):
+        hd = os.path.join(os.getcwd(), 'keys')
+        if os.path.exists(hd):
+            self.assertTrue(os.path.isdir(hd),
+                            "Not a directory: %s" % hd)
+            shutil.rmtree(hd)
+        self.homedir = hd
+        self.gpg = gnupg.GPG(gnupghome=hd, gpgbinary='gpg')
 
-	def test_environment(self):
-		"Test the environment by ensuring that setup worked"
-		hd = self.homedir
-		self.assertTrue(os.path.exists(hd) and os.path.isdir(hd),
-						"Not an existing directory: %s" % hd)
+    def test_environment(self):
+        "Test the environment by ensuring that setup worked"
+        hd = self.homedir
+        self.assertTrue(os.path.exists(hd) and os.path.isdir(hd),
+                        "Not an existing directory: %s" % hd)
 
-	def test_list_keys_initial(self):
-		"Test that initially there are no keys"
-		public_keys = self.gpg.list_keys()
-		self.assertTrue(is_list_with_len(public_keys, 0),
-						"Empty list expected")
-		private_keys = self.gpg.list_keys(secret=True)
-		self.assertTrue(is_list_with_len(private_keys, 0),
-						"Empty list expected")
+    def test_list_keys_initial(self):
+        "Test that initially there are no keys"
+        public_keys = self.gpg.list_keys()
+        self.assertTrue(is_list_with_len(public_keys, 0),
+                        "Empty list expected")
+        private_keys = self.gpg.list_keys(secret=True)
+        self.assertTrue(is_list_with_len(private_keys, 0),
+                        "Empty list expected")
 
-	def generate_key(self, first_name, last_name, domain, passphrase=None):
-		"Generate a key"
-		params = {
-			'Key-Type': 'DSA',
-			'Key-Length': 1024,
-			'Subkey-Type': 'ELG-E',
-			'Subkey-Length': 2048,
-			'Name-Comment': 'A test user',
-			'Expire-Date': 0,
-		}
-		params['Name-Real'] = '%s %s' % (first_name, last_name)
-		params['Name-Email'] = ("%s.%s@%s" % (first_name, last_name, domain)).lower()
-		if passphrase is None:
-			passphrase = ("%s%s" % (first_name[0], last_name)).lower()
-		params['Passphrase'] = passphrase
-		cmd = self.gpg.gen_key_input(**params)
-		return self.gpg.gen_key(cmd)
-	
-	def do_key_generation(self):
-		"Test that key generation succeeds"
-		result = self.generate_key("Barbara", "Brown", "beta.com")
-		self.assertNotEqual(None, result, "Non-null result")
-		return result
-	
-	def test_list_keys_after_generation(self):
-		"Test that after key generation, the generated key is available"
-		self.test_list_keys_initial()
-		self.do_key_generation()
-		public_keys = self.gpg.list_keys()
-		self.assertTrue(is_list_with_len(public_keys, 1),
-						"1-element list expected")
-		private_keys = self.gpg.list_keys(secret=True)
-		self.assertTrue(is_list_with_len(private_keys, 1),
-						"1-element list expected")
+    def generate_key(self, first_name, last_name, domain, passphrase=None):
+        "Generate a key"
+        params = {
+            'Key-Type': 'DSA',
+            'Key-Length': 1024,
+            'Subkey-Type': 'ELG-E',
+            'Subkey-Length': 2048,
+            'Name-Comment': 'A test user',
+            'Expire-Date': 0,
+        }
+        params['Name-Real'] = '%s %s' % (first_name, last_name)
+        params['Name-Email'] = ("%s.%s@%s" % (first_name, last_name, domain)).lower()
+        if passphrase is None:
+            passphrase = ("%s%s" % (first_name[0], last_name)).lower()
+        params['Passphrase'] = passphrase
+        cmd = self.gpg.gen_key_input(**params)
+        return self.gpg.gen_key(cmd)
 
-	def test_encryption_and_decryption(self):
-		"Test that encryption and decryption works"
-		key = self.generate_key("Andrew", "Able", "alpha.com",
-								passphrase="andy")
-		andrew = key.fingerprint
-		print(("cacaCouicou  :  "+andrew))
-		key = self.generate_key("Barbara", "Brown", "beta.com")
-		barbara = key.fingerprint
-		data = "Hello, world!"
-		edata = str(self.gpg.encrypt(data, barbara))
-		self.assertNotEqual(data, edata, "Data must have changed")
-		ddata = self.gpg.decrypt(edata, passphrase="bbrown")
-		if data != str(ddata):
-			logger.debug("was: %r", data)
-			logger.debug("new: %r", str(ddata))
-		self.assertEqual(data, str(ddata), "Round-trip must work")
-		edata = str(self.gpg.encrypt(data, [andrew, barbara]))
-		self.assertNotEqual(data, edata, "Data must have changed")
-		ddata = self.gpg.decrypt(edata, passphrase="andy")
-		self.assertEqual(data, str(ddata), "Round-trip must work")
-		ddata = self.gpg.decrypt(edata, passphrase="bbrown")
-		self.assertEqual(data, str(ddata), "Round-trip must work")
+    def do_key_generation(self):
+        "Test that key generation succeeds"
+        result = self.generate_key("Barbara", "Brown", "beta.com")
+        self.assertNotEqual(None, result, "Non-null result")
+        return result
 
-	def test_import_and_export(self):
-		"Test that key import and export works"
-		self.test_list_keys_initial()
-		self.gpg.import_keys(KEYS_TO_IMPORT)
-		public_keys = self.gpg.list_keys()
-		self.assertTrue(is_list_with_len(public_keys, 2),
-						"2-element list expected")
-		private_keys = self.gpg.list_keys(secret=True)
-		self.assertTrue(is_list_with_len(private_keys, 0),
-						"Empty list expected")
-		ascii = self.gpg.export_keys([k['keyid'] for k in public_keys])
-		self.assertTrue(ascii.find("PGP PUBLIC KEY BLOCK") >= 0,
-						"Exported key should be public")
-		ascii = ascii.replace("\r", "").strip()
-		match = compare_keys(ascii, KEYS_TO_IMPORT)
-		if match:
-			logger.debug("was: %r", KEYS_TO_IMPORT)
-			logger.debug("now: %r", ascii)
-		self.assertEqual(0, match, "Keys must match")
-		#Generate a key so we can test exporting private keys
-		key = self.do_key_generation()
-		ascii = self.gpg.export_keys(key.fingerprint, True)
-		self.assertTrue(ascii.find("PGP PRIVATE KEY BLOCK") >= 0,
-						"Exported key should be private")
+    def test_list_keys_after_generation(self):
+        "Test that after key generation, the generated key is available"
+        self.test_list_keys_initial()
+        self.do_key_generation()
+        public_keys = self.gpg.list_keys()
+        self.assertTrue(is_list_with_len(public_keys, 1),
+                        "1-element list expected")
+        private_keys = self.gpg.list_keys(secret=True)
+        self.assertTrue(is_list_with_len(private_keys, 1),
+                        "1-element list expected")
 
-	def test_import_only(self):
-		"Test that key import works"
-		self.test_list_keys_initial()
-		self.gpg.import_keys(KEYS_TO_IMPORT)
-		public_keys = self.gpg.list_keys()
-		self.assertTrue(is_list_with_len(public_keys, 2),
-						"2-element list expected")
-		private_keys = self.gpg.list_keys(secret=True)
-		self.assertTrue(is_list_with_len(private_keys, 0),
-						"Empty list expected")
-		ascii = self.gpg.export_keys([k['keyid'] for k in public_keys])
-		self.assertTrue(ascii.find("PGP PUBLIC KEY BLOCK") >= 0,
-						"Exported key should be public")
-		ascii = ascii.replace("\r", "").strip()
-		match = compare_keys(ascii, KEYS_TO_IMPORT)
-		if match:
-			logger.debug("was: %r", KEYS_TO_IMPORT)
-			logger.debug("now: %r", ascii)
-		self.assertEqual(0, match, "Keys must match")
+    def test_encryption_and_decryption(self):
+        "Test that encryption and decryption works"
+        key = self.generate_key("Andrew", "Able", "alpha.com",
+                                passphrase="andy")
+        andrew = key.fingerprint
+        print(("cacaCouicou  :  " + andrew))
+        key = self.generate_key("Barbara", "Brown", "beta.com")
+        barbara = key.fingerprint
+        data = "Hello, world!"
+        edata = str(self.gpg.encrypt(data, barbara))
+        self.assertNotEqual(data, edata, "Data must have changed")
+        ddata = self.gpg.decrypt(edata, passphrase="bbrown")
+        if data != str(ddata):
+            logger.debug("was: %r", data)
+            logger.debug("new: %r", str(ddata))
+        self.assertEqual(data, str(ddata), "Round-trip must work")
+        edata = str(self.gpg.encrypt(data, [andrew, barbara]))
+        self.assertNotEqual(data, edata, "Data must have changed")
+        ddata = self.gpg.decrypt(edata, passphrase="andy")
+        self.assertEqual(data, str(ddata), "Round-trip must work")
+        ddata = self.gpg.decrypt(edata, passphrase="bbrown")
+        self.assertEqual(data, str(ddata), "Round-trip must work")
 
-	def test_signature_verification(self):
-		"Test that signing and verification works"
-		key = self.generate_key("Andrew", "Able", "alpha.com")
-		data = "Hello, world!"
-		sig = self.gpg.sign(data, keyid=key.fingerprint, passphrase='bbrown')
-		self.assertFalse(sig, "Bad passphrase should fail")
-		sig = self.gpg.sign(data, keyid=key.fingerprint, passphrase='aable')
-		self.assertTrue(sig, "Good passphrase should succeed")
-		sig = str(sig)
-		verified = self.gpg.verify(sig)
-		if key.fingerprint != verified.fingerprint:
-			logger.debug("key: %r", key.fingerprint)
-			logger.debug("ver: %r", verified.fingerprint)
-		self.assertEqual(key.fingerprint, verified.fingerprint,
-						 "Fingerprints must match")
-		data_file = open('random_binary_data', 'rb')
-		sig = self.gpg.sign_file(data_file, keyid=key.fingerprint,
-								 passphrase='aable')
-		self.assertTrue(sig, "File signing should succeed")
-		try:
-			verified = self.gpg.verify_file(StringIO(sig.data))
-		except UnicodeDecodeError:
-			from io import BytesIO
-			verified = self.gpg.verify_file(BytesIO(sig.data))
-		if key.fingerprint != verified.fingerprint:
-			logger.debug("key: %r", key.fingerprint)
-			logger.debug("ver: %r", verified.fingerprint)
-		self.assertEqual(key.fingerprint, verified.fingerprint,
-						 "Fingerprints must match")
+    def test_import_and_export(self):
+        "Test that key import and export works"
+        self.test_list_keys_initial()
+        self.gpg.import_keys(KEYS_TO_IMPORT)
+        public_keys = self.gpg.list_keys()
+        self.assertTrue(is_list_with_len(public_keys, 2),
+                        "2-element list expected")
+        private_keys = self.gpg.list_keys(secret=True)
+        self.assertTrue(is_list_with_len(private_keys, 0),
+                        "Empty list expected")
+        ascii = self.gpg.export_keys([k['keyid'] for k in public_keys])
+        self.assertTrue(ascii.find("PGP PUBLIC KEY BLOCK") >= 0,
+                        "Exported key should be public")
+        ascii = ascii.replace("\r", "").strip()
+        match = compare_keys(ascii, KEYS_TO_IMPORT)
+        if match:
+            logger.debug("was: %r", KEYS_TO_IMPORT)
+            logger.debug("now: %r", ascii)
+        self.assertEqual(0, match, "Keys must match")
+        # Generate a key so we can test exporting private keys
+        key = self.do_key_generation()
+        ascii = self.gpg.export_keys(key.fingerprint, True)
+        self.assertTrue(ascii.find("PGP PRIVATE KEY BLOCK") >= 0,
+                        "Exported key should be private")
 
-	def test_deletion(self):
-		"Test that key deletion works"
-		logger.debug("test_deletion begins")
-		self.gpg.import_keys(KEYS_TO_IMPORT)
-		public_keys = self.gpg.list_keys()
-		self.assertTrue(is_list_with_len(public_keys, 2),
-						"2-element list expected")
-		self.gpg.delete_keys(public_keys[0]['fingerprint'])
-		public_keys = self.gpg.list_keys()
-		self.assertTrue(is_list_with_len(public_keys, 1),
-						"1-element list expected")
-		logger.debug("test_deletion ends")
+    def test_import_only(self):
+        "Test that key import works"
+        self.test_list_keys_initial()
+        self.gpg.import_keys(KEYS_TO_IMPORT)
+        public_keys = self.gpg.list_keys()
+        self.assertTrue(is_list_with_len(public_keys, 2),
+                        "2-element list expected")
+        private_keys = self.gpg.list_keys(secret=True)
+        self.assertTrue(is_list_with_len(private_keys, 0),
+                        "Empty list expected")
+        ascii = self.gpg.export_keys([k['keyid'] for k in public_keys])
+        self.assertTrue(ascii.find("PGP PUBLIC KEY BLOCK") >= 0,
+                        "Exported key should be public")
+        ascii = ascii.replace("\r", "").strip()
+        match = compare_keys(ascii, KEYS_TO_IMPORT)
+        if match:
+            logger.debug("was: %r", KEYS_TO_IMPORT)
+            logger.debug("now: %r", ascii)
+        self.assertEqual(0, match, "Keys must match")
 
-	def test_nogpg(self):
-		"Test that absence of gpg is handled correctly"
-		self.assertRaises(ValueError, gnupg.GPG, gnupghome=self.homedir,
-						  gpgbinary='frob')
+    def test_signature_verification(self):
+        "Test that signing and verification works"
+        key = self.generate_key("Andrew", "Able", "alpha.com")
+        data = "Hello, world!"
+        sig = self.gpg.sign(data, keyid=key.fingerprint, passphrase='bbrown')
+        self.assertFalse(sig, "Bad passphrase should fail")
+        sig = self.gpg.sign(data, keyid=key.fingerprint, passphrase='aable')
+        self.assertTrue(sig, "Good passphrase should succeed")
+        sig = str(sig)
+        verified = self.gpg.verify(sig)
+        if key.fingerprint != verified.fingerprint:
+            logger.debug("key: %r", key.fingerprint)
+            logger.debug("ver: %r", verified.fingerprint)
+        self.assertEqual(key.fingerprint, verified.fingerprint,
+                         "Fingerprints must match")
+        data_file = open('random_binary_data', 'rb')
+        sig = self.gpg.sign_file(data_file, keyid=key.fingerprint,
+                                 passphrase='aable')
+        self.assertTrue(sig, "File signing should succeed")
+        try:
+            verified = self.gpg.verify_file(StringIO(sig.data))
+        except UnicodeDecodeError:
+            from io import BytesIO
+            verified = self.gpg.verify_file(BytesIO(sig.data))
+        if key.fingerprint != verified.fingerprint:
+            logger.debug("key: %r", key.fingerprint)
+            logger.debug("ver: %r", verified.fingerprint)
+        self.assertEqual(key.fingerprint, verified.fingerprint,
+                         "Fingerprints must match")
 
-#	def test_non_latin(self):
+    def test_deletion(self):
+        "Test that key deletion works"
+        logger.debug("test_deletion begins")
+        self.gpg.import_keys(KEYS_TO_IMPORT)
+        public_keys = self.gpg.list_keys()
+        self.assertTrue(is_list_with_len(public_keys, 2),
+                        "2-element list expected")
+        self.gpg.delete_keys(public_keys[0]['fingerprint'])
+        public_keys = self.gpg.list_keys()
+        self.assertTrue(is_list_with_len(public_keys, 1),
+                        "1-element list expected")
+        logger.debug("test_deletion ends")
+
+    def test_nogpg(self):
+        "Test that absence of gpg is handled correctly"
+        self.assertRaises(ValueError, gnupg.GPG, gnupghome=self.homedir,
+                          gpgbinary='frob')
+
+
+# def test_non_latin(self):
 #		"Test that non-Latin characters don't cause problems"
 #		raise ValueError("Not yet implemented")
 
 TEST_GROUPS = {
-	'sign' : set(['test_signature_verification']),
-	'crypt' : set(['test_encryption_and_decryption']),
-	'key' : set(['test_deletion', 'test_import_and_export',
-				 'test_list_keys_after_generation']),
-	'import' : set(['test_import_only']),
-	'basic' : set(['test_environment', 'test_list_keys_initial', 'test_nogpg']),
+    'sign': set(['test_signature_verification']),
+    'crypt': set(['test_encryption_and_decryption']),
+    'key': set(['test_deletion', 'test_import_and_export',
+                'test_list_keys_after_generation']),
+    'import': set(['test_import_only']),
+    'basic': set(['test_environment', 'test_list_keys_initial', 'test_nogpg']),
 }
 
+
 def suite(args=None):
-	if args is None:
-		args = sys.argv[1:]
-	if not args:
-		result = unittest.TestLoader().loadTestsFromTestCase(GPGTestCase)
-		want_doctests = True
-	else:
-		tests = set()
-		want_doctests = False
-		for arg in args:
-			if arg in TEST_GROUPS:
-				tests.update(TEST_GROUPS[arg])
-			elif arg == "doc":
-				want_doctests = True
-			else:
-				print(("Ignoring unknown test group %r" % arg))		
-		result = unittest.TestSuite(list(map(GPGTestCase, tests)))
-	if want_doctests:
-		result.addTest(doctest.DocTestSuite(gnupg))
-	return result
+    if args is None:
+        args = sys.argv[1:]
+    if not args:
+        result = unittest.TestLoader().loadTestsFromTestCase(GPGTestCase)
+        want_doctests = True
+    else:
+        tests = set()
+        want_doctests = False
+        for arg in args:
+            if arg in TEST_GROUPS:
+                tests.update(TEST_GROUPS[arg])
+            elif arg == "doc":
+                want_doctests = True
+            else:
+                print(("Ignoring unknown test group %r" % arg))
+        result = unittest.TestSuite(list(map(GPGTestCase, tests)))
+    if want_doctests:
+        result.addTest(doctest.DocTestSuite(gnupg))
+    return result
+
 
 def init_logging():
-	logging.basicConfig(level=logging.DEBUG, filename="test_gnupg.log",
-						filemode="w", format="%(asctime)s %(levelname)-5s %(name)-10s %(message)s")
+    logging.basicConfig(level=logging.DEBUG, filename="test_gnupg.log",
+                        filemode="w", format="%(asctime)s %(levelname)-5s %(name)-10s %(message)s")
 
-#def simple_test():
+
+# def simple_test():
 #	init_logging()
 #	hd = os.path.join(os.getcwd(), 'keys')
 #	if os.path.exists(hd):
 #		shutil.rmtree(hd)
 #	gpg = gnupg.GPG(gnupghome=hd)
 #	gpg.import_keys(KEYS_TO_IMPORT)
-	
+
 def main():
-	init_logging()
-	tests = suite()
-	unittest.TextTestRunner(verbosity=2).run(tests)
+    init_logging()
+    tests = suite()
+    unittest.TextTestRunner(verbosity=2).run(tests)
+
 
 if __name__ == "__main__":
-	main()
+    main()

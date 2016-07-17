@@ -6,7 +6,6 @@ import unittest
 
 from . import gnupg
 
-
 KEYS_TO_IMPORT = """-----BEGIN PGP PUBLIC KEY BLOCK-----
 Version: GnuPG v1.4.12 (GNU/Linux)
 
@@ -62,30 +61,27 @@ a2ooXfC2b0bSZZRH
 
 
 class Crypteuse():
-	def __init__(self):
-		print("coucou")
-		gpgPath='gpg'
-		if(os.name=="nt"):
-			gpgPath='..\..\EnvironnementDeTravail\GnuPG\gpg.exe'
-		print(gpgPath)
-		print((os.path.realpath(".")))
-		self.gpg = gnupg.GPG(gnupghome=".", gpgbinary=gpgPath)
-		print(gpgPath)
-		self.gpg.import_keys(KEYS_TO_IMPORT)
-		print(gpgPath)
+    def __init__(self):
+        print("coucou")
+        gpgPath = 'gpg'
+        if (os.name == "nt"):
+            gpgPath = '..\..\EnvironnementDeTravail\GnuPG\gpg.exe'
+        print(gpgPath)
+        print((os.path.realpath(".")))
+        self.gpg = gnupg.GPG(gnupghome=".", gpgbinary=gpgPath)
+        print(gpgPath)
+        self.gpg.import_keys(KEYS_TO_IMPORT)
+        print(gpgPath)
 
-	def crypteFichier(self,fichier,outputFichier):
-		cleDeChiffrement = self.gpg.list_keys()[0]
-#		print(dir(self.gpg))
-#		print(public_keys[0])
-		result=self.gpg.encrypt_file(open(fichier,"rb"),cleDeChiffrement["fingerprint"],always_trust=True)
-		output=open(outputFichier,"wb")
-		output.write(result.data)
-		output.close()
-#		print(dir(g))
+    def crypteFichier(self, fichier, outputFichier):
+        cleDeChiffrement = self.gpg.list_keys()[0]
+        #		print(dir(self.gpg))
+        #		print(public_keys[0])
+        result = self.gpg.encrypt_file(open(fichier, "rb"), cleDeChiffrement["fingerprint"], always_trust=True)
+        output = open(outputFichier, "wb")
+        output.write(result.data)
+        output.close()
+
+# print(dir(g))
 #		print(g)
 #		print(g.ok)
-
-
-
-

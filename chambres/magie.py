@@ -140,7 +140,7 @@ def crec(resum, sejours):
 
     if not allEmpty:
         return crec(resum, sejours)
-    #	print sejours
+    # print sejours
     return sejours
 
 

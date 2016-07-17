@@ -9,16 +9,15 @@ urlpatterns = [
     # url(r'^blog/', include('blog.urls')),
 
     url(r'^admin/', include(admin.site.urls)),
-	url(r'^chambres/',include('chambres.urls')),
-	url(r'^taches/',include('taches.urls')),
-	url(r'^menus/',include('menus.urls')),
-	url(r'^$',chambres.views.racine),
+    url(r'^chambres/', include('chambres.urls')),
+    url(r'^taches/', include('taches.urls')),
+    url(r'^menus/', include('menus.urls')),
+    url(r'^$', chambres.views.racine),
 
-	url(r'^collectage/', include('collectage.urls')),
-	url(r'^restaurant/', include('restaurant.urls' )),
-	url(r'^telephones/', include('telephones.urls')),
-	url(r'^easyPoS/', include('easyPoS.urls')),
+    url(r'^collectage/', include('collectage.urls')),
+    url(r'^restaurant/', include('restaurant.urls')),
+    url(r'^telephones/', include('telephones.urls')),
+    url(r'^easyPoS/', include('easyPoS.urls')),
 
-	url(r'^accounts/', include('django.contrib.auth.urls')),
-        ]
-
+    url(r'^accounts/', include('django.contrib.auth.urls')),
+]

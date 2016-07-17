@@ -10,7 +10,7 @@ from email.mime.text import MIMEText
 
 from email.utils import COMMASPACE, formatdate
 
-import email.encoders 
+import email.encoders
 
 import os
 
@@ -19,30 +19,22 @@ import zipfile
 from crypto.crypteEtSauveMonBiniou import Crypteuse
 
 
+def zippe(file, archive, nom):
+    zfilename = archive
 
-def zippe(file,archive,nom):
+    zout = zipfile.ZipFile(zfilename, "w", zipfile.ZIP_DEFLATED)
 
-	zfilename = archive
+    zout.write(file, nom)
 
-	zout = zipfile.ZipFile(zfilename, "w",zipfile.ZIP_DEFLATED)
-
-	zout.write(file,nom)
-
-	zout.close()
+    zout.close()
 
 
+def sendMail(to, subject, text, files=[], server=preferences.SERVEUR_SMTP):
+    assert type(to) == list
 
+    assert type(files) == list
 
-
-def sendMail(to, subject, text, files=[],server=preferences.SERVEUR_SMTP):
-
-    assert type(to)==list
-
-    assert type(files)==list
-
-    fro = "sauvegardeur <"+preferences.EXPEDITEUR+">"
-
-
+    fro = "sauvegardeur <" + preferences.EXPEDITEUR + ">"
 
     msg = MIMEMultipart()
 
@@ -54,78 +46,58 @@ def sendMail(to, subject, text, files=[],server=preferences.SERVEUR_SMTP):
 
     msg['Subject'] = subject
 
-
-
-    msg.attach( MIMEText(text) )
-
-
+    msg.attach(MIMEText(text))
 
     for file in files:
-
         part = MIMEBase('application', "octet-stream")
 
-        part.set_payload( open(file,"rb").read() )
+        part.set_payload(open(file, "rb").read())
 
         Encoders.encode_base64(part)
 
         part.add_header('Content-Disposition', 'attachment; filename="%s"'
 
-                       % os.path.basename(file))
+                        % os.path.basename(file))
 
         msg.attach(part)
 
-
-
     smtp = smtplib.SMTP(server)
 
-    smtp.sendmail(fro, to, msg.as_string() )
+    smtp.sendmail(fro, to, msg.as_string())
 
     smtp.close()
 
 
-
-
-
-
-
-fileToSave="/dos/baseDeDonnees.db"
-
-
+fileToSave = "/dos/baseDeDonnees.db"
 
 
 def EnvoieParMail(crypte=False):
+    if (crypte):
 
-	if(crypte):
+        archive = "db.gpg"
 
-		archive="db.gpg"
+        c = Crypteuse()
 
-		c=Crypteuse()
+        c.crypteFichier(fileToSave, archive)
 
-		c.crypteFichier(fileToSave,archive)
+    else:
 
-	else:
+        archive = "db.zip"
 
-		archive="db.zip"
+        zippe(fileToSave, archive, "heures.db")
 
-		zippe( fileToSave,archive,"heures.db")
+    sendMail(
 
-	sendMail(
+        [preferences.DESTINATAIRE],
 
-    	    [preferences.DESTINATAIRE],
+        "sauvegarde", "salutations",
 
-        	"sauvegarde","salutations",
+        [archive]
 
-        	[archive]
+    )
 
-	    )
-
-	os.remove(archive)
-
-
-
+    os.remove(archive)
 
 
 if __name__ == '__main__':
-
-	EnvoieParMail()
-
+    EnvoieParMail()

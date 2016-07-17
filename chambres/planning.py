@@ -150,14 +150,14 @@ def calculeCouleursClients(dateDeb, dateFin):
             if len(coull) < 6:
                 print("MER", coull)
             piscineDeCouleurs.append("#" + rr + gg + bb)
-        #	random.shuffle(piscineDeCouleurs)
+            #	random.shuffle(piscineDeCouleurs)
 
     for i in list(clients.keys()):
         #		print nom, "  ",nom.__hash__()
         hachis = hash(i.nom.lower().strip())
         taillePiscine = len(piscineDeCouleurs)
         clients[i] = piscineDeCouleurs[hachis % taillePiscine]
-    #		clients[i]=piscineDeCouleurs.pop()
+    # clients[i]=piscineDeCouleurs.pop()
     #	print piscineDeCouleurs
     return clients
 

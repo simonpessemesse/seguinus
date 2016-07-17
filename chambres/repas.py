@@ -76,7 +76,8 @@ class StatRepas():
                     dicParNom[nom] = (nb, ch, vieillard, depart, enfants + resa.nbEnfants)
                 else:
                     dicParNom[nom] = (
-                    resa.nbPersonnes, list(resa.chambresAssignees), resa.dateArrivee, resa.dateDepart, resa.nbEnfants)
+                        resa.nbPersonnes, list(resa.chambresAssignees), resa.dateArrivee, resa.dateDepart,
+                        resa.nbEnfants)
         dicParNb = {}
         total = 0
         totalKid = 0

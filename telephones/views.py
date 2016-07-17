@@ -3,7 +3,7 @@ from django.shortcuts import render_to_response
 
 
 def index(request):
-	from .models import Contact
-	cs=Contact.objects.all().order_by('nomTags')
+    from .models import Contact
+    cs = Contact.objects.all().order_by('nomTags')
 
-	return render_to_response('telephones/index.html', {"cs":cs})
+    return render_to_response('telephones/index.html', {"cs": cs})

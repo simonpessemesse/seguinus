@@ -4,6 +4,7 @@ from django.contrib import admin
 
 
 class ContactAdmin(admin.ModelAdmin):
-	search_fields = ['nomTags']
+    search_fields = ['nomTags']
 
-admin.site.register(Contact,ContactAdmin)
+
+admin.site.register(Contact, ContactAdmin)

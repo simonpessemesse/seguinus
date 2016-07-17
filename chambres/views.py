@@ -46,8 +46,8 @@ def avoirCouleurSelonQuantite(quantite):
         piscineDeCouleurs.append("#" + rr + gg + bb)
     if quantite > quantiteMax:
         quantite = quantiteMax
-    if quantite<0:
-        quantite=0
+    if quantite < 0:
+        quantite = 0
     return piscineDeCouleurs[quantite]
 
 
