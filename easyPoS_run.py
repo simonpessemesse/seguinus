@@ -17,7 +17,6 @@ except IOError:
 
 import configureEnvironnement
 configureEnvironnement.setup()
-import reconfigurePaths
 import os
 
 if preferences.LANCER_SERVEUR:
