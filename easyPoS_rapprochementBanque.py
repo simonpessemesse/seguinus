@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 # coding: utf-8
 from decimal import *
+import os
 import configureEnvironnement
 configureEnvironnement.setup()
 
@@ -16,7 +17,8 @@ from datetime import date
 
 import sys
 
-mois = 5
+
+mois = date.today().month
 if len(sys.argv) > 1:
     mois = int(sys.argv[1])
 
@@ -50,7 +52,8 @@ for k, v in TParJour.items():
 
 import re
 
-debPath = "/home/auberge/seguinus/"
+debPath =os.path.dirname(os.path.abspath(__file__))+os.sep+".."+os.sep# "/home/auberge/seguinus/"
+print(debPath)
 f = open(debPath + "banque.txt", 'r')
 banqueParJour = {}
 for line in f:

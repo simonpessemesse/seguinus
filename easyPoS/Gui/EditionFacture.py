@@ -46,7 +46,7 @@ class MetteurAJourTotal(QThread):
             pass
         else:
             self.emit(SIGNAL("enableEdit()"))
-        #			self.editFacture.enableEdit()
+        # self.editFacture.enableEdit()
         time.sleep(19)
         while self.actif:
             self.emit(SIGNAL("calcule()"))
@@ -97,7 +97,7 @@ class EditFacture(QtGui.QMainWindow):
             cl = Client(nom=self.choppeString(self.nomClient.text()))
             cl.save()
             self.fact.client = cl
-        #		self.fact.clientNomFinal=self.nomClient.text()
+        # self.fact.clientNomFinal=self.nomClient.text()
         self.fact.save()
         self.fact.client.save()
         self.listeModel.totalChange(self.fact)
@@ -702,8 +702,8 @@ class EditFacture(QtGui.QMainWindow):
             if not p.arrhe:
                 p.date = datetime.now()
                 p.save()
-            # self.deleteLater()
-            #		self.close()
+                # self.deleteLater()
+                #		self.close()
 
     def valideSansConfirmer(self):
         self.valideMoiCa()
@@ -980,6 +980,6 @@ class EditFacture(QtGui.QMainWindow):
         icone = QtGui.QIcon("ic2.png")
         self.setWindowIcon(icone)
 
-    #		textEdit = QtGui.QListWidget()
+        #		textEdit = QtGui.QListWidget()
 
 # self.setCentralWidget(textEdit)

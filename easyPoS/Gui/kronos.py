@@ -43,7 +43,7 @@ http://www.opensource.org/licenses/mit-license.php
 
 """
 
-__version__="2.0"
+__version__ = "2.0"
 
 __all__ = [
     "DayTaskRescheduler",
@@ -80,16 +80,18 @@ import time
 import traceback
 import weakref
 
+
 class method:
-    sequential="sequential"
-    forked="forked"
-    threaded="threaded"
+    sequential = "sequential"
+    forked = "forked"
+    threaded = "threaded"
+
 
 class Scheduler:
     """The Scheduler itself."""
 
     def __init__(self):
-        self.running=True
+        self.running = True
         self.sched = sched.scheduler(time.time, self.__delayfunc)
 
     def __delayfunc(self, delay):
@@ -97,7 +99,7 @@ class Scheduler:
         # divided up, so that we can check the self.running flag while delaying.
         # there is an additional check in here to ensure that the top item of
         # the queue hasn't changed
-        if delay<10:
+        if delay < 10:
             time.sleep(delay)
         else:
             toptime = self._getqueuetoptime()
@@ -105,7 +107,7 @@ class Scheduler:
             period = 5
             stoptime = endtime - period
             while self.running and stoptime > time.time() and \
-                self._getqueuetoptime() == toptime:
+                            self._getqueuetoptime() == toptime:
                 time.sleep(period)
             if not self.running or self._getqueuetoptime() != toptime:
                 return
@@ -120,7 +122,7 @@ class Scheduler:
         pass
 
     def add_interval_task(self, action, taskname, initialdelay, interval,
-            processmethod, args, kw):
+                          processmethod, args, kw):
         """Add a new Interval Task to the schedule.
         
         A very short initialdelay or one of zero cannot be honored, you will 
@@ -147,8 +149,8 @@ class Scheduler:
         self.schedule_task(task, initialdelay)
         return task
 
-    def add_single_task(self, action, taskname, initialdelay, processmethod, 
-            args, kw):
+    def add_single_task(self, action, taskname, initialdelay, processmethod,
+                        args, kw):
         """Add a new task to the scheduler that will only be executed once."""
         if initialdelay < 0:
             raise ValueError("Delay must be >0")
@@ -169,12 +171,12 @@ class Scheduler:
         self.schedule_task(task, initialdelay)
         return task
 
-    def add_daytime_task(self, action, taskname, weekdays, monthdays, timeonday, 
-            processmethod, args, kw):
+    def add_daytime_task(self, action, taskname, weekdays, monthdays, timeonday,
+                         processmethod, args, kw):
         """Add a new Day Task (Weekday or Monthday) to the schedule."""
         if weekdays and monthdays:
             raise ValueError("You can only specify weekdays or monthdays, "
-                "not both")
+                             "not both")
         if not args:
             args = []
         if not kw:
@@ -190,7 +192,7 @@ class Scheduler:
                 TaskClass = ForkedWeekdayTask
             else:
                 raise ValueError("Invalid processmethod")
-            task=TaskClass(taskname, weekdays, timeonday, action, args, kw)
+            task = TaskClass(taskname, weekdays, timeonday, action, args, kw)
         if monthdays:
             # Select the correct MonthdayTask class.
             # Not all types may be available!
@@ -202,8 +204,8 @@ class Scheduler:
                 TaskClass = ForkedMonthdayTask
             else:
                 raise ValueError("Invalid processmethod")
-            task=TaskClass(taskname, monthdays, timeonday, action, args, kw)
-        firsttime=task.get_schedule_time(True)
+            task = TaskClass(taskname, monthdays, timeonday, action, args, kw)
+        firsttime = task.get_schedule_time(True)
         self.schedule_task_abs(task, firsttime)
         return task
 
@@ -218,12 +220,12 @@ class Scheduler:
             self._acquire_lock()
             try:
                 task.event = self.sched.enter(delay, 0, task,
-                            (weakref.ref(self),) )
+                                              (weakref.ref(self),))
             finally:
                 self._release_lock()
         else:
             task.event = self.sched.enter(delay, 0, task,
-                        (weakref.ref(self),) )
+                                          (weakref.ref(self),))
 
     def schedule_task_abs(self, task, abstime):
         """Add a new task to the scheduler for the given absolute time value.
@@ -236,12 +238,12 @@ class Scheduler:
             self._acquire_lock()
             try:
                 task.event = self.sched.enterabs(abstime, 0, task,
-                                    (weakref.ref(self),) )
+                                                 (weakref.ref(self),))
             finally:
                 self._release_lock()
         else:
             task.event = self.sched.enterabs(abstime, 0, task,
-                                (weakref.ref(self),) )
+                                             (weakref.ref(self),))
 
     def start(self):
         """Start the scheduler."""
@@ -256,18 +258,20 @@ class Scheduler:
         """Cancel given scheduled task."""
         self.sched.cancel(task.event)
 
-    if sys.version_info>=(2,6):
+    if sys.version_info >= (2, 6):
         # code for sched module of python 2.6+
         def _getqueuetoptime(self):
             return self.sched._queue[0].time
+
         def _clearschedqueue(self):
             self.sched._queue[:] = []
     else:
         # code for sched module of python 2.5 and older
         def _getqueuetoptime(self):
             return self.sched.queue[0][0]
+
         def _clearschedqueue(self):
-            self.sched.queue[:] = []                    
+            self.sched.queue[:] = []
 
     def _run(self):
         # Low-level run method to do the actual scheduling loop.
@@ -275,7 +279,7 @@ class Scheduler:
             try:
                 self.sched.run()
             except Exception as x:
-                print("ERROR DURING SCHEDULER EXECUTION",x)
+                print("ERROR DURING SCHEDULER EXECUTION", x)
                 print("".join(
                     traceback.format_exception(*sys.exc_info())))
                 print("-" * 20)
@@ -289,10 +293,10 @@ class Task:
 
     def __init__(self, name, action, args, kw):
         """This is an abstract class!"""
-        self.name=name
-        self.action=action
-        self.args=args
-        self.kw=kw
+        self.name = name
+        self.action = action
+        self.args = args
+        self.kw = kw
 
     def __call__(self, schedulerref):
         """Execute the task action in the scheduler's thread."""
@@ -305,7 +309,7 @@ class Task:
     def reschedule(self, scheduler):
         """This method should be defined in one of the sub classes!"""
         raise NotImplementedError("You're using the abstract base class 'Task',"
-            " use a concrete class instead")
+                                  " use a concrete class instead")
 
     def execute(self):
         """Execute the actual task."""
@@ -383,7 +387,7 @@ class WeekdayTask(DayTaskRescheduler, Task):
             raise TypeError("timeonday must be a 2-tuple (hour,minute)")
         if type(weekdays) not in (list, tuple):
             raise TypeError("weekdays must be a sequence of weekday numbers "
-                "1-7 (1 is Monday)")
+                            "1-7 (1 is Monday)")
         DayTaskRescheduler.__init__(self, timeonday)
         Task.__init__(self, name, action, args, kw)
         self.days = weekdays
@@ -407,7 +411,7 @@ class MonthdayTask(DayTaskRescheduler, Task):
             raise TypeError("timeonday must be a 2-tuple (hour,minute)")
         if type(monthdays) not in (list, tuple):
             raise TypeError("monthdays must be a sequence of monthdays numbers "
-                "1-31")
+                            "1-31")
         DayTaskRescheduler.__init__(self, timeonday)
         Task.__init__(self, name, action, args, kw)
         self.days = monthdays
@@ -422,6 +426,7 @@ class MonthdayTask(DayTaskRescheduler, Task):
 try:
     import threading
 
+
     class ThreadedScheduler(Scheduler):
         """A Scheduler that runs in its own thread."""
 
@@ -435,7 +440,7 @@ try:
             self.thread = threading.Thread(target=self._run)
             self.thread.setDaemon(True)
             self.thread.start()
-            
+
         def stop(self):
             """Stop the scheduler and wait for the thread to finish."""
             Scheduler.stop(self)
@@ -447,7 +452,7 @@ try:
         def _acquire_lock(self):
             """Lock the thread's task queue."""
             self._lock.acquire()
-            
+
         def _release_lock(self):
             """Release the lock on th ethread's task queue."""
             self._lock.release()
@@ -469,17 +474,21 @@ try:
             except Exception as x:
                 self.handle_exception(x)
 
+
     class ThreadedIntervalTask(ThreadedTaskMixin, IntervalTask):
         """Interval Task that executes in its own thread."""
         pass
 
+
     class ThreadedSingleTask(ThreadedTaskMixin, SingleTask):
-        """Single Task that executes in its own thread.""" 
+        """Single Task that executes in its own thread."""
         pass
+
 
     class ThreadedWeekdayTask(ThreadedTaskMixin, WeekdayTask):
         """Weekday Task that executes in its own thread."""
         pass
+
 
     class ThreadedMonthdayTask(ThreadedTaskMixin, MonthdayTask):
         """Monthday Task that executes in its own thread."""
@@ -489,9 +498,9 @@ except ImportError:
     # threading is not available
     pass
 
-
 if hasattr(os, "fork"):
     import signal
+
 
     class ForkedScheduler(Scheduler):
         """A Scheduler that runs in its own forked process."""
@@ -545,35 +554,36 @@ if hasattr(os, "fork"):
         """Interval Task that executes in its own process."""
         pass
 
+
     class ForkedSingleTask(ForkedTaskMixin, SingleTask):
         """Single Task that executes in its own process."""
         pass
+
 
     class ForkedWeekdayTask(ForkedTaskMixin, WeekdayTask):
         """Weekday Task that executes in its own process."""
         pass
 
+
     class ForkedMonthdayTask(ForkedTaskMixin, MonthdayTask):
         """Monthday Task that executes in its own process."""
         pass
 
-
-
-if __name__=="__main__":
+if __name__ == "__main__":
     def testaction(arg):
-        print(">>>TASK",arg,"sleeping 3 seconds")
+        print(">>>TASK", arg, "sleeping 3 seconds")
         time.sleep(3)
-        print("<<<END_TASK",arg)
+        print("<<<END_TASK", arg)
 
-    s=ThreadedScheduler()
-    s.add_interval_task( testaction, "test action 1", 30, 4, method.threaded, ["task 1"], None )
+
+    s = ThreadedScheduler()
+    s.add_interval_task(testaction, "test action 1", 30, 4, method.threaded, ["task 1"], None)
     s.start()
-    
+
     print("Scheduler started, waiting 15 sec....")
     time.sleep(15)
-    
+
     print("STOP SCHEDULER")
     s.stop()
-    
-    print("EXITING")
 
+    print("EXITING")
