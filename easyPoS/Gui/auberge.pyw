@@ -53,7 +53,7 @@ class MinuteurLanceurDeTaches(QThread):
         donnees = DonneesEntreprise.objects.get(id=preferences.ENTREPRISE)
 
         if (donnees.derniereSauvegarde < datetime.now() - timedelta(2) or (
-                donnees.derniereSauvegarde < datetime.now() - timedelta(0.9) and datetime.now().hour >= 9)):
+                donnees.derniereSauvegarde < datetime.now() - timedelta(0.9) and datetime.now().hour >= 8)):
             logging.info("On fait maintenance Quotidienne")
             self.minuteur.add_single_task(self.maintenanceQuotidienne, "Truc Quotidien", 10, "threaded", [], None)
         if preferences.ENVOIE_CAISSES:

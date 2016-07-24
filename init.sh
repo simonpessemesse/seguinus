@@ -10,3 +10,4 @@ if [ ! -f preferences.py ]; then
 fi
 python manage.py migrate
 python manage.py loaddata initData.json 
+#end
