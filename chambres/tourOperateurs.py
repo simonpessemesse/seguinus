@@ -9,6 +9,8 @@ from django.forms.models import modelformset_factory
 from django import forms
 from django.forms.extras.widgets import SelectDateWidget
 
+from easyPoS.models import PreparationFacture
+
 
 class TourOpSearch(forms.Form):
     dateDebut = forms.DateField(required=True, initial=date(date.today().year, 1, 1))
@@ -30,6 +32,10 @@ def index(request):
     result = []
     if request.method == 'POST':  # If the form has been submitted...
         form = TourOpSearch(request.POST)  # A form bound to the POST data
+        if "searchResults" in request.POST:
+            cherche=True
+        else:
+            cherche=False
         if form.is_valid():  # All validation rules pass
             r = RapportTourOp()
             r.dateDebut = form.cleaned_data['dateDebut']
@@ -65,6 +71,13 @@ def index(request):
             r.list = resas
 
             result = r
+            if not cherche:
+                for resa in resas:
+                    resa.aEtePrepare = True
+                    resa.save()
+                    p = PreparationFacture(resa=resa)
+                    p.save()
+
     else:
         form = TourOpSearch()  # An unbound form
 

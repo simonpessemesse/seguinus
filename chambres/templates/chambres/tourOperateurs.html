@@ -3,7 +3,8 @@
 {% block content %}
 <form action="" method="POST">{% csrf_token %}
 {{ form.as_p }}
-<input type="submit" value="Submit" />
+<input type="submit" name="searchResults" value="Chercher" />
+	<input type="submit" name="prepareResults" value="Preparer Tout" />
 </form>
 {% if result %}
 <h2>
