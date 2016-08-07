@@ -11,7 +11,6 @@ import preferences
 from datetime import datetime, date, timedelta
 from chambres.models import Client
 from restaurant.models import ResaResto
-from django.template.context_processors import csrf
 
 nomMois = ["Janvier", "Fevrier", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre",
            "Decembre"]

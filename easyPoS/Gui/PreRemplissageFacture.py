@@ -110,6 +110,8 @@ def ajoutePrestations(fact, resa, prixReduit=False):
     else:
         ajouteNuitPetitDejRepas(resa,nbNuits-m,fact,True,prixReduit)
         ajouteNuitPetitDejRepas(resa,m,fact,False,prixReduit)
+    if "#" in resa.client.nom:
+        ajouterNProd(nbNuits*resa.nbPersonnes(),Produit.objects.get(pk=5),fact)
     taxeDeSejour = Produit.objects.get(pk=173)
     ajouterNProd(nbNuits * resa.nbPersonnes(), taxeDeSejour, fact)
 
