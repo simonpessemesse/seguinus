@@ -45,38 +45,8 @@ def ajouterNProd(n, prod, fact, prix=None):
         ligne.save()
     # TODO add log
 
-
-def ajoutePrestations(fact, resa, prixReduit=False):
-    picnicAjoute = False
-    if resa.client.tourOperateur:
-
-        tourOp = resa.client.tourOperateur
-        nbPers = resa.nbPersonnes()
-
-        if tourOp.seuilGroupe and nbPers >= tourOp.seuilGroupe:
-            groupe = True
-        else:
-            groupe = False
-
-        if groupe and tourOp.gratuiteAccompagnateurSiGroupe:
-            nbPers = nbPers - 1
-
-        if groupe and tourOp.picnicSiGroupe:
-            ajouterNProd(nbPers * resa.nbNuits(), Produit.objects.get(pk=4), fact, prix=7.5)
-            picnicAjoute = True
-
-        if tourOp.prixParPersonne:
-            demiPensionChambrePartagee = Produit.objects.get(pk=107)
-            if resa.chambresSingle > 0:
-                ajouterNProd(resa.chambresSingle, Produit.objects.get(pk=154), fact)
-            ajouterNProd(nbPers, demiPensionChambrePartagee, fact, prix=tourOp.prixParPersonne)
-            return
-
-    nbNuits = resa.nbNuits()
-    if resa.client.asPicnicDansLeNom() and not picnicAjoute:
-        ajouterNProd(resa.nbPersonnes() * nbNuits, Produit.objects.get(pk=4), fact)
-
-    if "nodp" in resa.client.nom or "no dp" in resa.client.nom:
+def ajouteNuitPetitDejRepas(resa,nbNuits,fact,nodp,prixReduit):
+    if nodp:
         dortoir = Produit.objects.get(pk=142)
         single = Produit.objects.get(pk=136)
         double = Produit.objects.get(pk=136)
@@ -94,7 +64,7 @@ def ajoutePrestations(fact, resa, prixReduit=False):
         quintuple = Produit.objects.get(pk=12)
     ajouterNProd(nbNuits * resa.placesDortoir, dortoir, fact)
     ajouterNProd(nbNuits * resa.chambresQuintuples, quintuple, fact)
-    if prixReduit:
+    if prixReduit and not nodp:
         ajouterNProd(nbNuits * resa.chambresSingle, single, fact, prix=82)
         ajouterNProd(nbNuits * (resa.chambres + resa.chambresDoubles + resa.chambresTwin), double, fact, prix=124)
         ajouterNProd(nbNuits * resa.chambresTriples, triple, fact, prix=163)
@@ -105,9 +75,43 @@ def ajoutePrestations(fact, resa, prixReduit=False):
         ajouterNProd(nbNuits * resa.chambresTriples, triple, fact)
         ajouterNProd(nbNuits * resa.chambresQuadruples, quadruple, fact)
 
+def ajoutePrestations(fact, resa, prixReduit=False):
+    picnicAjoute = False
+    if resa.client.tourOperateur:
+        tourOp = resa.client.tourOperateur
+        nbPers = resa.nbPersonnes()
+        if tourOp.seuilGroupe and nbPers >= tourOp.seuilGroupe:
+            groupe = True
+        else:
+            groupe = False
+        if groupe and tourOp.gratuiteAccompagnateurSiGroupe:
+            nbPers = nbPers - 1
+        if groupe and tourOp.picnicSiGroupe:
+            ajouterNProd(nbPers * resa.nbNuits(), Produit.objects.get(pk=4), fact, prix=7.5)
+            picnicAjoute = True
+        if tourOp.prixParPersonne:
+            demiPensionChambrePartagee = Produit.objects.get(pk=107)
+            if resa.chambresSingle > 0:
+                ajouterNProd(resa.chambresSingle, Produit.objects.get(pk=154), fact)
+            ajouterNProd(nbPers, demiPensionChambrePartagee, fact, prix=tourOp.prixParPersonne)
+            return
+    nbNuits = resa.nbNuits()
+    if resa.client.asPicnicDansLeNom() and not picnicAjoute:
+        m=resa.client.modificateurPicnic()
+        if m==-1:
+            ajouterNProd(resa.nbPersonnes() * nbNuits, Produit.objects.get(pk=4), fact,prix=8.5)
+        if m!=0:
+            ajouterNProd(resa.nbPersonnes() * m, Produit.objects.get(pk=4), fact,prix=8.5)
+    m=resa.client.modificateurRepas()
+    if m==0:
+        ajouteNuitPetitDejRepas(resa,nbNuits,fact,True,prixReduit)
+    elif m==-1:
+        ajouteNuitPetitDejRepas(resa,nbNuits,fact,False,prixReduit)
+    else:
+        ajouteNuitPetitDejRepas(resa,nbNuits-m,fact,True,prixReduit)
+        ajouteNuitPetitDejRepas(resa,m,fact,False,prixReduit)
     taxeDeSejour = Produit.objects.get(pk=173)
     ajouterNProd(nbNuits * resa.nbPersonnes(), taxeDeSejour, fact)
-
 
 def prepare(resa):
     ent = DonneesEntreprise.objects.get(id=preferences.ENTREPRISE)

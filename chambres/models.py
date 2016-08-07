@@ -140,9 +140,33 @@ class Client(models.Model):
                 oui = True
         return oui
 
+
+    def modificateurPicnic(self):
+        nom = (self.nom.lower())
+        if "paspicnic" in nom:
+            return 0
+        if "unpicnic" in nom:
+            return 1
+        if "deuxpicnic" in nom:
+            return 2
+        if "troispicnic" in nom:
+            return 3
+        return -1
+    def modificateurRepas(self):
+        nom = (self.nom.lower())
+        if "pasrepas" in nom or "nodp" in nom or "no dp" in nom:
+            return 0
+        if "unrepas" in nom:
+            return 1
+        if "deuxrepas" in nom:
+            return 2
+        if "troisrepas" in nom:
+            return 3
+        return -1
+
     def asPicnicDansLeNom(self):
         nom = (self.nom.lower())
-        if "picnic" in nom or "pn" in nom or "pique nique" in nom or "piquenique" in nom or "piqnic" in nom or "piq niq" in nom:
+        if "picnic" in nom or "pn" in nom or "pique nique" in nom or "piquenique" in nom or "piqnic" in nom or "piq niq" in nom or "piknik" in nom or "pik nik" in nom:
             return True
         else:
             return False
