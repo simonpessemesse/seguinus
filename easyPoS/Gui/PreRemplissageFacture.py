@@ -12,8 +12,6 @@ from PyQt4.QtGui import QIcon
 from PyQt4.QtCore import QThread, SIGNAL
 from easyPoS.models import Facture
 import time
-import EditionFacture
-import sys
 
 
 def getLibelle(resa):
@@ -110,8 +108,8 @@ def ajoutePrestations(fact, resa, prixReduit=False):
     else:
         ajouteNuitPetitDejRepas(resa,nbNuits-m,fact,True,prixReduit)
         ajouteNuitPetitDejRepas(resa,m,fact,False,prixReduit)
-    if "#" in resa.client.nom:
-        ajouterNProd(nbNuits*resa.nbPersonnes(),Produit.objects.get(pk=5),fact)
+    if "#" in resa.client.nom: #si pension complete
+        ajouterNProd(nbNuits*resa.nbPersonnes(),Produit.objects.get(pk=5),fact) #rajoute les assiettes de crudité
     taxeDeSejour = Produit.objects.get(pk=173)
     ajouterNProd(nbNuits * resa.nbPersonnes(), taxeDeSejour, fact)
 

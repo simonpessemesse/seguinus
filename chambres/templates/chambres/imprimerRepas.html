@@ -12,6 +12,8 @@
 			{% include "chambres/tableauRepas.html" with repas=repas.nouveaux %}
 			<h5>Booking Potentiels</h5>
 			{% include "chambres/tableauRepas.html" with repas=repas.nouveauxBooking %}
+		<h5>Anciens Booking Potentiels</h5>
+		{% include "chambres/tableauRepas.html" with repas=repas.anciensBooking %}
 			<h5>Total</h5>
 			{% for k,v in repas.total.stat.items %}
 					{{ v|length }}
