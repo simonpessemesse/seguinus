@@ -116,9 +116,9 @@ def vieuxTrouveProbleme(easy, banque):
         easy.paiements.remove(i)
 
     for b in easy.paiements:
-        print(b.montant, " n'est pas a sa place dans la caisse du " + str(easy.date))
+        print(b.montant, " n'est pas a sa place dans la caisse du " + str(easy.date)+" https://127.0.0.1/admin/easyPoS/paiement/"+str(b.id))
     for b in banque.paiements:
-        print(b, " DANS BANQUE le " + str(banque.date))
+        print(b, " DANS BANQUE le " + str(banque.date)+ " https://127.0.0.1/easyPoS/factures/"+str(banque.date.year)+"/"+str(banque.date.month)+"/"+str(banque.date.day))
 
 
 def ceQuiVaPas(easy, banque):
