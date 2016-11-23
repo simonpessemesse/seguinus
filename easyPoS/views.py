@@ -172,6 +172,7 @@ def editArrhes(request, clientId):
             a.save()
             ent = DonneesEntreprise.objects.get(pk=preferences.ENTREPRISE)
             p = Paiement(entreprise=ent, arrhe=a, montant=montant, moyenPaiement=moyen)
+
             p.date = datetime.now()
             p.save()
             confirmeClient(client)

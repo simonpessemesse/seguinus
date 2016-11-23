@@ -18,11 +18,13 @@ def joli(d):
     return nomJour[d.weekday()] + " " + str(d.day) + " " + nomMois[d.month - 1]
 
 
-deb = date(2015, 4, 15)
-fin = date(2015, 5, 1)
-chambresDispo = 12
+deb = date(2017, 4, 1)
+fin = date(2017, 11, 1)
+chambresDispo = 2
 joursPossible = [0, 1, 2, 3, 4, 5, 6]
-dispoTotale = True
+dispoTotale = False
+libres=False
+
 
 nbSem = (fin - deb).days // 7 + 1
 for i in range(nbSem):
@@ -32,5 +34,10 @@ for i in range(nbSem):
         if dispoTotale:
             print(joli(day), " Chambres dispos: ", 25 - reserves, " places dortoir dispo: ",
                   OneDayStats(day).nbPlacesLibreDortoir)
-        elif reserves < 24 - chambresDispo:
-            print(joli(day))
+        else:
+            if libres:
+                if reserves < 24 - chambresDispo:
+                    print(joli(day),reserves,chambresDispo)
+            else:
+                if reserves > 24 - chambresDispo:
+                    print("stop vente le ",joli(day))
